@@ -21,6 +21,11 @@ namespace ProjectTracker.Data.Entities
         [ForeignKey(nameof(DepartmentId))]
         public Department Department { get; set; }
 
+        public Guid? LeadedDepartmentId { get; set; }
+
+        [ForeignKey(nameof(LeadedDepartmentId))]
+        public Department LeadedDepartment { get; set; }
+
         public ICollection<EmployeeProject> EmployeesProjects { get; set; }
 
         [InverseProperty("Submitter")]

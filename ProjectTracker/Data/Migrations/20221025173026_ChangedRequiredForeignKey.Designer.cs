@@ -12,8 +12,8 @@ using ProjectTracker.Data;
 namespace ProjectTracker.Data.Migrations
 {
     [DbContext(typeof(ProjectTrackerDbContext))]
-    [Migration("20221025081741_InitialMigration")]
-    partial class InitialMigration
+    [Migration("20221025173026_ChangedRequiredForeignKey")]
+    partial class ChangedRequiredForeignKey
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -189,7 +189,7 @@ namespace ProjectTracker.Data.Migrations
 
                     b.HasIndex("TicketId");
 
-                    b.ToTable("Change");
+                    b.ToTable("Changes");
                 });
 
             modelBuilder.Entity("ProjectTracker.Data.Entities.Comment", b =>
@@ -219,7 +219,7 @@ namespace ProjectTracker.Data.Migrations
 
                     b.HasIndex("TicketId");
 
-                    b.ToTable("Comment");
+                    b.ToTable("Comments");
                 });
 
             modelBuilder.Entity("ProjectTracker.Data.Entities.Department", b =>
@@ -230,7 +230,7 @@ namespace ProjectTracker.Data.Migrations
 
                     b.Property<string>("LeadId")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -239,9 +239,7 @@ namespace ProjectTracker.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("LeadId");
-
-                    b.ToTable("Department");
+                    b.ToTable("Departments");
                 });
 
             modelBuilder.Entity("ProjectTracker.Data.Entities.Employee", b =>
@@ -275,6 +273,9 @@ namespace ProjectTracker.Data.Migrations
                         .IsRequired()
                         .HasMaxLength(20)
                         .HasColumnType("nvarchar(20)");
+
+                    b.Property<Guid?>("LeadedDepartmentId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");
@@ -313,6 +314,10 @@ namespace ProjectTracker.Data.Migrations
 
                     b.HasIndex("DepartmentId");
 
+                    b.HasIndex("LeadedDepartmentId")
+                        .IsUnique()
+                        .HasFilter("[LeadedDepartmentId] IS NOT NULL");
+
                     b.HasIndex("NormalizedEmail")
                         .HasDatabaseName("EmailIndex");
 
@@ -336,7 +341,7 @@ namespace ProjectTracker.Data.Migrations
 
                     b.HasIndex("ProjectId");
 
-                    b.ToTable("EmployeeProject");
+                    b.ToTable("EmployeesProjects");
                 });
 
             modelBuilder.Entity("ProjectTracker.Data.Entities.Project", b =>
@@ -362,7 +367,7 @@ namespace ProjectTracker.Data.Migrations
 
                     b.HasIndex("DepartmentId");
 
-                    b.ToTable("Project");
+                    b.ToTable("Projects");
                 });
 
             modelBuilder.Entity("ProjectTracker.Data.Entities.Ticket", b =>
@@ -413,7 +418,7 @@ namespace ProjectTracker.Data.Migrations
 
                     b.HasIndex("SubmitterId");
 
-                    b.ToTable("Ticket");
+                    b.ToTable("Tickets");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -489,7 +494,7 @@ namespace ProjectTracker.Data.Migrations
                     b.HasOne("ProjectTracker.Data.Entities.Ticket", "Ticket")
                         .WithMany("Comments")
                         .HasForeignKey("TicketId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Commenter");
@@ -497,26 +502,22 @@ namespace ProjectTracker.Data.Migrations
                     b.Navigation("Ticket");
                 });
 
-            modelBuilder.Entity("ProjectTracker.Data.Entities.Department", b =>
-                {
-                    b.HasOne("ProjectTracker.Data.Entities.Employee", "Lead")
-                        .WithMany()
-                        .HasForeignKey("LeadId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Lead");
-                });
-
             modelBuilder.Entity("ProjectTracker.Data.Entities.Employee", b =>
                 {
                     b.HasOne("ProjectTracker.Data.Entities.Department", "Department")
                         .WithMany("Employees")
                         .HasForeignKey("DepartmentId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
+                    b.HasOne("ProjectTracker.Data.Entities.Department", "LeadedDepartment")
+                        .WithOne("Lead")
+                        .HasForeignKey("ProjectTracker.Data.Entities.Employee", "LeadedDepartmentId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
                     b.Navigation("Department");
+
+                    b.Navigation("LeadedDepartment");
                 });
 
             modelBuilder.Entity("ProjectTracker.Data.Entities.EmployeeProject", b =>
@@ -558,7 +559,7 @@ namespace ProjectTracker.Data.Migrations
                     b.HasOne("ProjectTracker.Data.Entities.Department", "Department")
                         .WithMany("Tickets")
                         .HasForeignKey("DepartmentId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("ProjectTracker.Data.Entities.Project", null)
@@ -581,6 +582,9 @@ namespace ProjectTracker.Data.Migrations
             modelBuilder.Entity("ProjectTracker.Data.Entities.Department", b =>
                 {
                     b.Navigation("Employees");
+
+                    b.Navigation("Lead")
+                        .IsRequired();
 
                     b.Navigation("Projects");
 

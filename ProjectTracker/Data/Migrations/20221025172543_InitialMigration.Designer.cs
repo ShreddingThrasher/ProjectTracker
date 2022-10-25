@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ProjectTracker.Data;
 
@@ -11,9 +12,10 @@ using ProjectTracker.Data;
 namespace ProjectTracker.Data.Migrations
 {
     [DbContext(typeof(ProjectTrackerDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221025172543_InitialMigration")]
+    partial class InitialMigration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -273,6 +275,7 @@ namespace ProjectTracker.Data.Migrations
                         .HasColumnType("nvarchar(20)");
 
                     b.Property<Guid?>("LeadedDepartmentId")
+                        .IsRequired()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<bool>("LockoutEnabled")
@@ -313,8 +316,7 @@ namespace ProjectTracker.Data.Migrations
                     b.HasIndex("DepartmentId");
 
                     b.HasIndex("LeadedDepartmentId")
-                        .IsUnique()
-                        .HasFilter("[LeadedDepartmentId] IS NOT NULL");
+                        .IsUnique();
 
                     b.HasIndex("NormalizedEmail")
                         .HasDatabaseName("EmailIndex");
@@ -511,7 +513,8 @@ namespace ProjectTracker.Data.Migrations
                     b.HasOne("ProjectTracker.Data.Entities.Department", "LeadedDepartment")
                         .WithOne("Lead")
                         .HasForeignKey("ProjectTracker.Data.Entities.Employee", "LeadedDepartmentId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
                     b.Navigation("Department");
 

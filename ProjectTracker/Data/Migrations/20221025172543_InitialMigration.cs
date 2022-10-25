@@ -32,27 +32,28 @@ namespace ProjectTracker.Data.Migrations
                 nullable: false,
                 defaultValue: "");
 
+            migrationBuilder.AddColumn<Guid>(
+                name: "LeadedDepartmentId",
+                table: "AspNetUsers",
+                type: "uniqueidentifier",
+                nullable: false,
+                defaultValue: new Guid("00000000-0000-0000-0000-000000000000"));
+
             migrationBuilder.CreateTable(
-                name: "Department",
+                name: "Departments",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false),
-                    LeadId = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                    LeadId = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Department", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Department_AspNetUsers_LeadId",
-                        column: x => x.LeadId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                    table.PrimaryKey("PK_Departments", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Project",
+                name: "Projects",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -62,17 +63,17 @@ namespace ProjectTracker.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Project", x => x.Id);
+                    table.PrimaryKey("PK_Projects", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Project_Department_DepartmentId",
+                        name: "FK_Projects_Departments_DepartmentId",
                         column: x => x.DepartmentId,
-                        principalTable: "Department",
+                        principalTable: "Departments",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "EmployeeProject",
+                name: "EmployeesProjects",
                 columns: table => new
                 {
                     EmployeeId = table.Column<string>(type: "nvarchar(450)", nullable: false),
@@ -80,23 +81,23 @@ namespace ProjectTracker.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_EmployeeProject", x => new { x.EmployeeId, x.ProjectId });
+                    table.PrimaryKey("PK_EmployeesProjects", x => new { x.EmployeeId, x.ProjectId });
                     table.ForeignKey(
-                        name: "FK_EmployeeProject_AspNetUsers_EmployeeId",
+                        name: "FK_EmployeesProjects_AspNetUsers_EmployeeId",
                         column: x => x.EmployeeId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_EmployeeProject_Project_ProjectId",
+                        name: "FK_EmployeesProjects_Projects_ProjectId",
                         column: x => x.ProjectId,
-                        principalTable: "Project",
+                        principalTable: "Projects",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Ticket",
+                name: "Tickets",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -112,33 +113,33 @@ namespace ProjectTracker.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Ticket", x => x.Id);
+                    table.PrimaryKey("PK_Tickets", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Ticket_AspNetUsers_AssignedEmployeeId",
+                        name: "FK_Tickets_AspNetUsers_AssignedEmployeeId",
                         column: x => x.AssignedEmployeeId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id");
                     table.ForeignKey(
-                        name: "FK_Ticket_AspNetUsers_SubmitterId",
+                        name: "FK_Tickets_AspNetUsers_SubmitterId",
                         column: x => x.SubmitterId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Ticket_Department_DepartmentId",
+                        name: "FK_Tickets_Departments_DepartmentId",
                         column: x => x.DepartmentId,
-                        principalTable: "Department",
+                        principalTable: "Departments",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_Ticket_Project_ProjectId",
+                        name: "FK_Tickets_Projects_ProjectId",
                         column: x => x.ProjectId,
-                        principalTable: "Project",
+                        principalTable: "Projects",
                         principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
-                name: "Change",
+                name: "Changes",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -150,17 +151,17 @@ namespace ProjectTracker.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Change", x => x.Id);
+                    table.PrimaryKey("PK_Changes", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Change_Ticket_TicketId",
+                        name: "FK_Changes_Tickets_TicketId",
                         column: x => x.TicketId,
-                        principalTable: "Ticket",
+                        principalTable: "Tickets",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Comment",
+                name: "Comments",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -171,19 +172,19 @@ namespace ProjectTracker.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Comment", x => x.Id);
+                    table.PrimaryKey("PK_Comments", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Comment_AspNetUsers_CommenterId",
+                        name: "FK_Comments_AspNetUsers_CommenterId",
                         column: x => x.CommenterId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Comment_Ticket_TicketId",
+                        name: "FK_Comments_Tickets_TicketId",
                         column: x => x.TicketId,
-                        principalTable: "Ticket",
+                        principalTable: "Tickets",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateIndex(
@@ -192,90 +193,107 @@ namespace ProjectTracker.Data.Migrations
                 column: "DepartmentId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Change_TicketId",
-                table: "Change",
+                name: "IX_AspNetUsers_LeadedDepartmentId",
+                table: "AspNetUsers",
+                column: "LeadedDepartmentId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Changes_TicketId",
+                table: "Changes",
                 column: "TicketId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Comment_CommenterId",
-                table: "Comment",
+                name: "IX_Comments_CommenterId",
+                table: "Comments",
                 column: "CommenterId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Comment_TicketId",
-                table: "Comment",
+                name: "IX_Comments_TicketId",
+                table: "Comments",
                 column: "TicketId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Department_LeadId",
-                table: "Department",
-                column: "LeadId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_EmployeeProject_ProjectId",
-                table: "EmployeeProject",
+                name: "IX_EmployeesProjects_ProjectId",
+                table: "EmployeesProjects",
                 column: "ProjectId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Project_DepartmentId",
-                table: "Project",
+                name: "IX_Projects_DepartmentId",
+                table: "Projects",
                 column: "DepartmentId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Ticket_AssignedEmployeeId",
-                table: "Ticket",
+                name: "IX_Tickets_AssignedEmployeeId",
+                table: "Tickets",
                 column: "AssignedEmployeeId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Ticket_DepartmentId",
-                table: "Ticket",
+                name: "IX_Tickets_DepartmentId",
+                table: "Tickets",
                 column: "DepartmentId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Ticket_ProjectId",
-                table: "Ticket",
+                name: "IX_Tickets_ProjectId",
+                table: "Tickets",
                 column: "ProjectId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Ticket_SubmitterId",
-                table: "Ticket",
+                name: "IX_Tickets_SubmitterId",
+                table: "Tickets",
                 column: "SubmitterId");
 
             migrationBuilder.AddForeignKey(
-                name: "FK_AspNetUsers_Department_DepartmentId",
+                name: "FK_AspNetUsers_Departments_DepartmentId",
                 table: "AspNetUsers",
                 column: "DepartmentId",
-                principalTable: "Department",
+                principalTable: "Departments",
                 principalColumn: "Id",
-                onDelete: ReferentialAction.Cascade);
+                onDelete: ReferentialAction.Restrict);
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_AspNetUsers_Departments_LeadedDepartmentId",
+                table: "AspNetUsers",
+                column: "LeadedDepartmentId",
+                principalTable: "Departments",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.Restrict);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropForeignKey(
-                name: "FK_AspNetUsers_Department_DepartmentId",
+                name: "FK_AspNetUsers_Departments_DepartmentId",
+                table: "AspNetUsers");
+
+            migrationBuilder.DropForeignKey(
+                name: "FK_AspNetUsers_Departments_LeadedDepartmentId",
                 table: "AspNetUsers");
 
             migrationBuilder.DropTable(
-                name: "Change");
+                name: "Changes");
 
             migrationBuilder.DropTable(
-                name: "Comment");
+                name: "Comments");
 
             migrationBuilder.DropTable(
-                name: "EmployeeProject");
+                name: "EmployeesProjects");
 
             migrationBuilder.DropTable(
-                name: "Ticket");
+                name: "Tickets");
 
             migrationBuilder.DropTable(
-                name: "Project");
+                name: "Projects");
 
             migrationBuilder.DropTable(
-                name: "Department");
+                name: "Departments");
 
             migrationBuilder.DropIndex(
                 name: "IX_AspNetUsers_DepartmentId",
+                table: "AspNetUsers");
+
+            migrationBuilder.DropIndex(
+                name: "IX_AspNetUsers_LeadedDepartmentId",
                 table: "AspNetUsers");
 
             migrationBuilder.DropColumn(
@@ -288,6 +306,10 @@ namespace ProjectTracker.Data.Migrations
 
             migrationBuilder.DropColumn(
                 name: "LastName",
+                table: "AspNetUsers");
+
+            migrationBuilder.DropColumn(
+                name: "LeadedDepartmentId",
                 table: "AspNetUsers");
         }
     }
