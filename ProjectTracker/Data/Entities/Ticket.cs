@@ -1,5 +1,4 @@
-﻿using Humanizer;
-using ProjectTracker.Constants;
+﻿using ProjectTracker.Constants;
 using ProjectTracker.Data.Entities;
 using ProjectTracker.Data.Entities.Enums;
 using System;
@@ -50,5 +49,8 @@ namespace ProjectTracker.Data.Entities
         public ICollection<Comment> Comments { get; set; }
 
         public ICollection<Change> History { get; set; }
+
+        [Required]
+        public bool IsActive { get; set; }
     }
 }

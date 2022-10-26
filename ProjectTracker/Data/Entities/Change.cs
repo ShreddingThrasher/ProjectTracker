@@ -25,5 +25,8 @@ namespace ProjectTracker.Data.Entities
 
         [ForeignKey(nameof(TicketId))]
         public Ticket Ticket { get; set; }
+
+        [Required]
+        public bool IsActive { get; set; }
     }
 }

@@ -25,5 +25,8 @@ namespace ProjectTracker.Data.Entities
         public ICollection<Project> Projects { get; set; }
 
         public ICollection<Ticket> Tickets { get; set; }
+
+        [Required]
+        public bool IsActive { get; set; }
     }
 }

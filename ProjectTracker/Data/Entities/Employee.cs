@@ -35,5 +35,8 @@ namespace ProjectTracker.Data.Entities
         public ICollection<Ticket> AssignedTickets { get; set; }
 
         public ICollection<Comment> Comments { get; set; }
+
+        [Required]
+        public bool IsActive { get; set; }
     }
 }

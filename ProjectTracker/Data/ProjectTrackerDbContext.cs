@@ -31,6 +31,8 @@ namespace ProjectTracker.Data
             builder.Entity<EmployeeProject>()
                 .HasKey(ep => new { ep.EmployeeId, ep.ProjectId });
 
+
+            //Delete behaviour
             builder.Entity<EmployeeProject>()
                 .HasOne(ep => ep.Employee)
                 .WithMany(e => e.EmployeesProjects)
@@ -70,7 +72,8 @@ namespace ProjectTracker.Data
                 .HasForeignKey(c => c.TicketId)
                 .OnDelete(DeleteBehavior.Restrict);
 
-
+            
+            //ASP.NET Identity User properties max length
             builder.Entity<Employee>()
                 .Property(e => e.UserName)
                 .HasMaxLength(EmployeeConstants.UserNameMaxLength);
@@ -78,6 +81,36 @@ namespace ProjectTracker.Data
             builder.Entity<Employee>()
                 .Property(e => e.Email)
                 .HasMaxLength(EmployeeConstants.EmailMaxLength);
+
+
+            //IsActive default value for all entities
+            builder.Entity<Change>()
+                .Property(c => c.IsActive)
+                .HasDefaultValue(true);
+
+            builder.Entity<Comment>()
+                .Property(c => c.IsActive)
+                .HasDefaultValue(true);
+
+            builder.Entity<Department>()
+                .Property(c => c.IsActive)
+                .HasDefaultValue(true);
+
+            builder.Entity<Employee>()
+                .Property(c => c.IsActive)
+                .HasDefaultValue(true);
+
+            builder.Entity<EmployeeProject>()
+                .Property(c => c.IsActive)
+                .HasDefaultValue(true);
+
+            builder.Entity<Project>()
+                .Property(c => c.IsActive)
+                .HasDefaultValue(true);
+
+            builder.Entity<Ticket>()
+                .Property(c => c.IsActive)
+                .HasDefaultValue(true);
 
             base.OnModelCreating(builder);
         }

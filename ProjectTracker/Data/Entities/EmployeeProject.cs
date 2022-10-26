@@ -16,5 +16,8 @@ namespace ProjectTracker.Data.Entities
 
         [ForeignKey(nameof(ProjectId))]
         public Project Project { get; set; }
+
+        [Required]
+        public bool IsActive { get; set; }
     }
 }

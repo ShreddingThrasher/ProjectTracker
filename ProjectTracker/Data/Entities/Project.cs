@@ -26,5 +26,8 @@ namespace ProjectTracker.Data.Entities
         public ICollection<EmployeeProject> AssignedEmployees { get; set; }
 
         public ICollection<Ticket> Tickets { get; set; }
+
+        [Required]
+        public bool IsActive { get; set; }
     }
 }
