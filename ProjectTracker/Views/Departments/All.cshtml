@@ -1,0 +1,46 @@
+﻿@using ProjectTracker.Core.ViewModels.Department
+@using System.Security.Claims
+@model IEnumerable<DepartmentViewModel>
+
+<div class="col">
+
+	@foreach(var department in Model)
+	{
+		<div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">@department.Name</h6>
+            </div>
+            <div class="card-body">
+                <ul>
+                    <li>
+                        Projects: @department.Projects
+                    </li>
+                    <li>
+                        Employees: @department.Employees
+                    </li>
+                    <li>
+                        Tickets: @department.Tickets
+                    </li>
+                </ul>
+
+                <a asp-controller="Departments" asp-action="Details" asp-route-id="@department.Id" class="btn btn-info btn-icon-split">
+                    <span class="icon text-white-50">
+                        <i class="fas fa-info-circle"></i>
+                    </span>
+                    <span class="text">Details</span>
+                </a>
+
+                @if(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value == department.LeaderId)
+                {
+                    <a asp-controller="Departments" asp-action="Manage" asp-route-id="@department.Id" class="btn btn-primary btn-icon-split">
+                        <span class="icon text-white-50">
+                            <i class="fas fa-flag"></i>
+                        </span>
+                        <span class="text">Manage</span>
+                    </a>
+                }
+            </div>
+        </div>
+	}
+
+</div>

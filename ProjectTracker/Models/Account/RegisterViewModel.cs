@@ -1,4 +1,4 @@
-﻿using ProjectTracker.Constants;
+﻿using ProjectTracker.Infrastructure.DataConstants;
 using System.ComponentModel.DataAnnotations;
 
 namespace ProjectTracker.Models.Account
