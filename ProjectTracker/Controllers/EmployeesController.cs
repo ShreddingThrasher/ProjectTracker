@@ -4,8 +4,7 @@ using ProjectTracker.Core.Contracts;
 
 namespace ProjectTracker.Controllers
 {
-    [Authorize]
-    public class EmployeesController : Controller
+    public class EmployeesController : BaseController
     {
         private readonly IEmployeeService employeeService;
 

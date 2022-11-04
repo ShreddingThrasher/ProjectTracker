@@ -37,5 +37,7 @@ namespace ProjectTracker.Infrastructure.Data.Entities
 
         [Required]
         public bool IsActive { get; set; }
+
+        public bool IsGuest { get; set; }
     }
 }

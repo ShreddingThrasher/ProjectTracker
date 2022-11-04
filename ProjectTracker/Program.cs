@@ -29,11 +29,7 @@ builder.Services.ConfigureApplicationCookie(options =>
     options.LoginPath = "/Account/Login";
 });
 
-builder.Services.AddScoped<IRepository, Repository>();
-builder.Services.AddScoped<IDepartmentService, DepartmentService>();
-builder.Services.AddScoped<IEmployeeService, EmployeeService>();
-builder.Services.AddScoped<IProjectService, ProjectService>();
-builder.Services.AddScoped<ITicketService, TicketService>();
+builder.Services.AddApplicationServices();
 
 var app = builder.Build();
 

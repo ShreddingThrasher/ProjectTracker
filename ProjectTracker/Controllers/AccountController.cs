@@ -1,28 +1,38 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using ProjectTracker.Core.Constants;
+using ProjectTracker.Core.ViewModels.Account;
 using ProjectTracker.Infrastructure.Data.Entities;
-using ProjectTracker.Models.Account;
 
 namespace ProjectTracker.Controllers
 {
-    [Authorize]
-    public class AccountController : Controller
+    public class AccountController : BaseController
     {
         private readonly UserManager<Employee> userManager;
         private readonly SignInManager<Employee> signInManager;
+        private readonly RoleManager<IdentityRole> roleManager;
 
-        public AccountController(UserManager<Employee> _userManager,
-            SignInManager<Employee> _signInManager)
+        public AccountController(
+            UserManager<Employee> _userManager,
+            SignInManager<Employee> _signInManager,
+            RoleManager<IdentityRole> _roleManager)
         {
             userManager = _userManager;
             signInManager = _signInManager;
+            roleManager = _roleManager;
         }
 
         [HttpGet]
         [AllowAnonymous]
         public IActionResult Register()
         {
+            if (User?.Identity?.IsAuthenticated ?? false)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
             return View();
         }
 
@@ -46,6 +56,9 @@ namespace ProjectTracker.Controllers
             var result = await userManager.CreateAsync(user, model.Password);
 
             if (result.Succeeded)
+
+                await userManager.AddClaimAsync(
+                    user, new System.Security.Claims.Claim(ClaimTypeConstants.FirstName, user.FirstName));
             {
                 await signInManager.SignInAsync(user, false);
 
@@ -64,6 +77,11 @@ namespace ProjectTracker.Controllers
         [AllowAnonymous]
         public IActionResult Login()
         {
+            if(User?.Identity?.IsAuthenticated ?? false)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
             return View();
         }
 
@@ -91,6 +109,95 @@ namespace ProjectTracker.Controllers
             ModelState.AddModelError(string.Empty, "Login failed");
 
             return View(model);
+        }
+
+        public async Task<IActionResult> Logout()
+        {
+
+            await signInManager.SignOutAsync();
+
+            var user = await userManager.FindByNameAsync(User.Identity.Name);
+
+            if (user.IsGuest)
+            {
+                await userManager.DeleteAsync(user);
+            }
+
+            return RedirectToAction(nameof(Login));
+        }
+
+        [HttpGet]
+        [AllowAnonymous]
+        public async Task<IActionResult> Guest(bool? success)
+        {
+            var model = new GuestRegisterViewModel()
+            {
+                Roles = await roleManager.Roles.Select(r => r.Name).ToListAsync()
+            };
+
+            ViewBag.Success = success;
+
+            return View(model);
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        public async Task<IActionResult> Guest(GuestRegisterViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return RedirectToAction(nameof(Guest), new { Success = false });
+            }
+
+            var rnd = new Random();
+
+            int guestRnd = rnd.Next(1, int.MaxValue);
+
+            var guest = new Employee()
+            {
+                Email = $"guest{guestRnd}@mail.com",
+                FirstName = "Guest",
+                LastName = "Guest",
+                UserName = $"Guest{guestRnd}",
+                IsGuest = true
+            };
+
+            var roles = await roleManager.Roles.Select(r => r.Name).ToListAsync();
+
+            if(!roles.Contains(model.Role))
+            {
+                if(model.Role != "Regular")
+                {
+                    return RedirectToAction(nameof(Guest), new { Success = false });
+                }
+            }
+
+            var result = await userManager.CreateAsync(guest);
+
+            if (result.Succeeded)
+            {
+
+                await userManager.AddClaimAsync(
+                    guest, new System.Security.Claims.Claim(ClaimTypeConstants.FirstName, guest.FirstName));
+
+                if (model.Role == "Regular")
+                {
+                    await signInManager.SignInAsync(guest, true);
+                    return RedirectToAction("Index", "Home");
+                }
+                else
+                {
+                    var roleResult = await userManager.AddToRoleAsync(guest, model.Role);
+
+                    if (result.Succeeded)
+                    {
+                        await signInManager.SignInAsync(guest, false);
+                        return RedirectToAction("Index", "Home");
+                    }
+                }
+            }
+
+            return RedirectToAction(nameof(Guest), new { Success = false });
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿@using ProjectTracker.Models.Account
+﻿@using ProjectTracker.Core.ViewModels.Account
 @{
     ViewData["Title"] = "Login";
 }
@@ -36,14 +36,9 @@
                                 <hr>
                                 <a asp-controller="Account" asp-action="Register" class="btn btn-primary btn-user btn-block">
                                     Register
-                                </a><a href="index.html" class="btn btn-primary btn-user btn-block .bg-gradient-success">
+                                </a>
+                                <a asp-controller="Account" asp-action="Guest" class="btn btn-primary btn-user btn-block .bg-gradient-success">
                                     Try as Guest
-                                </a>
-                                <a href="index.html" class="btn btn-google btn-user btn-block">
-                                    <i class="fab fa-google fa-fw"></i> Login with Google
-                                </a>
-                                <a href="index.html" class="btn btn-facebook btn-user btn-block">
-                                    <i class="fab fa-facebook-f fa-fw"></i> Login with Facebook
                                 </a>
                             </form>
                             <hr>

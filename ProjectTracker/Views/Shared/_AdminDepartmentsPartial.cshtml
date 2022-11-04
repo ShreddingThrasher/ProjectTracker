@@ -1,8 +1,9 @@
 ﻿<div class="row">
+    <div class="col">
 
         <div class="card mb-4">
             <div class="card-header">
-                Departments
+                Manage Departments
             </div>
             <div class="card-body">
                 <a asp-controller="Departments" asp-action="All" class="btn btn-info btn-icon-split">
@@ -32,7 +33,13 @@
                     </span>
                     <span class="text">Close Department</span>
                 </a>
+
+                <a asp-controller="Departments" asp-action="Past" class="btn btn-warning btn-icon-split">
+                    <span class="text">Change Department</span>
+                </a>
             </div>
         </div>
 
+    </div>
+        
 </div>

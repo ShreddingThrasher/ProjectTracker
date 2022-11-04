@@ -35,6 +35,11 @@ namespace ProjectTracker.Core.Services
         }
 
         public async Task<int> GetCount()
-            => this.repo.AllReadonly<Employee>().Count();
+            => await this.repo.AllReadonly<Employee>().CountAsync();
+
+        public async Task<IEnumerable<string>> GetUserNamesAsync()
+            => await this.repo.AllReadonly<Employee>()
+                        .Select(e => e.UserName)
+                        .ToListAsync();
     }
 }
