@@ -23,6 +23,7 @@ namespace ProjectTracker.Core.Services
         public async Task<IEnumerable<DepartmentViewModel>> GetAll()
         {
             return await repo.AllReadonly<Department>()
+                .Where(d => d.IsActive)
                 .Select(d => new DepartmentViewModel()
                 {
                     Id = d.Id,
@@ -35,7 +36,19 @@ namespace ProjectTracker.Core.Services
                 .ToListAsync();
         }
 
+        public async Task<IEnumerable<CreateProjectDepartmentModel>> GetAllIdAndName()
+        {
+            return await repo.AllReadonly<Department>()
+                .Where(d => d.IsActive)
+                .Select(d => new CreateProjectDepartmentModel()
+                {
+                    Id = d.Id,
+                    Name = d.Name
+                })
+                .ToListAsync();
+        }
+
         public async Task<int> GetCount()
-            => this.repo.AllReadonly<Department>().Count();
+            => this.repo.AllReadonly<Department>().Where(d => d.IsActive).Count();
     }
 }

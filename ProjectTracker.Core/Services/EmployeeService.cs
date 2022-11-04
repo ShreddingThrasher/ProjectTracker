@@ -23,6 +23,7 @@ namespace ProjectTracker.Core.Services
         public async Task<IEnumerable<EmployeeViewModel>> GetAll()
         {
             return await repo.AllReadonly<Employee>()
+                .Where(e => e.IsActive)
                 .Select(e => new EmployeeViewModel()
                 {
                     FullName = e.FirstName + " " + e.LastName,
@@ -35,10 +36,11 @@ namespace ProjectTracker.Core.Services
         }
 
         public async Task<int> GetCount()
-            => await this.repo.AllReadonly<Employee>().CountAsync();
+            => await this.repo.AllReadonly<Employee>().Where(e => e.IsActive).CountAsync();
 
         public async Task<IEnumerable<string>> GetUserNamesAsync()
             => await this.repo.AllReadonly<Employee>()
+                        .Where(e => e.IsActive)
                         .Select(e => e.UserName)
                         .ToListAsync();
     }

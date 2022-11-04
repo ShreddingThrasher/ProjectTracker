@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ProjectTracker.Core.ViewModels.Project;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,5 +10,7 @@ namespace ProjectTracker.Core.Contracts
     public interface IProjectService
     {
         Task<int> GetCount();
+
+        Task<IEnumerable<ProjectViewModel>> GetAllProjects();
     }
 }

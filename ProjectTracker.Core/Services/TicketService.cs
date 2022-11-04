@@ -19,6 +19,6 @@ namespace ProjectTracker.Core.Services
         }
 
         public async Task<int> GetCount()
-            => this.repo.AllReadonly<Ticket>().Count();
+            => this.repo.AllReadonly<Ticket>().Where(t => t.IsActive).Count();
     }
 }
