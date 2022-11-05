@@ -19,12 +19,12 @@ namespace ProjectTracker.Core.ViewModels.Project
         [Required]
         [StringLength(ProjectConstants.DescriptionMaxLength,
             MinimumLength = ProjectConstants.DescriptionMinLength)]
-        public string Description { get; set; }
+        public string Description { get; set; } = null!;
 
         [Required]
         public Guid DepartmentId { get; set; }
 
-        public IEnumerable<CreateProjectDepartmentModel> Departments { get; set; } 
-            = new List<CreateProjectDepartmentModel>();
+        public IEnumerable<DepartmentIdNameViewModel> Departments { get; set; } 
+            = new List<DepartmentIdNameViewModel>();
     }
 }

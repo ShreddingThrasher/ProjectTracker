@@ -1,4 +1,5 @@
 ﻿using ProjectTracker.Core.ViewModels.Department;
+using ProjectTracker.Infrastructure.Data.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,6 +14,8 @@ namespace ProjectTracker.Core.Contracts
 
         Task<IEnumerable<DepartmentViewModel>> GetAll();
 
-        Task<IEnumerable<CreateProjectDepartmentModel>> GetAllIdAndName();
+        Task<IEnumerable<DepartmentIdNameViewModel>> GetAllIdAndName();
+
+        Task<Department> GetById(Guid id);
     }
 }

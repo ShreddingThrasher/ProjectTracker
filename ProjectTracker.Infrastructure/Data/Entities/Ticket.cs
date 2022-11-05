@@ -35,7 +35,9 @@ namespace ProjectTracker.Infrastructure.Data.Entities
         public DateTime CreatedOn { get; set; }
 
         [Required]
-        public Priority Priority { get; set; }
+        public Guid ProjectId { get; set; }
+        [ForeignKey(nameof(ProjectId))]
+        public Project Project { get; set; }
 
         public string? AssignedEmployeeId { get; set; }
 
@@ -44,6 +46,9 @@ namespace ProjectTracker.Infrastructure.Data.Entities
 
         [Required]
         public Status Status { get; set; }
+
+        [Required]
+        public Priority Priority { get; set; }
 
         public ICollection<TicketComment> Comments { get; set; }
 

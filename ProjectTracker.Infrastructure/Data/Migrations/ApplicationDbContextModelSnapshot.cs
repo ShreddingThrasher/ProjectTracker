@@ -360,7 +360,7 @@ namespace ProjectTracker.Infrastructure.Data.Migrations
                     b.Property<int>("Priority")
                         .HasColumnType("int");
 
-                    b.Property<Guid?>("ProjectId")
+                    b.Property<Guid>("ProjectId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("Status")
@@ -569,9 +569,11 @@ namespace ProjectTracker.Infrastructure.Data.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("ProjectTracker.Infrastructure.Data.Entities.Project", null)
+                    b.HasOne("ProjectTracker.Infrastructure.Data.Entities.Project", "Project")
                         .WithMany("Tickets")
-                        .HasForeignKey("ProjectId");
+                        .HasForeignKey("ProjectId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("ProjectTracker.Infrastructure.Data.Entities.Employee", "Submitter")
                         .WithMany("SubmittedTickets")
@@ -582,6 +584,8 @@ namespace ProjectTracker.Infrastructure.Data.Migrations
                     b.Navigation("AssignedEmployee");
 
                     b.Navigation("Department");
+
+                    b.Navigation("Project");
 
                     b.Navigation("Submitter");
                 });

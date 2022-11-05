@@ -12,5 +12,9 @@ namespace ProjectTracker.Core.Contracts
         Task<int> GetCount();
 
         Task<IEnumerable<ProjectViewModel>> GetAllProjects();
+
+        Task Create(CreateProjectViewModel model);
+
+        Task<ProjectDetailsViewModel> GetProjectDetailsById(Guid id);
     }
 }

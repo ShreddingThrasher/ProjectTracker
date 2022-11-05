@@ -36,11 +36,11 @@ namespace ProjectTracker.Core.Services
                 .ToListAsync();
         }
 
-        public async Task<IEnumerable<CreateProjectDepartmentModel>> GetAllIdAndName()
+        public async Task<IEnumerable<DepartmentIdNameViewModel>> GetAllIdAndName()
         {
             return await repo.AllReadonly<Department>()
                 .Where(d => d.IsActive)
-                .Select(d => new CreateProjectDepartmentModel()
+                .Select(d => new DepartmentIdNameViewModel()
                 {
                     Id = d.Id,
                     Name = d.Name
@@ -48,7 +48,12 @@ namespace ProjectTracker.Core.Services
                 .ToListAsync();
         }
 
+        public async Task<Department> GetById(Guid id)
+            => await repo.All<Department>()
+                .Where(d => d.IsActive)
+                .FirstOrDefaultAsync(d => d.Id == id);
+
         public async Task<int> GetCount()
-            => this.repo.AllReadonly<Department>().Where(d => d.IsActive).Count();
+            => await this.repo.AllReadonly<Department>().Where(d => d.IsActive).CountAsync();
     }
 }

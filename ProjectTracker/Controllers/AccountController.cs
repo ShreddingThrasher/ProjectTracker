@@ -56,10 +56,10 @@ namespace ProjectTracker.Controllers
             var result = await userManager.CreateAsync(user, model.Password);
 
             if (result.Succeeded)
-
+            {
                 await userManager.AddClaimAsync(
                     user, new System.Security.Claims.Claim(ClaimTypeConstants.FirstName, user.FirstName));
-            {
+
                 await signInManager.SignInAsync(user, false);
 
                 return RedirectToAction("Index", "Home");

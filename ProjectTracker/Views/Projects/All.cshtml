@@ -14,7 +14,7 @@
         <div class="card shadow mb-4">
             <div class="card-header py-3">
                 <h6 class="m-0 font-weight-bold text-primary">
-                    <a asp-controller="Project" asp-action="Details" asp-route-id="@project.Id">@project.Name</a>
+                    <a asp-controller="Projects" asp-action="Details" asp-route-id="@project.Id">@project.Name</a>
                 </h6>
             </div>
             <div class="card-body">
@@ -37,3 +37,7 @@
     }
 
 </div>
+
+<a asp-controller="Projects" asp-action="Create" class="btn btn-primary btn-icon-split">
+    <span class="text">Create New Project</span>
+</a>

@@ -26,6 +26,7 @@ namespace ProjectTracker.Core.Services
                 .Where(e => e.IsActive)
                 .Select(e => new EmployeeViewModel()
                 {
+                    Id = e.Id,
                     FullName = e.FirstName + " " + e.LastName,
                     Department = e.Department.Name,
                     AssignedProjects = e.EmployeesProjects.Count,

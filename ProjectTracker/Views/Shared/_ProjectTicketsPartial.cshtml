@@ -1,0 +1,42 @@
+﻿@using ProjectTracker.Core.ViewModels.Ticket
+@model IEnumerable<TicketViewModel>
+
+
+
+<!-- Project Card Example -->
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">Tickets</h6>
+    </div>
+    <!-- Card Body -->
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>Submitter</th>
+                        <th>Status</th>
+                        <th>Priority</th>
+                        <th>Submit Time</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    @foreach (var ticket in Model)
+                    {
+                        <tr>
+                            <td><a asp-controller="Tickets" asp-action="Details" asp-route-id="@ticket.Id">@ticket.Title</a></td>
+                            <td>@ticket.Subbmitter</td>
+                            <td>@ticket.Status</td>
+                            <td>@ticket.Priority</td>
+                            <td>@ticket.Date</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+

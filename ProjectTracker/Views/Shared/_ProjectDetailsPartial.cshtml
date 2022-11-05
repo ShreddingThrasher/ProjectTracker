@@ -1,0 +1,18 @@
+﻿@using ProjectTracker.Core.ViewModels.Project
+@model ProjectDetailsViewModel
+
+
+<div class="col-xl-12 col-lg-7">
+    <div class="card shadow mb-4">
+
+        <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+            <h6 class="m-0 font-weight-bold text-primary">Overview</h6>
+        </div>
+        <!-- Card Body -->
+        <div class="card-body">
+            <p>Department <a asp-controller="Departments" asp-action="Details" asp-route-id="@Model.Department.Id">@Model.Department.Name</a></p>
+            <p>@Model.Description</p>
+
+        </div>
+    </div>
+</div>
