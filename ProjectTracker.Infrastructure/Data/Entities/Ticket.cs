@@ -3,11 +3,19 @@ using ProjectTracker.Infrastructure.DataConstants;
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Xml.Linq;
 
 namespace ProjectTracker.Infrastructure.Data.Entities
 {
     public class Ticket
     {
+        public Ticket()
+        {
+            Comments = new List<TicketComment>();
+
+            History = new List<TicketChange>();
+        }
+
         [Key]
         public Guid Id { get; set; }
 

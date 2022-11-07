@@ -24,7 +24,7 @@
 
                 <tbody>
 
-                    @foreach (var ticket in Model)
+                    @foreach (var ticket in Model.OrderByDescending(t => t.Date))
                     {
                         <tr>
                             <td><a asp-controller="Tickets" asp-action="Details" asp-route-id="@ticket.Id">@ticket.Title</a></td>

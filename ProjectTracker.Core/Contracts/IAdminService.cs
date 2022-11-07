@@ -11,10 +11,12 @@ namespace ProjectTracker.Core.Contracts
 {
     public interface IAdminService
     {
-        Task<IEnumerable<string>> GetAllRoles();
+        Task<IEnumerable<string>> GetAllRolesAsync();
 
         Task<IdentityResult> CreateRoleAsync(CreateRoleViewModel model);
 
         Task<IdentityResult> AddToRoleAsync(string userName, string roleName);
+
+        Task AssignToProjectAsync(string employeeId, Guid projectId);
     }
 }

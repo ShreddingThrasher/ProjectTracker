@@ -25,15 +25,15 @@ namespace ProjectTracker.Infrastructure.Data.Entities
         [ForeignKey(nameof(LeadedDepartmentId))]
         public Department LeadedDepartment { get; set; }
 
-        public ICollection<EmployeeProject> EmployeesProjects { get; set; }
+        public ICollection<EmployeeProject> EmployeesProjects { get; set; } = new List<EmployeeProject>();
 
         [InverseProperty("Submitter")]
-        public ICollection<Ticket> SubmittedTickets { get; set; }
+        public ICollection<Ticket> SubmittedTickets { get; set; } = new List<Ticket>();
 
         [InverseProperty("AssignedEmployee")]
-        public ICollection<Ticket> AssignedTickets { get; set; }
+        public ICollection<Ticket> AssignedTickets { get; set; } = new List<Ticket>();
 
-        public ICollection<TicketComment> Comments { get; set; }
+        public ICollection<TicketComment> Comments { get; set; } = new List<TicketComment>();
 
         [Required]
         public bool IsActive { get; set; }

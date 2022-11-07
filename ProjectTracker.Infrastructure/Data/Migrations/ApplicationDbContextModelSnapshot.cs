@@ -444,8 +444,8 @@ namespace ProjectTracker.Infrastructure.Data.Migrations
 
                     b.Property<string>("Message")
                         .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
+                        .HasMaxLength(1500)
+                        .HasColumnType("nvarchar(1500)");
 
                     b.Property<Guid>("TicketId")
                         .HasColumnType("uniqueidentifier");

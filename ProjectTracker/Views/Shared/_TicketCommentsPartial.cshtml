@@ -1,0 +1,38 @@
+﻿@using ProjectTracker.Core.ViewModels.Ticket.TicketComment
+@model IEnumerable<TicketCommentViewModel>
+
+<!-- Content Column -->
+<div class="col-lg-6 mb-4">
+
+    <!-- Approach -->
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Comments</h6>
+        </div>
+        <div class="card-body">
+
+            @if(Model.Any())
+            {
+                @foreach (var comment in Model)
+                {
+                    <div class="border-left-success card mb-4">
+                        <div class="card-header">
+                            Comment by: <a asp-controller="Employees" asp-action="Details" asp-route-id="@comment.CommenterId">@comment.Commenter</a> @comment.CreatedOn
+                        </div>
+                        <div class="card-body">
+                            @comment.Message
+                        </div>
+                    </div>
+                }
+            }
+            else
+            {
+                @:No comments yet
+            }
+
+        </div>
+
+        @await Html.PartialAsync("_CommentFormPartial", new CreateTicketCommentViewModel())
+    </div>
+
+</div>

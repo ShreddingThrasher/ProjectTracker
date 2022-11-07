@@ -14,5 +14,7 @@ namespace ProjectTracker.Core.Contracts
         Task<IEnumerable<EmployeeViewModel>> GetAll();
 
         Task<IEnumerable<string>> GetUserNamesAsync();
+
+        Task<IEnumerable<EmployeeIdNameViewModel>> GetIdsAndNamesAsync();
     }
 }

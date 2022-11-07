@@ -40,6 +40,44 @@ namespace ProjectTracker.Core.Services
             return await userManager.AddToRoleAsync(employee, roleName);
         }
 
+        public async Task AssignToProjectAsync(string employeeId, Guid projectId)
+        {
+            var employee = await repo.All<Employee>()
+                .Where(e => e.IsActive)
+                .Include(e => e.EmployeesProjects)
+                .FirstOrDefaultAsync(e => e.Id == employeeId);
+
+            if(employee == null)
+            {
+                throw new NullReferenceException();
+            }
+
+            var project = await repo.All<Project>()
+                .Where(p => p.IsActive)
+                .FirstOrDefaultAsync(p => p.Id == projectId);
+
+            if(project == null)
+            {
+                throw new NullReferenceException();
+            }
+
+            if(employee.EmployeesProjects.Any(ep => ep.ProjectId == projectId))
+            {
+                throw new ArgumentException();
+            }
+
+            var employeeProject = new EmployeeProject()
+            {
+                EmployeeId = employee.Id,
+                Employee = employee,
+                ProjectId = project.Id,
+                Project = project
+            };
+
+            await repo.AddAsync(employeeProject);
+            await repo.SaveChangesAsync();
+        }
+
         public async Task<IdentityResult> CreateRoleAsync(CreateRoleViewModel model)
         {
             var role = new IdentityRole()
@@ -50,7 +88,7 @@ namespace ProjectTracker.Core.Services
             return await roleManager.CreateAsync(role);
         }
 
-        public async Task<IEnumerable<string>> GetAllRoles()
+        public async Task<IEnumerable<string>> GetAllRolesAsync()
         {
             return await roleManager.Roles
                 .Select(r => r.Name)

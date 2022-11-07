@@ -39,6 +39,18 @@ namespace ProjectTracker.Core.Services
         public async Task<int> GetCount()
             => await this.repo.AllReadonly<Employee>().Where(e => e.IsActive).CountAsync();
 
+        public async Task<IEnumerable<EmployeeIdNameViewModel>> GetIdsAndNamesAsync()
+        {
+            return await repo.AllReadonly<Employee>()
+                .Where(e => e.IsActive)
+                .Select(e => new EmployeeIdNameViewModel()
+                {
+                    Id = e.Id,
+                    UserName = e.UserName
+                })
+                .ToListAsync();
+        }
+
         public async Task<IEnumerable<string>> GetUserNamesAsync()
             => await this.repo.AllReadonly<Employee>()
                         .Where(e => e.IsActive)

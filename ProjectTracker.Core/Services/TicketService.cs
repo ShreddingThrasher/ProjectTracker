@@ -24,6 +24,25 @@ namespace ProjectTracker.Core.Services
             repo = _repo;
         }
 
+        public Task CreateComment()
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task CreateComment(string userId, Guid ticketId, CreateTicketCommentViewModel model)
+        {
+            var comment = new TicketComment()
+            {
+                Message = model.Message,
+                CommenterId = userId,
+                CreatedOn = DateTime.Now,
+                TicketId = ticketId
+            };
+
+            await repo.AddAsync(comment);
+            await repo.SaveChangesAsync();
+        }
+
         public async Task CreateTicketAsync(SubmitTicketViewModel model, string submitterId, Guid departmentId)
         {
             var ticket = new Ticket()
@@ -40,6 +59,49 @@ namespace ProjectTracker.Core.Services
 
             await repo.AddAsync(ticket);
             await repo.SaveChangesAsync();
+        }
+
+        public async Task EditTicket(EditTicketViewModel model)
+        {
+            var ticket = await repo.All<Ticket>()
+                .Where(t => t.IsActive)
+                .Include(t => t.History)
+                .FirstOrDefaultAsync(t => t.Id == model.Id);
+
+            if(ticket.Title != model.Title)
+            {
+                ticket.History.Add(CreateChange(ticket.Id, nameof(ticket.Title), ticket.Title, model.Title));
+
+                ticket.Title = model.Title;
+            }
+
+            if(ticket.Priority != model.Priority)
+            {
+                ticket.History.Add(CreateChange(ticket.Id, nameof(ticket.Priority), ticket.Priority.ToString(), model.Priority.ToString()));
+
+                ticket.Priority = model.Priority;
+            }
+            
+            if(ticket.Status != model.Status)
+            {
+                ticket.History.Add(CreateChange(ticket.Id, nameof(ticket.Status), ticket.Status.ToString(), model.Status.ToString()));
+
+                ticket.Status = model.Status;
+            }
+
+            await repo.SaveChangesAsync();
+        }
+
+        private TicketChange CreateChange(Guid ticketId, string propery, string oldValue, string newValue)
+        {
+            return new TicketChange()
+            {
+                Property = propery,
+                OldValue = oldValue,
+                NewValue = newValue,
+                Date = DateTime.Now,
+                TicketId = ticketId
+            };
         }
 
         public async Task<IEnumerable<TicketViewModel>> GetAll()
@@ -62,6 +124,19 @@ namespace ProjectTracker.Core.Services
                     Date = t.CreatedOn
                 })
                 .ToListAsync();
+        }
+
+        public async Task<EditTicketViewModel> GetById(Guid id)
+        {
+            var ticket = await repo.GetByIdAsync<Ticket>(id);
+
+            return new EditTicketViewModel()
+            {
+                Id = ticket.Id,
+                Title = ticket.Title,
+                Priority = ticket.Priority,
+                Status = ticket.Status
+            };
         }
 
         public async Task<int> GetCount()
@@ -107,7 +182,8 @@ namespace ProjectTracker.Core.Services
                         {
                             Property = c.Property,
                             OldValue = c.OldValue,
-                            NewValue = c.NewValue
+                            NewValue = c.NewValue,
+                            ChangedOn = c.Date
                         }).ToList()
                 })
                 .FirstOrDefaultAsync();

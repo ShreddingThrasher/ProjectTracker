@@ -23,9 +23,9 @@ namespace ProjectTracker.Infrastructure.Data.Entities
         [ForeignKey(nameof(DepartmentId))]
         public Department Department { get; set; }
 
-        public ICollection<EmployeeProject> AssignedEmployees { get; set; }
+        public ICollection<EmployeeProject> AssignedEmployees { get; set; } = new List<EmployeeProject>();
 
-        public ICollection<Ticket> Tickets { get; set; }
+        public ICollection<Ticket> Tickets { get; set; } = new List<Ticket>();
 
         [Required]
         public bool IsActive { get; set; }

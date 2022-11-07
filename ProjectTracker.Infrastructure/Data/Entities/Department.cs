@@ -20,11 +20,11 @@ namespace ProjectTracker.Infrastructure.Data.Entities
         public Employee Lead { get; set; }
 
         [InverseProperty("Department")]
-        public ICollection<Employee> Employees { get; set; }
+        public ICollection<Employee> Employees { get; set; } = new List<Employee>();
 
-        public ICollection<Project> Projects { get; set; }
+        public ICollection<Project> Projects { get; set; } = new List<Project>();
 
-        public ICollection<Ticket> Tickets { get; set; }
+        public ICollection<Ticket> Tickets { get; set; } = new List<Ticket>();
 
         [Required]
         public bool IsActive { get; set; }

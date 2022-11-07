@@ -1,0 +1,23 @@
+﻿@using ProjectTracker.Core.ViewModels.Ticket.TicketComment
+@model CreateTicketCommentViewModel
+
+<div class="card mb-4">
+    <div class="card-header">
+        Post a comment
+    </div>
+    <div class="card-body">
+        <form method="post" action="/Tickets/Details/@ViewBag.TicketId/Comment">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group row">
+                <div class="col-sm-15 mb-3 mb-sm-0">
+                    <label asp-for="@Model.Message"></label><br />
+                    <span asp-validation-for="@Model.Message" class="text-danger"></span>
+                    <textarea asp-for="@Model.Message" class="form-control" aria-required="true" style="resize: none"></textarea>
+                </div>
+            </div>
+            <button type="submit" class="w-100 btn btn-lg btn-primary">Post comment</button>
+        </form>
+    </div>
+</div>
+
+<partial name="_ValidationScriptsPartial" />

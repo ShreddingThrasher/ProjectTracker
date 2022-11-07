@@ -1,5 +1,7 @@
-﻿using System;
+﻿using ProjectTracker.Infrastructure.DataConstants;
+using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,8 +14,8 @@ namespace ProjectTracker.Core.ViewModels.Ticket.TicketComment
 
         public DateTime CreatedOn { get; set; }
 
-        public string CommenterId { get; set; }
+        public string CommenterId { get; set; } = null!;
 
-        public string Commenter { get; set; }
+        public string Commenter { get; set; } = null!;
     }
 }

@@ -13,5 +13,7 @@ namespace ProjectTracker.Core.ViewModels.Ticket.TicketChange
         public string OldValue { get; set; }
 
         public string NewValue { get; set; }
+
+        public DateTime ChangedOn { get; set; }
     }
 }

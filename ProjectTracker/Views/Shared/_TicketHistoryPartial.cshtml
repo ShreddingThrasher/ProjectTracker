@@ -1,0 +1,51 @@
+﻿@using ProjectTracker.Core.ViewModels.Ticket.TicketChange
+@model IEnumerable<TicketChangeViewModel>
+
+<!-- Content Column -->
+    <div class="col-lg-6 mb-4">
+
+        <!-- Approach -->
+        <div class="card shadow mb-4">
+        <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">History</h6>
+            </div>
+            <div class="card-body">
+            
+                @if(Model.Any())
+                {
+                <div class="table-responsive">
+                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                        <thead>
+                            <tr>
+                                <th>Property</th>
+                                <th>Old Value</th>
+                                <th>New Value</th>
+                                <th>Changed On</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+
+                            @foreach (var change in Model.OrderByDescending(c => c.ChangedOn))
+                            {
+                                <tr>
+                                    <td>@change.Property</td>
+                                    <td>@change.OldValue</td>
+                                    <td>@change.NewValue</td>
+                                    <td>@change.ChangedOn</td>
+                                </tr>
+                            }
+
+                        </tbody>
+                    </table>
+                </div>
+                }
+                else
+                {
+                    @:No changes yet
+                }
+
+            </div>
+        </div>
+
+    </div>
