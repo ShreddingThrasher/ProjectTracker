@@ -15,6 +15,8 @@ namespace ProjectTracker.Core.Contracts
 
         Task<IEnumerable<TicketViewModel>> GetAll();
 
+        Task AssignTicket(AssignTicketViewModel model);
+
         Task EditTicket(EditTicketViewModel model);
 
         Task<EditTicketViewModel> GetById(Guid id);

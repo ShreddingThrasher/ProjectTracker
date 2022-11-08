@@ -1,4 +1,5 @@
-﻿using ProjectTracker.Core.Contracts;
+﻿using ProjectTracker.Core.Constants;
+using ProjectTracker.Core.Contracts;
 using ProjectTracker.Core.Services;
 using ProjectTracker.Infrastructure.Data.Common;
 
@@ -17,7 +18,10 @@ namespace Microsoft.Extensions.DependencyInjection
 
             services.AddAuthorization(options =>
             {
-                //Define policies if needed
+                options.AddPolicy("CanAssignAndEditTicket", policy =>
+                {
+                    policy.RequireRole(new string[] { RoleConstants.Admin, RoleConstants.DepartmentLead });
+                });
             });
 
             return services;

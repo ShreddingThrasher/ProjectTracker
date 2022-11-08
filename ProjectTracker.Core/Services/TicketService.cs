@@ -24,11 +24,6 @@ namespace ProjectTracker.Core.Services
             repo = _repo;
         }
 
-        public Task CreateComment()
-        {
-            throw new NotImplementedException();
-        }
-
         public async Task CreateComment(string userId, Guid ticketId, CreateTicketCommentViewModel model)
         {
             var comment = new TicketComment()
@@ -188,6 +183,66 @@ namespace ProjectTracker.Core.Services
                 })
                 .FirstOrDefaultAsync();
 #pragma warning restore CS8603 // Possible null reference return.
+        }
+
+        public async Task AssignTicket(AssignTicketViewModel model)
+        {
+            var employee = await repo.All<Employee>()
+                .Where(e => e.IsActive)
+                .Include(e => e.AssignedTickets)
+                .FirstOrDefaultAsync(e => e.Id == model.EmployeeId);
+
+            if(employee == null)
+            {
+                throw new NullReferenceException("Employee doesn't exist!");
+            }
+
+            var ticket = await repo.All<Ticket>()
+                .Where(t => t.IsActive)
+                .Include(t => t.AssignedEmployee)
+                .Include(t => t.History)
+                .FirstOrDefaultAsync(t => t.Id == model.TicketId);
+
+            if(ticket == null)
+            {
+                throw new NullReferenceException("Ticket doesn't exist!");
+            }
+
+            if (employee.AssignedTickets.Contains(ticket))
+            {
+                throw new ArgumentException("Already assigned to this employee!");
+            }
+
+            if(ticket.Status == Status.Done)
+            {
+                throw new ArgumentException("Ticket is already Done!");
+            }
+
+            if(ticket.Status != Status.InProgress)
+            {
+                var statusChange = CreateChange(
+                ticket.Id,
+                nameof(ticket.Status),
+                ticket.Status.ToString(),
+                Status.InProgress.ToString()
+                );
+
+                ticket.Status = Status.InProgress;
+
+                ticket.History.Add(statusChange);
+            }
+
+            var assignedChange = CreateChange(
+                ticket.Id,
+                nameof(ticket.AssignedEmployee),
+                ticket.AssignedEmployee != null ? ticket.AssignedEmployee.UserName : "Not assigned",
+                employee.UserName);
+
+            ticket.AssignedEmployeeId = employee.Id;
+
+            ticket.History.Add(assignedChange);
+
+            await repo.SaveChangesAsync();
         }
     }
 }

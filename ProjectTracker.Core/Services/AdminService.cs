@@ -34,7 +34,12 @@ namespace ProjectTracker.Core.Services
 
             if(employee == null)
             {
-                throw new NullReferenceException();
+                throw new NullReferenceException("Employee doesn't exist!");
+            }
+
+            if(!roleManager.Roles.Select(r => r.Name).Contains(roleName))
+            {
+                throw new NullReferenceException("Role doesn't exist!");
             }
 
             return await userManager.AddToRoleAsync(employee, roleName);

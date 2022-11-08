@@ -109,12 +109,22 @@ namespace ProjectTracker.Controllers
                 }
 
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                return RedirectToAction(nameof(AssignRoles), new { Success = false });
+                ModelState.AddModelError(string.Empty, ex.Message);
+
+                model.Employees = await employeeService.GetUserNamesAsync();
+                model.Roles = await adminService.GetAllRolesAsync();
+
+                return View(model);
             }
 
-            return RedirectToAction(nameof(AssignRoles), new { Success = false });
+            ModelState.AddModelError(string.Empty, "The employee is already in that Role.");
+
+            model.Employees = await employeeService.GetUserNamesAsync();
+            model.Roles = await adminService.GetAllRolesAsync();
+
+            return View(model);
         }
 
         [HttpGet]
@@ -144,7 +154,7 @@ namespace ProjectTracker.Controllers
             {
                 await adminService.AssignToProjectAsync(model.EmployeeId, model.ProjectId);
 
-                RedirectToAction("Detauks", "Projects", new { id = model.ProjectId });
+                return RedirectToAction("Details", "Projects", new { id = model.ProjectId });
             }
             catch (ArgumentException ex)
             {
