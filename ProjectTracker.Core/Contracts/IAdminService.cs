@@ -18,5 +18,7 @@ namespace ProjectTracker.Core.Contracts
         Task<IdentityResult> AddToRoleAsync(string userName, string roleName);
 
         Task AssignToProjectAsync(string employeeId, Guid projectId);
+
+        Task AssignToDepartmentAsync(string employeeId, Guid departmentId);
     }
 }

@@ -28,8 +28,8 @@
                     {
                         <tr>
                             <td><a asp-controller="Tickets" asp-action="Details" asp-route-id="@ticket.Id">@ticket.Title</a></td>
-                            <td>@ticket.Subbmitter</td>
-                            <td>@ticket.Status</td>
+                            <td><a asp-controller="Employees" asp-action="Details" asp-route-id="@ticket.Submitter.Id">@ticket.Submitter.UserName</a></td>
+                            <td @(ticket.Status.ToString() == "Done" ? "class=text-success" : "")>@ticket.Status</td>
                             <td>@ticket.Priority</td>
                             <td>@ticket.Date.ToString("dddd, dd MMMM yyyy, HH:mm")</td>
                         </tr>

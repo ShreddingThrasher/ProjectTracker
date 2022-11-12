@@ -1,5 +1,6 @@
 ﻿using ProjectTracker.Core.ViewModels.Ticket;
 using ProjectTracker.Core.ViewModels.Ticket.TicketComment;
+using ProjectTracker.Infrastructure.Data.Entities.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,5 +27,7 @@ namespace ProjectTracker.Core.Contracts
         Task<TicketDetailsViewModel> GetTicketDetaisById(Guid id);
 
         Task CreateComment(string userId, Guid ticketId, CreateTicketCommentViewModel model);
+
+        Task<IEnumerable<Status>> GetAllStatusesAsync();
     }
 }

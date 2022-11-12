@@ -45,6 +45,43 @@ namespace ProjectTracker.Core.Services
             return await userManager.AddToRoleAsync(employee, roleName);
         }
 
+        public async Task AssignToDepartmentAsync(string employeeId, Guid departmentId)
+        {
+            var employee = await repo.All<Employee>()
+                .Where(e => e.IsActive)
+                .Include(e => e.Department)
+                .FirstOrDefaultAsync(e => e.Id == employeeId);
+
+            if(employee == null)
+            {
+                throw new NullReferenceException("Employee doesn't exist.");
+            }
+
+            var department = await repo.All<Department>()
+                .Where(d => d.IsActive)
+                .Include(d => d.Employees)
+                .FirstOrDefaultAsync(d => d.Id == departmentId);
+
+            if(department == null)
+            {
+                throw new NullReferenceException("Department doesn't exist.");
+            }
+
+            if(employee?.Department?.Id == departmentId)
+            {
+                throw new ArgumentException("The Employee is already in this Department.");
+            }
+
+            if(employee.LeadedDepartmentId != null)
+            {
+                throw new ArgumentException("This Employee is a leader of Department and cannot be assigned.");
+            }
+
+            employee.DepartmentId = department.Id;
+
+            await repo.SaveChangesAsync();
+        }
+
         public async Task AssignToProjectAsync(string employeeId, Guid projectId)
         {
             var employee = await repo.All<Employee>()

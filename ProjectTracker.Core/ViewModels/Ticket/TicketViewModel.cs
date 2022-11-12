@@ -5,6 +5,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using ProjectTracker.Core.ViewModels.Project;
+using ProjectTracker.Core.ViewModels.Department;
+using ProjectTracker.Core.ViewModels.Employee;
 
 namespace ProjectTracker.Core.ViewModels.Ticket
 {
@@ -16,7 +18,9 @@ namespace ProjectTracker.Core.ViewModels.Ticket
 
         public ProjectIdNameViewModel Project { get; set; }
 
-        public string Subbmitter { get; set; }
+        public DepartmentIdNameViewModel Department { get; set; }
+
+        public EmployeeIdNameViewModel Submitter { get; set; }
 
         public Priority Priority { get; set; }
 

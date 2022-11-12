@@ -2,6 +2,7 @@
 using ProjectTracker.Core.Contracts;
 using ProjectTracker.Core.ViewModels.Project;
 using ProjectTracker.Core.ViewModels.Ticket;
+using ProjectTracker.Infrastructure.Data.Entities.Enums;
 using System.Security.Claims;
 
 namespace ProjectTracker.Controllers
@@ -34,7 +35,7 @@ namespace ProjectTracker.Controllers
         {
             var model = new CreateProjectViewModel()
             {
-                Departments = await departmentService.GetAllIdAndName()
+                Departments = await departmentService.GetAllIdAndNameAsync()
             };
 
             ViewBag.Success = success;
@@ -59,6 +60,10 @@ namespace ProjectTracker.Controllers
         public async Task<IActionResult> Details(Guid id)
         {
             var model = await projectService.GetProjectDetailsById(id);
+
+            ViewBag.Open = model.Tickets.Where(t => t.Status == Status.Open).Count();
+            ViewBag.InProgress = model.Tickets.Where(t => t.Status == Status.InProgress).Count();
+            ViewBag.Done = model.Tickets.Where(t => t.Status == Status.Done).Count();
 
             return View(model);
         }

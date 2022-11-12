@@ -39,7 +39,7 @@ namespace ProjectTracker.Core.Services
         public async Task<int> GetCount()
             => await this.repo.AllReadonly<Employee>().Where(e => e.IsActive).CountAsync();
 
-        public async Task<IEnumerable<EmployeeIdNameViewModel>> GetIdsAndNamesAsync()
+        public async Task<IEnumerable<EmployeeIdNameViewModel>> GetAllIdAndNameAsync()
         {
             return await repo.AllReadonly<Employee>()
                 .Where(e => e.IsActive)

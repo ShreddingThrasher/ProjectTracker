@@ -14,8 +14,12 @@ namespace ProjectTracker.Core.Contracts
 
         Task<IEnumerable<DepartmentViewModel>> GetAll();
 
-        Task<IEnumerable<DepartmentIdNameViewModel>> GetAllIdAndName();
+        Task<IEnumerable<DepartmentIdNameViewModel>> GetAllIdAndNameAsync();
 
         Task<Department> GetById(Guid id);
+
+        Task CreateAsync(CreateDepartmentViewModel model);
+
+        Task<DepartmentDetailsViewModel> GetDepartmentDetailsAsync(Guid departmentId);
     }
 }

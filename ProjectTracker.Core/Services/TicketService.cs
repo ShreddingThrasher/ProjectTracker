@@ -12,6 +12,8 @@ using System.Threading.Tasks;
 using ProjectTracker.Infrastructure.Data.Entities.Enums;
 using ProjectTracker.Core.ViewModels.Ticket.TicketComment;
 using ProjectTracker.Core.ViewModels.Ticket.TicketChange;
+using ProjectTracker.Core.ViewModels.Department;
+using ProjectTracker.Core.ViewModels.Employee;
 
 namespace ProjectTracker.Core.Services
 {
@@ -103,16 +105,27 @@ namespace ProjectTracker.Core.Services
         {
             return await repo.AllReadonly<Ticket>()
                 .Where(t => t.IsActive)
+                .Include(t => t.Submitter)
                 .Include(t => t.Project)
+                .Include(t => t.Department)
                 .Select(t => new TicketViewModel()
                 {
                     Id = t.Id,
-                    Subbmitter = t.Submitter.UserName,
+                    Submitter = new EmployeeIdNameViewModel()
+                    {
+                        Id = t.Submitter.Id,
+                        UserName = t.Submitter.UserName
+                    },
                     Title = t.Title,
                     Project = new ProjectIdNameViewModel()
                     {
                         Id = t.Project.Id,
                         Name = t.Project.Name
+                    },
+                    Department = new DepartmentIdNameViewModel()
+                    {
+                        Id = t.Department.Id,
+                        Name = t.Department.Name
                     },
                     Priority = t.Priority,
                     Status = t.Status,
@@ -243,6 +256,14 @@ namespace ProjectTracker.Core.Services
             ticket.History.Add(assignedChange);
 
             await repo.SaveChangesAsync();
+        }
+
+        public async Task<IEnumerable<Status>> GetAllStatusesAsync()
+        {
+            return await repo.AllReadonly<Ticket>()
+                .Where(t => t.IsActive)
+                .Select(t => t.Status)
+                .ToListAsync();
         }
     }
 }

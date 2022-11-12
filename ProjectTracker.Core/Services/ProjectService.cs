@@ -106,7 +106,11 @@ namespace ProjectTracker.Core.Services
                     {
                         Id = t.Id,
                         Title = t.Title,
-                        Subbmitter = t.Submitter.UserName,
+                        Submitter = new EmployeeIdNameViewModel()
+                        {
+                            Id = t.Submitter.Id,
+                            UserName = t.Submitter.UserName
+                        },
                         Priority = t.Priority,
                         Status = t.Status,
                         Date = t.CreatedOn

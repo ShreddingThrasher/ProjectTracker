@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using ProjectTracker.Core.Contracts;
 using ProjectTracker.Infrastructure.Data.Entities;
+using ProjectTracker.Infrastructure.Data.Entities.Enums;
 using ProjectTracker.Models;
 using System.Diagnostics;
 
@@ -37,11 +38,12 @@ namespace ProjectTracker.Controllers
             ViewData["Projects"] = await projectService.GetCount();
             ViewData["Tickets"] = await ticketService.GetCount();
 
-            return View();
-        }
+            var statuses = await ticketService.GetAllStatusesAsync();
 
-        public IActionResult Dashboard()
-        {
+            ViewBag.Open = statuses.Where(s => s == Status.Open).Count();
+            ViewBag.InProgress = statuses.Where(s => s == Status.InProgress).Count();
+            ViewBag.Done = statuses.Where(s => s == Status.Done).Count();
+
             return View();
         }
 

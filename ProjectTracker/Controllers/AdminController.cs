@@ -15,17 +15,20 @@ namespace ProjectTracker.Controllers
         private readonly IEmployeeService employeeService;
         private readonly RoleManager<IdentityRole> roleManager;
         private readonly IProjectService projectService;
+        private readonly IDepartmentService departmentService;
 
         public AdminController(
             IAdminService _adminService,
             IEmployeeService _employeeService,
             RoleManager<IdentityRole> _roleManager,
-            IProjectService _projectService)
+            IProjectService _projectService,
+            IDepartmentService _departmentService)
         {
             adminService = _adminService;
             employeeService = _employeeService;
             roleManager = _roleManager;
             projectService = _projectService;
+            departmentService = _departmentService;
         }
 
         public IActionResult Index()
@@ -128,11 +131,51 @@ namespace ProjectTracker.Controllers
         }
 
         [HttpGet]
+        public async Task<IActionResult> AssignDepartments()
+        {
+            var model = new AssignDepartmentViewModel()
+            {
+                Employees = await employeeService.GetAllIdAndNameAsync(),
+                Departments = await departmentService.GetAllIdAndNameAsync()
+            };
+
+            return View(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AssignDepartments(AssignDepartmentViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                model.Employees = await employeeService.GetAllIdAndNameAsync();
+                model.Departments = await departmentService.GetAllIdAndNameAsync();
+
+                return View(model);
+            }
+
+            try
+            {
+                await adminService.AssignToDepartmentAsync(model.EmployeeId, model.DepartmentId);
+
+                return RedirectToAction("Details", "Departments", new { id = model.DepartmentId });
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError(string.Empty, ex.Message);
+            }
+
+            model.Employees = await employeeService.GetAllIdAndNameAsync();
+            model.Departments = await departmentService.GetAllIdAndNameAsync();
+
+            return View(model);
+        }
+
+        [HttpGet]
         public async Task<IActionResult> AssignProjects()
         {
             var model = new AssignProjectsViewModel()
             {
-                Employees = await employeeService.GetIdsAndNamesAsync(),
+                Employees = await employeeService.GetAllIdAndNameAsync(),
                 Projects = await projectService.GetIdsAndNamesAsync()
             };
 
@@ -144,7 +187,7 @@ namespace ProjectTracker.Controllers
         {
             if (!ModelState.IsValid)
             {
-                model.Employees = await employeeService.GetIdsAndNamesAsync();
+                model.Employees = await employeeService.GetAllIdAndNameAsync();
                 model.Projects = await projectService.GetIdsAndNamesAsync();
 
                 return View(model);
@@ -165,7 +208,7 @@ namespace ProjectTracker.Controllers
                 ModelState.AddModelError(string.Empty, "Something went wrong :(");
             }
 
-            model.Employees = await employeeService.GetIdsAndNamesAsync();
+            model.Employees = await employeeService.GetAllIdAndNameAsync();
             model.Projects = await projectService.GetIdsAndNamesAsync();
 
             return View(model);

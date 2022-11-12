@@ -1,0 +1,45 @@
+﻿@using ProjectTracker.Core.ViewModels.Ticket
+@model IEnumerable<TicketViewModel>
+
+
+<div class="col-xl-12 col-lg-7">
+
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">Tickets</h6>
+    </div>
+    <!-- Card Body -->
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Title</th>
+                        <th>Project</th>
+                        <th>Submitter</th>
+                        <th>Status</th>
+                        <th>Priority</th>
+                        <th>Submit Time</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    @foreach (var ticket in Model.OrderByDescending(t => t.Date))
+                    {
+                        <tr>
+                            <td><a asp-controller="Tickets" asp-action="Details" asp-route-id="@ticket.Id">@ticket.Title</a></td>
+                            <td><a asp-controller="Projects" asp-action="Details" asp-route-id="@ticket.Project.Id">@ticket.Project.Name</a></td>
+                            <td><a asp-controller="Employees" asp-action="Details" asp-route-id="@ticket.Submitter.Id">@ticket.Submitter.UserName</a></td>
+                            <td @(ticket.Status.ToString() == "Done" ? "class=text-success" : "")>@ticket.Status</td>
+                            <td>@ticket.Priority</td>
+                            <td>@ticket.Date.ToString("dddd, dd MMMM yyyy, HH:mm")</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+</div>

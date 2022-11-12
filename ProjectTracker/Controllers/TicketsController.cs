@@ -84,7 +84,7 @@ namespace ProjectTracker.Controllers
             var model = new AssignTicketViewModel()
             {
                 TicketId = id,
-                Employees = await employeeService.GetIdsAndNamesAsync()
+                Employees = await employeeService.GetAllIdAndNameAsync()
             };
 
             return View(model);
@@ -97,7 +97,7 @@ namespace ProjectTracker.Controllers
         {
             if (!ModelState.IsValid)
             {
-                model.Employees = await employeeService.GetIdsAndNamesAsync();
+                model.Employees = await employeeService.GetAllIdAndNameAsync();
 
                 return View(model);
             }
@@ -117,7 +117,7 @@ namespace ProjectTracker.Controllers
                 ModelState.AddModelError(string.Empty, ex.Message);
             }
 
-            model.Employees = await employeeService.GetIdsAndNamesAsync();
+            model.Employees = await employeeService.GetAllIdAndNameAsync();
 
             return View(model);
         }
