@@ -70,6 +70,11 @@ namespace ProjectTracker.Controllers
         {
             var model = await departmentService.GetDepartmentDetailsAsync(id);
 
+            if(model == null)
+            {
+                return RedirectToAction(nameof(HomeController.NotFound), "Home");
+            }
+
             ViewBag.Open = model.Tickets.Where(t => t.Status == Status.Open).Count();
             ViewBag.InProgress = model.Tickets.Where(t => t.Status == Status.InProgress).Count();
             ViewBag.Done = model.Tickets.Where(t => t.Status == Status.Done).Count();

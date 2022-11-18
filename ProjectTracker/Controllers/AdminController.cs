@@ -36,21 +36,6 @@ namespace ProjectTracker.Controllers
             return View();
         }
 
-        public async Task<IActionResult> Test()
-        {
-            var role = await roleManager.FindByNameAsync(RoleConstants.Admin);
-
-            string name = role.Name;
-
-            var x = User.IsInRole(RoleConstants.Admin);
-            var y = User.IsInRole("nonexistent");
-
-
-            Console.WriteLine();
-
-            return View();
-        }
-
         [HttpGet]
         public IActionResult CreateRole()
         {

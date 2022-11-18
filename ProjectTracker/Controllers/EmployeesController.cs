@@ -19,5 +19,17 @@ namespace ProjectTracker.Controllers
 
             return View(model);
         }
+
+        public async Task<IActionResult> Details(string id)
+        {
+            var model = await employeeService.GetEmployeeDetailsAsync(id);
+
+            if (model == null)
+            {
+                return RedirectToAction(nameof(HomeController.NotFound), "Home");
+            }
+
+            return View(model);
+        }
     }
 }

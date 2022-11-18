@@ -34,6 +34,11 @@ namespace ProjectTracker.Controllers
         {
             var model = await ticketService.GetTicketDetaisById(id);
 
+            if (model == null)
+            {
+                return RedirectToAction(nameof(HomeController.NotFound), "Home");
+            }
+
             ViewBag.TicketId = model.Id;
 
             return View(model);
