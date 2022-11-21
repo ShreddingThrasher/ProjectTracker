@@ -1,4 +1,5 @@
-﻿@using ProjectTracker.Core.ViewModels.Ticket
+﻿@using ProjectTracker.Core.Constants
+@using ProjectTracker.Core.ViewModels.Ticket
 @model TicketDetailsViewModel
 
 <!-- Page Heading -->
@@ -41,10 +42,10 @@
                 <p>Priority: @Model.Priority</p>
                 <p>Status: @Model.Status</p>
 
-                @if(Model.Status != "Done")
+                @if(Model.Status != "Done" && User.IsInRole(RoleConstants.Admin))
                 {
                     <a href="/Tickets/Details/@Model.Id/Assign" class="btn btn-success">Assign to Employee</a>
-                    <a asp-controller="Tickets" asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">Edit</a>
+                    <a asp-controller="Tickets" asp-action="Edit" asp-route-id="@Model.Id" asp-area="Administration" class="btn btn-warning">Edit</a>
                 }
             </div>
         </div>

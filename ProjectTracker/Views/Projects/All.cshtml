@@ -1,4 +1,5 @@
-﻿@using ProjectTracker.Core.ViewModels.Project
+﻿@using ProjectTracker.Core.Constants
+@using ProjectTracker.Core.ViewModels.Project
 @model IEnumerable<ProjectViewModel>
 
 @{
@@ -38,6 +39,9 @@
 
 </div>
 
-<a asp-controller="Projects" asp-action="Create" class="btn btn-primary btn-icon-split">
-    <span class="text">Create New Project</span>
-</a>
+@if (User.IsInRole(RoleConstants.Admin))
+{
+    <a asp-controller="Projects" asp-action="Create" asp-area="Administration" class="btn btn-primary btn-icon-split">
+        <span class="text">Create New Project</span>
+    </a>
+}

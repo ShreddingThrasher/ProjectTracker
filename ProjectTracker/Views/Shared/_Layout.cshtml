@@ -46,7 +46,7 @@
 
                 <!-- Nav Item - Dashboard -->
                 <li class="nav-item active">
-                    <a asp-controller="Home" asp-action="Index" class="nav-link">
+                    <a asp-controller="Home" asp-action="Index" asp-area="" class="nav-link">
                         <i class="fas fa-fw fa-tachometer-alt"></i>
                         <span>Dashboard</span>
                     </a>
@@ -55,7 +55,7 @@
                 @if(User.IsInRole(RoleConstants.Admin))
                 {
                     <li class="nav-item">
-                        <a asp-controller="Admin" asp-action="Index" class="nav-link">
+                        <a class="nav-link" asp-controller="Admin" asp-action="Index" asp-area="Administration">
                             <i class="fas fa-fw fa-tachometer-alt"></i>
                             <span>Admin Panel</span>
                         </a>
@@ -79,7 +79,7 @@
                     </a>
                     <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordionSidebar">
                         <div class="bg-white py-2 collapse-inner rounded">
-                            <a asp-controller="Departments" asp-action="All" class="collapse-item">All Departments</a>
+                            <a asp-controller="Departments" asp-action="All" asp-area="" class="collapse-item">All Departments</a>
                         </div>
                     </div>
                 </li>
@@ -93,7 +93,7 @@
                     </a>
                     <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                         <div class="bg-white py-2 collapse-inner rounded">
-                            <a asp-controller="Employees" asp-action="All" class="collapse-item">All Employees</a>
+                            <a asp-controller="Employees" asp-action="All" asp-area="" class="collapse-item">All Employees</a>
                         </div>
                     </div>
                 </li>
@@ -107,7 +107,7 @@
                     </a>
                     <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordionSidebar">
                         <div class="bg-white py-2 collapse-inner rounded">
-                            <a asp-controller="Projects" asp-action="All" class="collapse-item">All Projects</a>
+                            <a asp-controller="Projects" asp-action="All" asp-area="" class="collapse-item">All Projects</a>
                         </div>
                     </div>
                 </li>
@@ -121,7 +121,7 @@
                     </a>
                     <div id="collapseFour" class="collapse" aria-labelledby="headingFour" data-parent="#accordionSidebar">
                         <div class="bg-white py-2 collapse-inner rounded">
-                            <a asp-controller="Tickets" asp-action="All" class="collapse-item">All Tickets</a>
+                            <a asp-controller="Tickets" asp-action="All" asp-area="" class="collapse-item">All Tickets</a>
                         </div>
                     </div>
                 </li>
@@ -393,7 +393,7 @@
                                         Activity Log
                                     </a>
                                     <div class="dropdown-divider"></div>
-                                    <a asp-controller="Account" asp-action="Logout" class="dropdown-item">
+                                    <a asp-controller="Account" asp-action="Logout" asp-area="" class="dropdown-item">
                                         <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
                                         Logout
                                     </a>

@@ -27,45 +27,6 @@ namespace ProjectTracker.Controllers
             return View(model);
         }
 
-        [HttpGet]
-        [Authorize(Roles = RoleConstants.Admin)]
-        public async Task<IActionResult> Create()
-        {
-            var model = new CreateDepartmentViewModel()
-            {
-                Employees = await employeeService.GetAllIdAndNameAsync()
-            };
-
-            return View(model);
-        }
-
-        [HttpPost]
-        [Authorize(Roles = RoleConstants.Admin)]
-        public async Task<IActionResult> Create(CreateDepartmentViewModel model)
-        {
-            if (!ModelState.IsValid)
-            {
-                model.Employees = await employeeService.GetAllIdAndNameAsync();
-
-                return View(model);
-            }
-
-            try
-            {
-                await departmentService.CreateAsync(model);
-
-                return RedirectToAction("All", "Departments");
-            }
-            catch (Exception ex)
-            {
-                ModelState.AddModelError(string.Empty, ex.Message);
-
-                model.Employees = await employeeService.GetAllIdAndNameAsync();
-
-                return View(model);
-            }
-        }
-
         public async Task<IActionResult> Details(Guid id)
         {
             var model = await departmentService.GetDepartmentDetailsAsync(id);

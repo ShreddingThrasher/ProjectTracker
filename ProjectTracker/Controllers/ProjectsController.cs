@@ -30,33 +30,6 @@ namespace ProjectTracker.Controllers
             return View(model);
         }
 
-        [HttpGet]
-        public async Task<IActionResult> Create(bool? success)
-        {
-            var model = new CreateProjectViewModel()
-            {
-                Departments = await departmentService.GetAllIdAndNameAsync()
-            };
-
-            ViewBag.Success = success;
-
-            return View(model);
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> Create(CreateProjectViewModel model)
-        {
-            if (!ModelState.IsValid)
-            {
-                return View(model);
-            }
-
-            await projectService.Create(model);
-
-            //TODO: Redirect to details
-            return RedirectToAction(nameof(All));
-        }
-
         public async Task<IActionResult> Details(Guid id)
         {
             var model = await projectService.GetProjectDetailsById(id);
@@ -74,7 +47,7 @@ namespace ProjectTracker.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> SubmitTicket(Guid id, bool? success)
+        public IActionResult SubmitTicket(Guid id, bool? success)
         {
             var model = new SubmitTicketViewModel();
             model.ProjectId = id;

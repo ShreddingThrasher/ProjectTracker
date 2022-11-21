@@ -44,29 +44,6 @@ namespace ProjectTracker.Controllers
             return View(model);
         }
 
-        [HttpGet]
-        [Authorize(Policy = "CanAssignAndEditTicket")]
-        public async Task<IActionResult> Edit(Guid id)
-        {
-            var model = await ticketService.GetById(id);
-
-            return View(model);
-        }
-
-        [HttpPost]
-        [Authorize(Policy = "CanAssignAndEditTicket")]
-        public async Task<IActionResult> Edit(EditTicketViewModel model)
-        {
-            if (!ModelState.IsValid)
-            {
-                return View(model);
-            }
-
-            await ticketService.EditTicket(model);
-
-            return RedirectToAction(nameof(Details), new { id = model.Id });
-        }
-
         [HttpPost]
         [Route("/Tickets/Details/{Id}/Comment")]
         public async Task<IActionResult> Comment(Guid Id, CreateTicketCommentViewModel model)
@@ -79,52 +56,6 @@ namespace ProjectTracker.Controllers
             await ticketService.CreateComment(User.Id(), Id, model);
 
             return RedirectToAction(nameof(Details), new { id = Id });
-        }
-
-        [HttpGet]
-        [Authorize(Policy = "CanAssignAndEditTicket")]
-        [Route("/Tickets/Details/{Id}/Assign")]
-        public async Task<IActionResult> Assign(Guid id)
-        {
-            var model = new AssignTicketViewModel()
-            {
-                TicketId = id,
-                Employees = await employeeService.GetAllIdAndNameAsync()
-            };
-
-            return View(model);
-        }
-
-        [HttpPost]
-        [Authorize(Policy = "CanAssignAndEditTicket")]
-        [Route("/Tickets/Details/{Id}/Assign")]
-        public async Task<IActionResult> Assign(AssignTicketViewModel model)
-        {
-            if (!ModelState.IsValid)
-            {
-                model.Employees = await employeeService.GetAllIdAndNameAsync();
-
-                return View(model);
-            }
-
-            try
-            {
-                await ticketService.AssignTicket(model);
-
-                return RedirectToAction(nameof(Details), new { id = model.TicketId });
-            }
-            catch (ArgumentException ex)
-            {
-                ModelState.AddModelError(string.Empty, ex.Message);
-            }
-            catch (NullReferenceException ex)
-            {
-                ModelState.AddModelError(string.Empty, ex.Message);
-            }
-
-            model.Employees = await employeeService.GetAllIdAndNameAsync();
-
-            return View(model);
         }
     }
 }
