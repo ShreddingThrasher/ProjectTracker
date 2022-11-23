@@ -25,12 +25,12 @@
             </div>
             <!-- Card Body -->
             <div class="card-body">
-                <p>Project: <a asp-controller="Projects" asp-action="Details" asp-route-id="@Model.ProjectId">@Model.Project</a></p>
-                <p>Submitted by: <a asp-controller="Employees" asp-action="Details" asp-route-id="@Model.SubmitterId">@Model.Submitter</a></p>
+                <p>Project: <a asp-controller="Project" asp-action="Details" asp-route-id="@Model.ProjectId">@Model.Project</a></p>
+                <p>Submitted by: <a asp-controller="Employee" asp-action="Details" asp-route-id="@Model.SubmitterId">@Model.Submitter</a></p>
                 <p>
                     Assigned to: @if(Model.AssignedEmployee != null)
                     {
-                        <a asp-controller="Employees" asp-action="Details" asp-route-id="@Model.AssignedEmployeeId">
+                        <a asp-controller="Employee" asp-action="Details" asp-route-id="@Model.AssignedEmployeeId">
                             @(Model.AssignedEmployee != null ? Model.AssignedEmployee : "Not Assigned")
                         </a>
                     }
@@ -45,7 +45,7 @@
                 @if(Model.Status != "Done" && User.IsInRole(RoleConstants.Admin))
                 {
                     <a href="/Tickets/Details/@Model.Id/Assign" class="btn btn-success">Assign to Employee</a>
-                    <a asp-controller="Tickets" asp-action="Edit" asp-route-id="@Model.Id" asp-area="Administration" class="btn btn-warning">Edit</a>
+                    <a asp-controller="Ticket" asp-action="Edit" asp-route-id="@Model.Id" asp-area="Administration" class="btn btn-warning">Edit</a>
                 }
             </div>
         </div>

@@ -144,7 +144,7 @@ namespace ProjectTracker.Areas.Administration.Controllers
             {
                 await adminService.AssignToDepartmentAsync(model.EmployeeId, model.DepartmentId);
 
-                return Redirect($"/Departments/Details/{model.DepartmentId}");
+                return Redirect($"/Department/Details/{model.DepartmentId}");
             }
             catch (Exception ex)
             {
@@ -184,7 +184,7 @@ namespace ProjectTracker.Areas.Administration.Controllers
             {
                 await adminService.AssignToProjectAsync(model.EmployeeId, model.ProjectId);
 
-                return Redirect($"/Projects/Details/{model.ProjectId}");
+                return Redirect($"/Project/Details/{model.ProjectId}");
             }
             catch (ArgumentException ex)
             {

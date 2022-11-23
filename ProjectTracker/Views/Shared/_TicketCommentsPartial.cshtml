@@ -17,7 +17,7 @@
                 {
                     <div class="border-left-success card mb-4">
                         <div class="card-header">
-                            Comment by: <a asp-controller="Employees" asp-action="Details" asp-route-id="@comment.CommenterId">@comment.Commenter</a> @comment.CreatedOn.ToString("dddd, dd MMMM yyyy, HH:mm")
+                            Comment by: <a asp-controller="Employee" asp-action="Details" asp-route-id="@comment.CommenterId">@comment.Commenter</a> @comment.CreatedOn.ToString("dddd, dd MMMM yyyy, HH:mm")
                         </div>
                         <div class="card-body">
                             @comment.Message

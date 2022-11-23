@@ -35,7 +35,7 @@
 
         @await Html.PartialAsync("_ProjectTicketsPartial", Model.Tickets)
 
-        <a asp-controller="Projects" asp-action="SubmitTicket" asp-route-id="@Model.Id" class="btn btn-info btn-icon-split">
+        <a asp-controller="Project" asp-action="SubmitTicket" asp-route-id="@Model.Id" class="btn btn-info btn-icon-split">
             <span class="text">Submit Ticket</span>
         </a>
 
