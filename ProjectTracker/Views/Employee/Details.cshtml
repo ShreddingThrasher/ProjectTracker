@@ -1,0 +1,95 @@
+﻿@using ProjectTracker.Core.ViewModels.Employee
+@model EmployeeDetailsViewModel
+
+<div class="row">
+    <div class="col-lg-4">
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">@Model.FirstName @Model.LastName</h6>
+            </div>
+            <div class="card-body">
+                <div class="card-body text-center">
+                    <i class="fas fa-user fa-6x text-success-300"></i>
+                </div>
+                <hr />
+                <p><b>UserName:</b> @Model.UserName</p>
+                <p><b>Email:</b> @Model.Email</p>
+                @if(!Model.IsLeader)
+                {
+                    <p>
+                        <b>Department:</b>
+                        @if (Model.Department != null)
+                        {
+                            <a asp-controller="Department" asp-action="Details" asp-route-id="@Model.Department.Id">@Model.Department.Name</a>
+                        }
+                        else
+                        {
+                            @:Not assigned to any Department
+                        }
+                    </p>
+                }
+                else
+                {
+                    <p><b>Leader of Department:</b> <a asp-controller="Department" asp-action="Details" asp-route-id="@Model.Department.Id">@Model.Department.Name</a></p>
+                }
+            </div>
+        </div>
+	</div>
+
+    <div class="col-lg-8" style="height: 100px;">
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">Assigned Projects</h6>
+            </div>
+            <div class="card-body">
+                
+                @if(Model.Projects.Any())
+                {
+                    @foreach (var project in Model.Projects)
+                    {
+                        <div class="card-header py-3 border-left-success">
+                            <h6 class="m-0 font-weight-bold text-primary"><a asp-controller="Project" asp-action="Details" asp-route-id="@project.Id">@project.Name</a></h6>
+                        </div>
+                    }
+                }
+                else
+                {
+                    @:<p>Currently not assigned to any projects.<p/>
+                }
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-xl-12 col-lg-7">
+
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">Assigned Tickets</h6>
+            </div>
+            <!-- Card Body -->
+            
+            <partial name="_EmployeeTicketsTable" model="Model.AssignedTickets" />
+
+        </div>
+
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-xl-12 col-lg-7">
+
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">Submitted Tickets</h6>
+            </div>
+            <!-- Card Body -->
+
+            <partial name="_EmployeeTicketsTable" model="Model.SubmittedTickets" />
+
+        </div>
+
+    </div>
+</div>

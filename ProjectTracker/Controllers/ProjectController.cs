@@ -39,9 +39,9 @@ namespace ProjectTracker.Controllers
                 return RedirectToAction(nameof(HomeController.NotFound), "Home");
             }
 
-            ViewBag.Open = model.Tickets.Where(t => t.Status == Status.Open).Count();
-            ViewBag.InProgress = model.Tickets.Where(t => t.Status == Status.InProgress).Count();
-            ViewBag.Done = model.Tickets.Where(t => t.Status == Status.Done).Count();
+            ViewData["Open"] = model.Tickets.Where(t => t.Status == Status.Open).Count();
+            ViewData["InProgress"] = model.Tickets.Where(t => t.Status == Status.InProgress).Count();
+            ViewData["Done"] = model.Tickets.Where(t => t.Status == Status.Done).Count();
 
             return View(model);
         }

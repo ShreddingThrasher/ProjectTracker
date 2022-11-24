@@ -21,7 +21,9 @@ namespace ProjectTracker.Core.ViewModels.Employee
 
         public string LastName { get; set; }
 
-        public DepartmentIdNameViewModel Department { get; set; }
+        public DepartmentIdNameViewModel? Department { get; set; }
+
+        public DepartmentIdNameViewModel? LeadedDepartment { get; set; }
 
         public bool IsLeader { get; set; }
 

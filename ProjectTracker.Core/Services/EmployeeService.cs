@@ -71,12 +71,12 @@ namespace ProjectTracker.Core.Services
                     Email = e.Email,
                     FirstName = e.FirstName,
                     LastName = e.LastName,
-                    Department = new DepartmentIdNameViewModel()
+                    Department = e.Department == null ? null : new DepartmentIdNameViewModel()
                     {
                         Id = e.Department.Id,
                         Name = e.Department.Name
                     },
-                    IsLeader = e.LeadedDepartmentId == null,
+                    IsLeader = e.LeadedDepartmentId != null,
                     Projects = e.EmployeesProjects
                         .Where(ep => ep.IsActive)
                         .Select(ep => new ProjectIdNameViewModel()

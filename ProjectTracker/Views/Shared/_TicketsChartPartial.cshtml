@@ -38,7 +38,7 @@
             data: {
                 labels: ["Open", "In Progress", "Done"],
                 datasets: [{
-                    data: [@ViewBag.Open, @ViewBag.InProgress, @ViewBag.Done],
+                    data: [@ViewData["Open"], @ViewData["InProgress"], @ViewData["Done"]],
                     backgroundColor: ['#f6c23e', '#4e73df', '#1cc88a'],
                     hoverBackgroundColor: ['#f3ce72', '#84a3ff', '#66e9ba'],
                     hoverBorderColor: "rgba(234, 236, 244, 1)",

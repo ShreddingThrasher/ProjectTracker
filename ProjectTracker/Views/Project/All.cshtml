@@ -1,0 +1,47 @@
+﻿@using ProjectTracker.Core.Constants
+@using ProjectTracker.Core.ViewModels.Project
+@model IEnumerable<ProjectViewModel>
+
+@{
+    ViewData["Title"] = "Current Projects";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<div class="col">
+
+    @foreach (var project in Model)
+    {
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">
+                    <a asp-controller="Project" asp-action="Details" asp-route-id="@project.Id">@project.Name</a>
+                </h6>
+            </div>
+            <div class="card-body">
+                <p>Description: @project.Description</p>
+                <p></p>
+                <p>Assigned Employees: @project.AssignedEmployeesCount</p>
+                <p>Tickets: @project.TicketsCount</p>
+
+                @*@if (User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value == department.LeaderId)
+                {
+                    <a asp-controller="Departments" asp-action="Manage" asp-route-id="@department.Id" class="btn btn-primary btn-icon-split">
+                        <span class="icon text-white-50">
+                            <i class="fas fa-flag"></i>
+                        </span>
+                        <span class="text">Manage</span>
+                    </a>
+                }*@
+            </div>
+        </div>
+    }
+
+</div>
+
+@if (User.IsInRole(RoleConstants.Admin))
+{
+    <a asp-controller="Project" asp-action="Create" asp-area="Administration" class="btn btn-primary btn-icon-split">
+        <span class="text">Create New Project</span>
+    </a>
+}

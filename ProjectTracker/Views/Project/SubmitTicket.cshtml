@@ -1,0 +1,75 @@
+﻿@using ProjectTracker.Core.ViewModels.Ticket
+@model SubmitTicketViewModel
+
+<div class="row justify-content-center">
+
+    @if (ViewBag.Success != null)
+    {
+        @if (ViewBag.Success)
+        {
+            <div class="text-center">
+                <h1 class="h4 text-success-900 mb-4">Success!</h1>
+            </div>
+        }
+        else
+        {
+            <div class="text-center">
+                <h1 class="h4 text-danger-900 mb-4">Something went wrong :(</h1>
+            </div>
+        }
+    }
+
+    <div class="col-xl-10 col-lg-12 col-md-9">
+
+        <div class="card o-hidden border-0 shadow-lg my-5">
+            <div class="card-body p-0">
+                <!-- Nested Row within Card Body -->
+                <!-- Nested Row within Card Body -->
+                <div class="row justify-content-center">
+                    <div class="col-lg-7">
+                        <div class="p-5">
+                            <div class="text-center">
+                                <h1 class="h4 text-gray-900 mb-4">Submit New Ticket</h1>
+                            </div>
+                            <form method="post">
+                                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                                <input type="hidden" asp-for="@Model.ProjectId" value="@Model.ProjectId" />
+                                <div class="form-group row">
+                                    <div class="col-sm-15 mb-3 mb-sm-0">
+                                        <label asp-for="@Model.Title"></label><br />
+                                        <span asp-validation-for="@Model.Title" class="text-danger"></span>
+                                        <input asp-for="@Model.Title" class="form-control" aria-required="true" />
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-sm-15 mb-3 mb-sm-0">
+                                        <label asp-for="@Model.Description"></label><br />
+                                        <span asp-validation-for="@Model.Description" class="text-danger"></span>
+                                        <textarea asp-for="@Model.Description" class="form-control" aria-required="true"></textarea>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-sm-15 mb-3 mb-sm-0">
+                                        <label>Priority</label><br />
+                                        <select asp-for="@Model.Priority" class="form-select">
+
+                                            @foreach (var priority in Model.Priorities)
+                                            {
+                                                <option value="@priority">@priority</option>
+                                            }
+
+                                        </select>
+                                    </div>
+                                </div>
+                                <button type="submit" class="w-100 btn btn-lg btn-primary">Submit</button>
+                                <hr>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</div>
