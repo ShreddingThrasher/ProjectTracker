@@ -43,17 +43,44 @@
                             <a asp-controller="Admin" asp-action="Index" class="nav-link"><h4 class="navbar-brand">Project Tracker - Admin Panel</h4></a>
                             <div class="topbar-divider d-none d-sm-block"></div>
                             <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
-                                <li class="nav-item">
-                                    <a asp-controller="Department" asp-action="All" asp-area="" class="nav-link">Departments</a>
+                    
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        Departments
+                                    </a>
+                                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                        <a asp-controller="Department" asp-action="All" asp-area="" class="dropdown-item">Active</a>
+                                        <a asp-controller="Department" asp-action="Past" asp-area="" class="dropdown-item">Past</a>                                        <div class="dropdown-divider"></div>
+                                    </div>
                                 </li>
-                                <li class="nav-item">
-                                    <a asp-controller="Employee" asp-action="All" asp-area="" class="nav-link">Employees</a>
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        Employees
+                                    </a>
+                                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                        <a asp-controller="Employee" asp-action="All" asp-area="" class="dropdown-item">Active</a>
+                                        <a asp-controller="Employee" asp-action="Past" asp-area="" class="dropdown-item">Past</a>
+                                    </div>
                                 </li>
-                                <li class="nav-item">
-                                    <a asp-controller="Project" asp-action="All" asp-area="" class="nav-link">Projects</a>
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        Projects
+                                    </a>
+                                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                        <a asp-controller="Project" asp-action="All" asp-area="" class="dropdown-item">Active</a>
+                                        <a asp-controller="Project" asp-action="Past" asp-area="" class="dropdown-item">Past</a>
+                                    </div>
                                 </li>
-                                <li class="nav-item">
-                                    <a asp-controller="Ticket" asp-action="All" asp-area="" class="nav-link">Tickets</a>
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        Tickets
+                                    </a>
+                                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                        <a asp-controller="Department" asp-action="All" asp-area="" class="dropdown-item">Active</a>
+                                        <a asp-controller="Department" asp-action="Past" asp-area="" class="dropdown-item">Past</a>
+                                        <div class="dropdown-divider"></div>
+                                        <a class="dropdown-item" href="#">Something else here</a>
+                                    </div>
                                 </li>
                             </ul>
                             <ul class="navbar-nav ml-auto">
