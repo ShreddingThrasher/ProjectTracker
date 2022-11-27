@@ -18,5 +18,9 @@ namespace ProjectTracker.Core.Contracts
         Task<ProjectDetailsViewModel> GetProjectDetailsById(Guid id);
 
         Task<IEnumerable<ProjectIdNameViewModel>> GetIdsAndNamesAsync();
+
+        Task<EditProjectViewModel> GetEditDetailsAsync(Guid id);
+
+        Task<Guid> EditProjectAsync(EditProjectViewModel model);
     }
 }

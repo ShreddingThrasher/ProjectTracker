@@ -49,5 +49,52 @@ namespace ProjectTracker.Areas.Administration.Controllers
             return Redirect("/Project/All");
         }
 
+        [HttpGet]
+        public async Task<IActionResult> Change(bool? success)
+        {
+            var model = new ChangeProjectViewModel()
+            {
+                Projects = await projectService.GetIdsAndNamesAsync()
+            };
+
+            ViewBag.Success = success;
+
+            return View(model);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Edit(Guid projectId)
+        {
+            try
+            {
+                var model = await projectService.GetEditDetailsAsync(projectId);
+
+                return View(model);
+            }
+            catch (Exception)
+            {
+                return RedirectToAction(nameof(Change), new { success = false });
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Edit(EditProjectViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            try
+            {
+                var id = await projectService.EditProjectAsync(model);
+
+                return Redirect($"/Project/Details/{id}");
+            }
+            catch (Exception ex)
+            {
+                return RedirectToAction(nameof(Change), new { success = false});
+            }
+        }
     }
 }

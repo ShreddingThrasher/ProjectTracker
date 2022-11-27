@@ -40,6 +40,24 @@ namespace ProjectTracker.Core.Services
             await repo.SaveChangesAsync();
         }
 
+        public async Task<Guid> EditProjectAsync(EditProjectViewModel model)
+        {
+            var project = await repo.All<Project>()
+                .Where(p => p.IsActive && p.Id == model.Id)
+                .FirstOrDefaultAsync();
+
+            if(project == null)
+            {
+                throw new NullReferenceException();
+            }
+
+            project.Name = model.Name;
+            project.Description = model.Description;
+
+            await repo.SaveChangesAsync();
+            return project.Id;
+        }
+
         public async Task<IEnumerable<ProjectViewModel>> GetAllProjects()
         {
             return await repo.AllReadonly<Project>()
@@ -58,6 +76,26 @@ namespace ProjectTracker.Core.Services
 
         public async Task<int> GetCount()
             => await this.repo.AllReadonly<Project>().Where(p => p.IsActive).CountAsync();
+
+        public async Task<EditProjectViewModel> GetEditDetailsAsync(Guid id)
+        {
+            var project = await repo.AllReadonly<Project>()
+                .Where(p => p.IsActive && p.Id == id)
+                .Select(p => new EditProjectViewModel()
+                {
+                    Id = p.Id,
+                    Name = p.Name,
+                    Description = p.Description
+                })
+                .FirstOrDefaultAsync();
+
+            if(project == null)
+            {
+                throw new NullReferenceException();
+            }
+
+            return project;
+        }
 
         public async Task<IEnumerable<ProjectIdNameViewModel>> GetIdsAndNamesAsync()
         {
