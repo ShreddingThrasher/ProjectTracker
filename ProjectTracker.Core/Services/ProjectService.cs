@@ -40,6 +40,34 @@ namespace ProjectTracker.Core.Services
             await repo.SaveChangesAsync();
         }
 
+        public async Task DeleteAsync(Guid id)
+        {
+            var project = await repo.All<Project>()
+                .Where(p => p.IsActive && p.Id == id)
+                .Include(p => p.AssignedEmployees)
+                .Include(p => p.Tickets)
+                .FirstOrDefaultAsync();
+
+            if(project == null)
+            {
+                throw new NullReferenceException();
+            }
+
+            project.IsActive = false;
+
+            foreach (var item in project.AssignedEmployees)
+            {
+                item.IsActive = false;
+            }
+
+            foreach (var item in project.Tickets)
+            {
+                item.IsActive = false;
+            }
+
+            await repo.SaveChangesAsync();
+        }
+
         public async Task<Guid> EditProjectAsync(EditProjectViewModel model)
         {
             var project = await repo.All<Project>()

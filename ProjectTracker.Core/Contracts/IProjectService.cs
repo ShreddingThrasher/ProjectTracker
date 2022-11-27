@@ -22,5 +22,7 @@ namespace ProjectTracker.Core.Contracts
         Task<EditProjectViewModel> GetEditDetailsAsync(Guid id);
 
         Task<Guid> EditProjectAsync(EditProjectViewModel model);
+
+        Task DeleteAsync(Guid id);
     }
 }

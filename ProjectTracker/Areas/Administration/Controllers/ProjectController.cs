@@ -4,6 +4,7 @@ using ProjectTracker.Core.ViewModels.Project;
 using ProjectTracker.Core.ViewModels.Ticket;
 using ProjectTracker.Infrastructure.Data.Entities.Enums;
 using System.Security.Claims;
+using System.Threading.Tasks;
 
 namespace ProjectTracker.Areas.Administration.Controllers
 {
@@ -94,6 +95,46 @@ namespace ProjectTracker.Areas.Administration.Controllers
             catch (Exception ex)
             {
                 return RedirectToAction(nameof(Change), new { success = false});
+            }
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Remove()
+        {
+            var model = new DeleteProjectViewModel()
+            {
+                Projects = await projectService.GetIdsAndNamesAsync()
+            };
+
+            return View(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Remove(DeleteProjectViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                ModelState.AddModelError(string.Empty, "Something went wrong");
+
+                model.Projects = await projectService.GetIdsAndNamesAsync();
+
+
+                return View(model);
+            }
+
+            try
+            {
+                await projectService.DeleteAsync(model.Id);
+
+                return Redirect("/Project/All");
+            }
+            catch (Exception)
+            {
+                ModelState.AddModelError(string.Empty, "Something went wrong");
+
+                model.Projects = await projectService.GetIdsAndNamesAsync();
+
+                return View(model);
             }
         }
     }

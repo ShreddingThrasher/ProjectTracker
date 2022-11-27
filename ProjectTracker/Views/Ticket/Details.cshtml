@@ -44,7 +44,7 @@
 
                 @if(Model.Status != "Done" && User.IsInRole(RoleConstants.Admin))
                 {
-                    <a href="/Tickets/Details/@Model.Id/Assign" class="btn btn-success">Assign to Employee</a>
+                    <a href="/Administration/Ticket/Details/@Model.Id/Assign" class="btn btn-success">Assign to Employee</a>
                     <a asp-controller="Ticket" asp-action="Edit" asp-route-id="@Model.Id" asp-area="Administration" class="btn btn-warning">Edit</a>
                 }
             </div>
