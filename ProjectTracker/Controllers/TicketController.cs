@@ -25,14 +25,14 @@ namespace ProjectTracker.Controllers
 
         public async Task<IActionResult> All()
         {
-            var model = await ticketService.GetAll();
+            var model = await ticketService.GetAllAsync();
 
             return View(model);
         }
 
         public async Task<IActionResult> Details(Guid id)
         {
-            var model = await ticketService.GetTicketDetaisById(id);
+            var model = await ticketService.GetTicketDetaisByIdAsync(id);
 
             if (model == null)
             {
@@ -53,7 +53,7 @@ namespace ProjectTracker.Controllers
                 return RedirectToAction(nameof(Details), new { id = Id});
             }
 
-            await ticketService.CreateComment(User.Id(), Id, model);
+            await ticketService.CreateCommentAsync(User.Id(), Id, model);
 
             return RedirectToAction(nameof(Details), new { id = Id });
         }

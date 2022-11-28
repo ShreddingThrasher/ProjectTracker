@@ -23,11 +23,39 @@ namespace ProjectTracker.Areas.Administration.Controllers
             employeeService = _employeeService;
         }
 
+        public async Task<IActionResult> InProgress()
+        {
+            var model = await ticketService.GetInProgressAsync();
+
+            return View(model);
+        }
+
+        public async Task<IActionResult> Done()
+        {
+            var model = await ticketService.GetDoneAsync();
+
+            return View(model);
+        }
+
+        public async Task<IActionResult> Unassigned()
+        {
+            var model = await ticketService.GetUnassignedAsync();
+
+            return View(model);
+        }
+
+        public async Task<IActionResult> Past()
+        {
+            var model = await ticketService.GetPastAsync();
+
+            return View(model);
+        }
+
         [HttpGet]
         [Authorize(Policy = "CanAssignAndEditTicket")]
         public async Task<IActionResult> Edit(Guid id)
         {
-            var model = await ticketService.GetById(id);
+            var model = await ticketService.GetByIdAsync(id);
 
             return View(model);
         }
@@ -41,7 +69,7 @@ namespace ProjectTracker.Areas.Administration.Controllers
                 return View(model);
             }
 
-            await ticketService.EditTicket(model);
+            await ticketService.EditTicketAsync(model);
 
             return Redirect($"/Ticket/Details/{model.Id}");
         }
@@ -74,7 +102,7 @@ namespace ProjectTracker.Areas.Administration.Controllers
 
             try
             {
-                await ticketService.AssignTicket(model);
+                await ticketService.AssignTicketAsync(model);
 
                 return Redirect($"/Ticket/Details/{model.TicketId}");
             }

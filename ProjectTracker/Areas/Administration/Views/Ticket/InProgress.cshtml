@@ -1,0 +1,12 @@
+﻿@using ProjectTracker.Core.ViewModels.Ticket
+@model IEnumerable<AdminTicketViewModel>
+
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">Tickets Currently In Progress</h6>
+    </div>
+    <!-- Card Body -->
+    
+    <partial name="_TicketsTablePartial" model="@Model" /> 
+
+</div>

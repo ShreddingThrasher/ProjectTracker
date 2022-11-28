@@ -76,10 +76,12 @@
                                         Tickets
                                     </a>
                                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                        <a asp-controller="Department" asp-action="Active" class="dropdown-item">Active</a>
-                                        <a asp-controller="Department" asp-action="Past" class="dropdown-item">Past</a>
+                                        <a asp-controller="Ticket" asp-action="InProgress" class="dropdown-item">In Progress</a>
+                                        <a asp-controller="Ticket" asp-action="Done" class="dropdown-item">Done</a>
                                         <div class="dropdown-divider"></div>
-                                        <a class="dropdown-item" href="#">Something else here</a>
+                                        <a asp-controller="Ticket" asp-action="Unassigned" class="dropdown-item">Unassigned</a>
+                                        <div class="dropdown-divider"></div>
+                                        <a asp-controller="Ticket" asp-action="Past" class="dropdown-item">Past</a>
                                     </div>
                                 </li>
                             </ul>

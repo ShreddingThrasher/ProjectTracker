@@ -26,7 +26,7 @@ namespace ProjectTracker.Core.Services
             repo = _repo;
         }
 
-        public async Task CreateComment(string userId, Guid ticketId, CreateTicketCommentViewModel model)
+        public async Task CreateCommentAsync(string userId, Guid ticketId, CreateTicketCommentViewModel model)
         {
             var comment = new TicketComment()
             {
@@ -58,7 +58,7 @@ namespace ProjectTracker.Core.Services
             await repo.SaveChangesAsync();
         }
 
-        public async Task EditTicket(EditTicketViewModel model)
+        public async Task EditTicketAsync(EditTicketViewModel model)
         {
             var ticket = await repo.All<Ticket>()
                 .Where(t => t.IsActive)
@@ -101,7 +101,7 @@ namespace ProjectTracker.Core.Services
             };
         }
 
-        public async Task<IEnumerable<TicketViewModel>> GetAll()
+        public async Task<IEnumerable<TicketViewModel>> GetAllAsync()
         {
             return await repo.AllReadonly<Ticket>()
                 .Where(t => t.IsActive)
@@ -134,7 +134,7 @@ namespace ProjectTracker.Core.Services
                 .ToListAsync();
         }
 
-        public async Task<EditTicketViewModel> GetById(Guid id)
+        public async Task<EditTicketViewModel> GetByIdAsync(Guid id)
         {
             var ticket = await repo.GetByIdAsync<Ticket>(id);
 
@@ -150,7 +150,7 @@ namespace ProjectTracker.Core.Services
         public async Task<int> GetCount()
             => await this.repo.AllReadonly<Ticket>().Where(t => t.IsActive).CountAsync();
 
-        public async Task<TicketDetailsViewModel> GetTicketDetaisById(Guid id)
+        public async Task<TicketDetailsViewModel> GetTicketDetaisByIdAsync(Guid id)
         {
 #pragma warning disable CS8603 // Possible null reference return.
             return await repo.AllReadonly<Ticket>()
@@ -198,7 +198,7 @@ namespace ProjectTracker.Core.Services
 #pragma warning restore CS8603 // Possible null reference return.
         }
 
-        public async Task AssignTicket(AssignTicketViewModel model)
+        public async Task AssignTicketAsync(AssignTicketViewModel model)
         {
             var employee = await repo.All<Employee>()
                 .Where(e => e.IsActive)
@@ -263,6 +263,90 @@ namespace ProjectTracker.Core.Services
             return await repo.AllReadonly<Ticket>()
                 .Where(t => t.IsActive)
                 .Select(t => t.Status)
+                .ToListAsync();
+        }
+
+        public async Task<IEnumerable<AdminTicketViewModel>> GetInProgressAsync()
+        {
+            return await repo.AllReadonly<Ticket>()
+                .Where(t => t.IsActive && t.Status == Status.InProgress)
+                .Include(t => t.Submitter)
+                .Include(t => t.Project)
+                .Include(t => t.Department)
+                .Select(t => new AdminTicketViewModel()
+                {
+                    Id = t.Id,
+                    Submitter = t.Submitter.UserName,
+                    Title = t.Title,
+                    Project = t.Project.Name,
+                    Department = t.Department.Name,
+                    Priority = t.Priority.ToString(),
+                    Status = t.Status.ToString(),
+                    Date = t.CreatedOn
+                })
+                .ToListAsync();
+        }
+
+        public async Task<IEnumerable<AdminTicketViewModel>> GetDoneAsync()
+        {
+            return await repo.AllReadonly<Ticket>()
+                .Where(t => t.IsActive && t.Status == Status.Done)
+                .Include(t => t.Submitter)
+                .Include(t => t.Project)
+                .Include(t => t.Department)
+                .Select(t => new AdminTicketViewModel()
+                {
+                    Id = t.Id,
+                    Submitter = t.Submitter.UserName,
+                    Title = t.Title,
+                    Project = t.Project.Name,
+                    Department = t.Department.Name,
+                    Priority = t.Priority.ToString(),
+                    Status = t.Status.ToString(),
+                    Date = t.CreatedOn
+                })
+                .ToListAsync();
+        }
+
+        public async Task<IEnumerable<AdminTicketViewModel>> GetUnassignedAsync()
+        {
+            return await repo.AllReadonly<Ticket>()
+                .Where(t => t.IsActive && t.Status == Status.Open)
+                .Include(t => t.Submitter)
+                .Include(t => t.Project)
+                .Include(t => t.Department)
+                .Select(t => new AdminTicketViewModel()
+                {
+                    Id = t.Id,
+                    Submitter = t.Submitter.UserName,
+                    Title = t.Title,
+                    Project = t.Project.Name,
+                    Department = t.Department.Name,
+                    Priority = t.Priority.ToString(),
+                    Status = t.Status.ToString(),
+                    Date = t.CreatedOn
+                })
+                .ToListAsync();
+        }
+
+        public async Task<IEnumerable<AdminTicketViewModel>> GetPastAsync()
+        {
+            return await repo.AllReadonly<Ticket>()
+                .Where(t => !t.IsActive)
+                .Include(t => t.Submitter)
+                .Include(t => t.Project)
+                .Include(t => t.Department)
+                .Select(t => new AdminTicketViewModel()
+                {
+                    Id = t.Id,
+                    Submitter = t.Submitter.UserName,
+                    Title = t.Title,
+                    Project = t.Project.Name,
+                    Department = t.Department.Name,
+                    Priority = t.Priority.ToString(),
+                    Status = t.Status.ToString(),
+                    Date = t.CreatedOn
+                })
                 .ToListAsync();
         }
     }

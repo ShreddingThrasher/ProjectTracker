@@ -61,7 +61,7 @@ namespace ProjectTracker.Areas.Administration.Controllers
             {
                 await departmentService.CreateAsync(model);
 
-                return Redirect("/Department/All");
+                return RedirectToAction(nameof(Active));
             }
             catch (Exception ex)
             {

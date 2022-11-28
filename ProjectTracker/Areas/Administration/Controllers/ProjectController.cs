@@ -61,7 +61,7 @@ namespace ProjectTracker.Areas.Administration.Controllers
 
             await projectService.CreateAsync(model);
 
-            return Redirect("/Project/All");
+            return RedirectToAction(nameof(Active));
         }
 
         [HttpGet]
@@ -102,9 +102,9 @@ namespace ProjectTracker.Areas.Administration.Controllers
 
             try
             {
-                var id = await projectService.EditProjectAsync(model);
+                await projectService.EditProjectAsync(model);
 
-                return Redirect($"/Project/Details/{id}");
+                return RedirectToAction(nameof(Active));
             }
             catch (Exception ex)
             {
@@ -140,7 +140,7 @@ namespace ProjectTracker.Areas.Administration.Controllers
             {
                 await projectService.DeleteAsync(model.Id);
 
-                return Redirect("/Project/All");
+                return RedirectToAction(nameof(Active));
             }
             catch (Exception)
             {

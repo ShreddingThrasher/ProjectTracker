@@ -14,19 +14,27 @@ namespace ProjectTracker.Core.Contracts
     {
         Task<int> GetCount();
 
-        Task<IEnumerable<TicketViewModel>> GetAll();
+        Task<IEnumerable<TicketViewModel>> GetAllAsync();
 
-        Task AssignTicket(AssignTicketViewModel model);
+        Task<IEnumerable<AdminTicketViewModel>> GetInProgressAsync();
 
-        Task EditTicket(EditTicketViewModel model);
+        Task<IEnumerable<AdminTicketViewModel>> GetDoneAsync();
 
-        Task<EditTicketViewModel> GetById(Guid id);
+        Task<IEnumerable<AdminTicketViewModel>> GetUnassignedAsync();
+
+        Task<IEnumerable<AdminTicketViewModel>> GetPastAsync();
+
+        Task AssignTicketAsync(AssignTicketViewModel model);
+
+        Task EditTicketAsync(EditTicketViewModel model);
+
+        Task<EditTicketViewModel> GetByIdAsync(Guid id);
 
         Task CreateTicketAsync(SubmitTicketViewModel model, string submitterId, Guid departmentId);
 
-        Task<TicketDetailsViewModel> GetTicketDetaisById(Guid id);
+        Task<TicketDetailsViewModel> GetTicketDetaisByIdAsync(Guid id);
 
-        Task CreateComment(string userId, Guid ticketId, CreateTicketCommentViewModel model);
+        Task CreateCommentAsync(string userId, Guid ticketId, CreateTicketCommentViewModel model);
 
         Task<IEnumerable<Status>> GetAllStatusesAsync();
     }
