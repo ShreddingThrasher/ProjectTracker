@@ -23,7 +23,7 @@ namespace ProjectTracker.Core.Services
             repo = _repo;
         }
 
-        public async Task Create(CreateProjectViewModel model)
+        public async Task CreateAsync(CreateProjectViewModel model)
         {
             var department = await repo.All<Department>()
                 .Where(d => d.IsActive)
@@ -86,7 +86,7 @@ namespace ProjectTracker.Core.Services
             return project.Id;
         }
 
-        public async Task<IEnumerable<ProjectViewModel>> GetAllProjects()
+        public async Task<IEnumerable<ProjectViewModel>> GetAllProjectsAsync()
         {
             return await repo.AllReadonly<Project>()
                 .Where(p => p.IsActive)
@@ -96,13 +96,17 @@ namespace ProjectTracker.Core.Services
                     Name = p.Name,
                     Description = p.Description,
                     Department = p.Department.Name,
-                    AssignedEmployeesCount = p.AssignedEmployees.Count,
-                    TicketsCount = p.Tickets.Count
+                    AssignedEmployeesCount = p.AssignedEmployees
+                        .Where(ae => ae.IsActive)
+                        .Count(),
+                    TicketsCount = p.Tickets
+                        .Where(t => t.IsActive)
+                        .Count()
                 })
                 .ToListAsync();
         }
 
-        public async Task<int> GetCount()
+        public async Task<int> GetCountAsync()
             => await this.repo.AllReadonly<Project>().Where(p => p.IsActive).CountAsync();
 
         public async Task<EditProjectViewModel> GetEditDetailsAsync(Guid id)
@@ -137,7 +141,23 @@ namespace ProjectTracker.Core.Services
                 .ToListAsync();
         }
 
-        public async Task<ProjectDetailsViewModel> GetProjectDetailsById(Guid id)
+        public async Task<IEnumerable<ProjectViewModel>> GetInactiveProjectsAsync()
+        {
+            return await repo.AllReadonly<Project>()
+                .Where(p => !p.IsActive)
+                .Select(p => new ProjectViewModel()
+                {
+                    Id = p.Id,
+                    Name = p.Name,
+                    Description = p.Description,
+                    Department = p.Department.Name,
+                    AssignedEmployeesCount = p.AssignedEmployees.Count(),
+                    TicketsCount = p.Tickets.Count()
+                })
+                .ToListAsync();
+        }
+
+        public async Task<ProjectDetailsViewModel> GetProjectDetailsByIdAsync(Guid id)
         {
             var project = await repo.AllReadonly<Project>()
                 .Where(p => p.Id == id && p.IsActive)

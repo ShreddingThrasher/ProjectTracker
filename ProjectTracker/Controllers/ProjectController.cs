@@ -25,14 +25,14 @@ namespace ProjectTracker.Controllers
 
         public async Task<IActionResult> All()
         {
-            var model = await projectService.GetAllProjects();
+            var model = await projectService.GetAllProjectsAsync();
 
             return View(model);
         }
 
         public async Task<IActionResult> Details(Guid id)
         {
-            var model = await projectService.GetProjectDetailsById(id);
+            var model = await projectService.GetProjectDetailsByIdAsync(id);
 
             if (model == null)
             {
@@ -66,7 +66,7 @@ namespace ProjectTracker.Controllers
             }
 
             var submitterId = User?.Claims?.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
-            var project = await projectService.GetProjectDetailsById(model.ProjectId);
+            var project = await projectService.GetProjectDetailsByIdAsync(model.ProjectId);
 
             try
             {

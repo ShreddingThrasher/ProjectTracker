@@ -9,13 +9,15 @@ namespace ProjectTracker.Core.Contracts
 {
     public interface IProjectService
     {
-        Task<int> GetCount();
+        Task<int> GetCountAsync();
 
-        Task<IEnumerable<ProjectViewModel>> GetAllProjects();
+        Task<IEnumerable<ProjectViewModel>> GetAllProjectsAsync();
 
-        Task Create(CreateProjectViewModel model);
+        Task<IEnumerable<ProjectViewModel>> GetInactiveProjectsAsync();
 
-        Task<ProjectDetailsViewModel> GetProjectDetailsById(Guid id);
+        Task CreateAsync(CreateProjectViewModel model);
+
+        Task<ProjectDetailsViewModel> GetProjectDetailsByIdAsync(Guid id);
 
         Task<IEnumerable<ProjectIdNameViewModel>> GetIdsAndNamesAsync();
 

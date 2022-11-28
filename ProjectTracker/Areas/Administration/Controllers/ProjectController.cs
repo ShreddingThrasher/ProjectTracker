@@ -24,6 +24,20 @@ namespace ProjectTracker.Areas.Administration.Controllers
             ticketService = _ticketService;
         }
 
+        public async Task<IActionResult> All()
+        {
+            var model = await projectService.GetAllProjectsAsync();
+
+            return View(model);
+        }
+
+        public async Task<IActionResult> Past()
+        {
+            var model = await projectService.GetInactiveProjectsAsync();
+
+            return View(model);
+        }
+
         [HttpGet]
         public async Task<IActionResult> Create(bool? success)
         {
@@ -45,7 +59,7 @@ namespace ProjectTracker.Areas.Administration.Controllers
                 return View(model);
             }
 
-            await projectService.Create(model);
+            await projectService.CreateAsync(model);
 
             return Redirect("/Project/All");
         }
@@ -64,11 +78,11 @@ namespace ProjectTracker.Areas.Administration.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Edit(Guid projectId)
+        public async Task<IActionResult> Edit(Guid id)
         {
             try
             {
-                var model = await projectService.GetEditDetailsAsync(projectId);
+                var model = await projectService.GetEditDetailsAsync(id);
 
                 return View(model);
             }
