@@ -20,6 +20,20 @@ namespace ProjectTracker.Areas.Administration.Controllers
             employeeService = _employeeService;
         }
 
+        public async Task<IActionResult> All()
+        {
+            var model = await departmentService.GetAllAsync();
+
+            return View(model);
+        }
+
+        public async Task<IActionResult> Past()
+        {
+            var model = await departmentService.GetInactiveDepartmentsAsync();
+
+            return View(model);
+        }
+
         [HttpGet]
         [Authorize(Roles = RoleConstants.Admin)]
         public async Task<IActionResult> Create()

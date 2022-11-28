@@ -53,7 +53,7 @@ namespace ProjectTracker.Core.Services
             await repo.SaveChangesAsync();
         }
 
-        public async Task<IEnumerable<DepartmentViewModel>> GetAll()
+        public async Task<IEnumerable<DepartmentViewModel>> GetAllAsync()
         {
             return await repo.AllReadonly<Department>()
                 .Where(d => d.IsActive)
@@ -61,9 +61,15 @@ namespace ProjectTracker.Core.Services
                 {
                     Id = d.Id,
                     Name = d.Name,
-                    Employees = d.Employees.Count,
-                    Projects = d.Projects.Count,
-                    Tickets = d.Tickets.Count,
+                    Employees = d.Employees
+                        .Where(e => e.IsActive)
+                        .Count(),
+                    Projects = d.Projects
+                        .Where(p => p.IsActive)
+                        .Count(),
+                    Tickets = d.Tickets
+                        .Where(t => t.IsActive)
+                        .Count(),
                     LeaderId = d.LeadId
                 })
                 .ToListAsync();
@@ -81,12 +87,12 @@ namespace ProjectTracker.Core.Services
                 .ToListAsync();
         }
 
-        public async Task<Department> GetById(Guid id)
+        public async Task<Department> GetByIdAsync(Guid id)
             => await repo.All<Department>()
                 .Where(d => d.IsActive)
                 .FirstOrDefaultAsync(d => d.Id == id);
 
-        public async Task<int> GetCount()
+        public async Task<int> GetCountAsync()
             => await this.repo.AllReadonly<Department>().Where(d => d.IsActive).CountAsync();
 
         public async Task<DepartmentDetailsViewModel> GetDepartmentDetailsAsync(Guid departmentId)
@@ -155,6 +161,21 @@ namespace ProjectTracker.Core.Services
 
             return model;
 #pragma warning restore CS8603 // Possible null reference return.
+        }
+
+        public async Task<IEnumerable<DepartmentViewModel>> GetInactiveDepartmentsAsync()
+        {
+            return await repo.AllReadonly<Department>()
+                .Where(d => !d.IsActive)
+                .Select(d => new DepartmentViewModel()
+                {
+                    Id = d.Id,
+                    Name = d.Name,
+                    Employees = d.Employees.Count,
+                    Projects = d.Projects.Count,
+                    Tickets = d.Tickets.Count,
+                })
+                .ToListAsync();
         }
     }
 }

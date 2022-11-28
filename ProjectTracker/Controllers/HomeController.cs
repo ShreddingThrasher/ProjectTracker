@@ -33,7 +33,7 @@ namespace ProjectTracker.Controllers
 
         public async Task<IActionResult> Index()
         {
-            ViewData["Departments"] = await departmentService.GetCount();
+            ViewData["Departments"] = await departmentService.GetCountAsync();
             ViewData["Employees"] = await employeeService.GetCount();
             ViewData["Projects"] = await projectService.GetCountAsync();
             ViewData["Tickets"] = await ticketService.GetCount();

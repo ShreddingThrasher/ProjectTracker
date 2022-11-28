@@ -22,7 +22,7 @@ namespace ProjectTracker.Controllers
 
         public async Task<IActionResult> All()
         {
-            var model = await departmentService.GetAll();
+            var model = await departmentService.GetAllAsync();
 
             return View(model);
         }

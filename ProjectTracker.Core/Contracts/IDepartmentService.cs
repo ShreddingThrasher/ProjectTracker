@@ -10,13 +10,15 @@ namespace ProjectTracker.Core.Contracts
 {
     public interface IDepartmentService
     {
-        Task<int> GetCount();
+        Task<int> GetCountAsync();
 
-        Task<IEnumerable<DepartmentViewModel>> GetAll();
+        Task<IEnumerable<DepartmentViewModel>> GetAllAsync();
+
+        Task<IEnumerable<DepartmentViewModel>> GetInactiveDepartmentsAsync();
 
         Task<IEnumerable<DepartmentIdNameViewModel>> GetAllIdAndNameAsync();
 
-        Task<Department> GetById(Guid id);
+        Task<Department> GetByIdAsync(Guid id);
 
         Task CreateAsync(CreateDepartmentViewModel model);
 

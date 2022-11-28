@@ -5,7 +5,7 @@
 
     @if (ViewBag.Success != null)
     {
-        @if (!ViewBag.Success)
+        @if (ViewBag.Success == false)
         {
             <div class="text-center">
                 <h1 class="text-danger mb-4">Something went wrong.</h1>
