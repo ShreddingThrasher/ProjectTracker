@@ -1,0 +1,12 @@
+﻿@using ProjectTracker.Core.ViewModels.Department
+@model IEnumerable<DepartmentViewModel>
+
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">Active Departments</h6>
+    </div>
+    <!-- Card Body -->
+
+    <partial name="_DepartmentsTablePartial" model="@Model" />
+
+</div>

@@ -36,7 +36,6 @@
   <ItemGroup>
     <Folder Include="Areas\Administration\Data\" />
     <Folder Include="Areas\Administration\Models\" />
-    <Folder Include="Areas\Administration\Views\Employee\" />
   </ItemGroup>
 
 </Project>

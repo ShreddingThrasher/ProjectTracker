@@ -23,7 +23,7 @@ namespace ProjectTracker.Core.Services
             repo = _repo;
         }
 
-        public async Task<IEnumerable<EmployeeViewModel>> GetAll()
+        public async Task<IEnumerable<EmployeeViewModel>> GetAllAsync()
         {
             return await repo.AllReadonly<Employee>()
                 .Where(e => e.IsActive)
@@ -32,14 +32,18 @@ namespace ProjectTracker.Core.Services
                     Id = e.Id,
                     FullName = e.FirstName + " " + e.LastName,
                     Department = e.Department.Name,
-                    AssignedProjects = e.EmployeesProjects.Count,
-                    AssignedTickets = e.AssignedTickets.Count,
+                    AssignedProjects = e.EmployeesProjects
+                        .Where(p => p.IsActive)
+                        .Count(),
+                    AssignedTickets = e.AssignedTickets
+                        .Where(t => t.IsActive)
+                        .Count(),
                     Email = e.Email
                 })
                 .ToListAsync();
         }
 
-        public async Task<int> GetCount()
+        public async Task<int> GetCountAsync()
             => await this.repo.AllReadonly<Employee>().Where(e => e.IsActive).CountAsync();
 
         public async Task<IEnumerable<EmployeeIdNameViewModel>> GetAllIdAndNameAsync()
@@ -121,6 +125,42 @@ namespace ProjectTracker.Core.Services
                 .FirstOrDefaultAsync();
 
             return employee;
+        }
+
+        public async Task<IEnumerable<EmployeeViewModel>> GetUnassignedAsync()
+        {
+            return await repo.AllReadonly<Employee>()
+                .Where(e => e.IsActive && e.DepartmentId == null)
+                .Select(e => new EmployeeViewModel()
+                {
+                    Id = e.Id,
+                    FullName = e.FirstName + " " + e.LastName,
+                    Department = e.Department.Name,
+                    AssignedProjects = e.EmployeesProjects.Count,
+                    AssignedTickets = e.AssignedTickets.Count,
+                    Email = e.Email
+                })
+                .ToListAsync();
+        }
+
+        public async Task<IEnumerable<EmployeeViewModel>> GetActiveAsync()
+        {
+            return await repo.AllReadonly<Employee>()
+                .Where(e => e.IsActive && e.DepartmentId != null)
+                .Select(e => new EmployeeViewModel()
+                {
+                    Id = e.Id,
+                    FullName = e.FirstName + " " + e.LastName,
+                    Department = e.Department.Name,
+                    AssignedProjects = e.EmployeesProjects
+                        .Where(p => p.IsActive)
+                        .Count(),
+                    AssignedTickets = e.AssignedTickets
+                        .Where(t => t.IsActive)
+                        .Count(),
+                    Email = e.Email
+                })
+                .ToListAsync();
         }
     }
 }

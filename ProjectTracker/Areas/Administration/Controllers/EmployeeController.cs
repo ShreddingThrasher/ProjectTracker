@@ -12,5 +12,19 @@ namespace ProjectTracker.Areas.Administration.Controllers
         {
             employeeService = _employeeService;
         }
+
+        public async Task<IActionResult> Active()
+        {
+            var model = await employeeService.GetActiveAsync();
+
+            return View(model);
+        }
+
+        public async Task<IActionResult> Unassigned()
+        {
+            var model = await employeeService.GetUnassignedAsync();
+
+            return View(model);
+        }
     }
 }

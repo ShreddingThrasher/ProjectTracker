@@ -20,7 +20,7 @@ namespace ProjectTracker.Areas.Administration.Controllers
             employeeService = _employeeService;
         }
 
-        public async Task<IActionResult> All()
+        public async Task<IActionResult> Active()
         {
             var model = await departmentService.GetAllAsync();
 

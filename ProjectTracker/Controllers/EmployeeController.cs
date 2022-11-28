@@ -15,7 +15,7 @@ namespace ProjectTracker.Controllers
 
         public async Task<IActionResult> All()
         {
-            var model = await employeeService.GetAll();
+            var model = await employeeService.GetAllAsync();
 
             return View(model);
         }

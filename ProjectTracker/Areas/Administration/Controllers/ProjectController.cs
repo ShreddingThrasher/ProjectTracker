@@ -24,7 +24,7 @@ namespace ProjectTracker.Areas.Administration.Controllers
             ticketService = _ticketService;
         }
 
-        public async Task<IActionResult> All()
+        public async Task<IActionResult> Active()
         {
             var model = await projectService.GetAllProjectsAsync();
 
