@@ -53,6 +53,23 @@ namespace ProjectTracker.Core.Services
             await repo.SaveChangesAsync();
         }
 
+        public async Task EditAsync(EditDepartmentViewModel model)
+        {
+            var department = await repo.All<Department>()
+                .Where(d => d.IsActive && d.Id == model.Id)
+                .FirstOrDefaultAsync();
+
+            if(department == null)
+            {
+                throw new NullReferenceException();
+            }
+
+            department.Name = model.Name;
+            department.LeadId = model.LeadId;
+
+            await repo.SaveChangesAsync();
+        }
+
         public async Task<IEnumerable<DepartmentViewModel>> GetAllAsync()
         {
             return await repo.AllReadonly<Department>()
@@ -161,6 +178,26 @@ namespace ProjectTracker.Core.Services
 
             return model;
 #pragma warning restore CS8603 // Possible null reference return.
+        }
+
+        public async Task<EditDepartmentViewModel> GetEditDetailsAsync(Guid id)
+        {
+            var department = await repo.AllReadonly<Department>()
+                .Where(d => d.IsActive && d.Id == id)
+                .Select(d => new EditDepartmentViewModel()
+                {
+                    Id = d.Id,
+                    Name = d.Name,
+                    LeadId = d.LeadId,
+                })
+                .FirstOrDefaultAsync();
+
+            if(department == null)
+            {
+                throw new NullReferenceException();
+            }
+
+            return department;
         }
 
         public async Task<IEnumerable<DepartmentViewModel>> GetInactiveDepartmentsAsync()

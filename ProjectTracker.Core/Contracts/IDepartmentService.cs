@@ -23,5 +23,9 @@ namespace ProjectTracker.Core.Contracts
         Task CreateAsync(CreateDepartmentViewModel model);
 
         Task<DepartmentDetailsViewModel> GetDepartmentDetailsAsync(Guid departmentId);
+
+        Task<EditDepartmentViewModel> GetEditDetailsAsync(Guid id);
+
+        Task EditAsync(EditDepartmentViewModel model);
     }
 }

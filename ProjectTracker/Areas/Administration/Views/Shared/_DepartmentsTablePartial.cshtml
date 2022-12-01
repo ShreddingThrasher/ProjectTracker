@@ -13,7 +13,7 @@
                     <th>Edit</th>
                 </tr>
             </thead>
-
+            
             <tbody>
 
                 @foreach (var department in Model)
@@ -27,6 +27,11 @@
                     </tr>
                 }
             </tbody>
+
         </table>
+        @if (!Model.Any())
+        {
+            <h3 class="text-center">No records</h3>
+        }
     </div>
 </div>

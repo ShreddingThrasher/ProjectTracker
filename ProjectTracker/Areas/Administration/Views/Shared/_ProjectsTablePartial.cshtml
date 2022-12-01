@@ -28,5 +28,9 @@
                 }
             </tbody>
         </table>
+        @if (!Model.Any())
+        {
+            <h3 class="text-center">No records</h3>
+        }
     </div>
 </div>

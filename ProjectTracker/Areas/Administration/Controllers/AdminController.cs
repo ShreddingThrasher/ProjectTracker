@@ -56,7 +56,7 @@ namespace ProjectTracker.Areas.Administration.Controllers
 
             if (result.Succeeded)
             {
-                return RedirectToAction("Index", "Admin");
+                return RedirectToAction(nameof(Index));
             }
 
             foreach (var error in result.Errors)

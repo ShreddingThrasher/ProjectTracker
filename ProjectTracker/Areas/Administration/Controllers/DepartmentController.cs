@@ -4,6 +4,7 @@ using ProjectTracker.Core.Constants;
 using ProjectTracker.Core.Contracts;
 using ProjectTracker.Core.ViewModels.Department;
 using ProjectTracker.Infrastructure.Data.Entities.Enums;
+using System.Runtime.InteropServices;
 
 namespace ProjectTracker.Areas.Administration.Controllers
 {
@@ -71,6 +72,60 @@ namespace ProjectTracker.Areas.Administration.Controllers
 
                 return View(model);
             }
+        }
+
+        public async Task<IActionResult> Change(bool? success)
+        {
+            var model = new ChangeDepartmentViewModel()
+            {
+                Departments = await departmentService.GetAllIdAndNameAsync()
+            };
+
+            ViewBag.Success = success;
+
+            return View(model);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Edit(Guid departmentId)
+        {
+            try
+            {
+                var model = await departmentService.GetEditDetailsAsync(departmentId);
+
+                model.Employees = await employeeService.GetAllIdAndNameAsync();
+
+                return View(model);
+            }
+            catch (Exception)
+            {
+                return RedirectToAction(nameof(Change), new { success = false });
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Edit(EditDepartmentViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                model.Employees = await employeeService.GetAllIdAndNameAsync();
+
+                return View(model);
+            }
+
+
+            try
+            {
+                await departmentService.EditAsync(model);
+
+                return RedirectToAction(nameof(Active));
+            }
+            catch (Exception)
+            {
+                RedirectToAction(nameof(Change), new { success = false });
+            }
+
+            return View(model);
         }
     }
 }

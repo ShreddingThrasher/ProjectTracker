@@ -1,0 +1,56 @@
+﻿@using ProjectTracker.Core.ViewModels.Department
+@model ChangeDepartmentViewModel
+
+<div class="row justify-content-center">
+
+    @if (ViewBag.Success != null)
+    {
+        @if (ViewBag.Success == false)
+        {
+            <div class="text-center">
+                <h1 class="text-danger mb-4">Something went wrong.</h1>
+            </div>
+        }
+    }
+
+    <div class="col-xl-10 col-lg-12 col-md-9">
+
+        <div class="card o-hidden border-0 shadow-lg my-5">
+            <div class="card-body p-0">
+                <!-- Nested Row within Card Body -->
+                <div class="row justify-content-center">
+                    <div class="col-lg-6">
+                        <div class="p-5">
+                            <div class="text-center">
+                                <h1 class="h4 text-gray-900 mb-4">Select Project</h1>
+                            </div>
+                            <form class="user" method="get" action="/Administration/Department/Edit">
+                                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                                <div class="form-group">
+                                    <select asp-for="@Model.DepartmentId" class="form-select" aria-label="Default select example">
+
+                                        <option>Select Department</option>
+
+                                        @foreach (var department in Model.Departments)
+                                        {
+                                            <option value="@department.Id">@department.Name</option>
+                                        }
+
+                                    </select>
+                                </div>
+                                <hr>
+                                <button type="submit" class="w-100 btn btn-lg btn-primary">Select</button>
+                                <hr>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <partial name="_ValidationScriptsPartial" />
+
+</div>
