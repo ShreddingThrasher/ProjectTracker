@@ -16,17 +16,19 @@
                     <div class="col-lg-6">
                         <div class="p-5">
                             <div class="text-center">
-                                <h1 class="h4 text-gray-900 mb-4">Welcome Back!</h1>
+                                <h1 class="h4 text-gray-900 mb-4">Project_Tracker</h1>
                             </div>
                             <form class="user" method="post">
                                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                                 <div class="form-group">
                                     <label asp-for="@Model.Email"></label><br />
-                                    <input asp-for="@Model.Email" class="form-control form-control-user" autocomplete="UserName" aria-required="true" />
+                                    <span asp-validation-for="@Model.Email" class="text-danger"></span>
+                                    <input asp-for="@Model.Email" class="form-control" autocomplete="UserName" aria-required="true" />
                                 </div>
                                 <div class="form-group">
                                     <label asp-for="@Model.Password"></label><br />
-                                    <input asp-for="@Model.Password" class="form-control form-control-user" aria-required="true" />
+                                    <span asp-validation-for="@Model.Password" class="text-danger"></span>
+                                    <input asp-for="@Model.Password" class="form-control" aria-required="true" />
                                 </div>
                                 <div class="form-group">
                                     <label asp-for="@Model.RememberMe"></label>
@@ -34,20 +36,16 @@
                                 </div>
                                 <button id="loginSubmit" type="submit" class="w-100 btn btn-lg btn-primary">Login</button>
                                 <hr>
-                                <a asp-controller="Account" asp-action="Register" class="btn btn-primary btn-user btn-block">
+                                <a asp-controller="Account" asp-action="Register" class="btn btn-primary btn-block">
                                     Register
                                 </a>
-                                <a asp-controller="Account" asp-action="Guest" class="btn btn-primary btn-user btn-block .bg-gradient-success">
+                                <a asp-controller="Account" asp-action="Guest" class="btn btn-success btn-block">
                                     Try as Guest
                                 </a>
                             </form>
                             <hr>
-                            <div class="text-center">
-                                <a class="small" href="forgot-password.html">Forgot Password?</a>
-                            </div>
-                            <div class="text-center">
-                                <a class="small" href="register.html">Create an Account!</a>
-                            </div>
+                            <p class="text-center">Project created by Boyko Nikolaev</p>
+
                         </div>
                     </div>
                 </div>

@@ -11,11 +11,13 @@ namespace ProjectTracker.Core.ViewModels.Account
         public string UserName { get; set; }
 
         [Required]
+        [Display(Name = "First Name")]
         [StringLength(EmployeeConstants.FirstNameMaxLength,
             MinimumLength = EmployeeConstants.FirstNameMinLength)]
         public string FirstName { get; set; }
 
         [Required]
+        [Display(Name = "Last Name")]
         [StringLength(EmployeeConstants.LastNameMaxLength,
             MinimumLength = EmployeeConstants.LastNameMinLength)]
         public string LastName { get; set; }

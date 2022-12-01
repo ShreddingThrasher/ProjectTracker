@@ -7,7 +7,7 @@ using System.Security.Claims;
 namespace ProjectTracker.Areas.Administration.Controllers
 {
     [Area("Administration")]
-    [Authorize]
+    [Authorize(Roles = RoleConstants.Admin)]
     public class BaseController : Controller
     {
         public string UserFirstName

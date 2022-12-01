@@ -18,10 +18,10 @@
                             <form class="user" method="post">
                                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                                 <div class="form-group row">
-                                    <div class="col-sm-6 mb-3 mb-sm-0">
+                                    <div class="col-sm-12 mb-3 mb-sm-0">
                                         <label asp-for="@Model.RoleName"></label><br />
                                         <span asp-validation-for="@Model.RoleName" class="text-danger"></span>
-                                        <input asp-for="@Model.RoleName" class="form-control form-control-user" autocomplete="UserName" aria-required="true" />
+                                        <input asp-for="@Model.RoleName" class="form-control" autocomplete="UserName" aria-required="true" />
                                     </div>
                                 </div>
                                 <button id="createRoleSubmit" type="submit" class="w-100 btn btn-lg btn-primary">Register</button>

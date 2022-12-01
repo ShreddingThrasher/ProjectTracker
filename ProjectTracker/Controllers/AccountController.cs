@@ -128,14 +128,12 @@ namespace ProjectTracker.Controllers
 
         [HttpGet]
         [AllowAnonymous]
-        public async Task<IActionResult> Guest(bool? success)
+        public async Task<IActionResult> Guest()
         {
             var model = new GuestRegisterViewModel()
             {
                 Roles = await roleManager.Roles.Select(r => r.Name).ToListAsync()
             };
-
-            ViewBag.Success = success;
 
             return View(model);
         }
@@ -146,7 +144,11 @@ namespace ProjectTracker.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return RedirectToAction(nameof(Guest), new { Success = false });
+                ModelState.AddModelError(string.Empty, "Something went Wrong");
+
+                model.Roles = await roleManager.Roles.Select(r => r.Name).ToListAsync();
+
+                return View(model);
             }
 
             var rnd = new Random();
@@ -168,7 +170,11 @@ namespace ProjectTracker.Controllers
             {
                 if(model.Role != "Regular")
                 {
-                    return RedirectToAction(nameof(Guest), new { Success = false });
+                    ModelState.AddModelError(string.Empty, "Something went Wrong");
+
+                    model.Roles = await roleManager.Roles.Select(r => r.Name).ToListAsync();
+
+                    return View(model);
                 }
             }
 
@@ -191,13 +197,17 @@ namespace ProjectTracker.Controllers
 
                     if (result.Succeeded)
                     {
-                        await signInManager.SignInAsync(guest, false);
+                        await signInManager.SignInAsync(guest, true);
                         return RedirectToAction("Index", "Home");
                     }
                 }
             }
 
-            return RedirectToAction(nameof(Guest), new { Success = false });
+            ModelState.AddModelError(string.Empty, "Something went Wrong");
+
+            model.Roles = await roleManager.Roles.Select(r => r.Name).ToListAsync();
+
+            return View(model);
         }
     }
 }
