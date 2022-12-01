@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.EntityFrameworkCore;
 using ProjectTracker.Core.Contracts;
 using ProjectTracker.Core.ViewModels.Department;
 using ProjectTracker.Core.ViewModels.Employee;
@@ -53,15 +54,74 @@ namespace ProjectTracker.Core.Services
             await repo.SaveChangesAsync();
         }
 
-        public async Task EditAsync(EditDepartmentViewModel model)
+        public async Task DeleteAsync(Guid id)
         {
             var department = await repo.All<Department>()
-                .Where(d => d.IsActive && d.Id == model.Id)
+                .Where(d => d.IsActive && d.Id == id)
+                .Include(d => d.Employees)
+                .ThenInclude(e => e.EmployeesProjects)
+                .ThenInclude(ep => ep.Project)
+                .Include(d => d.Lead)
+                .Include(d => d.Projects)
+                .Include(d => d.Tickets)
                 .FirstOrDefaultAsync();
 
             if(department == null)
             {
                 throw new NullReferenceException();
+            }
+
+            department.IsActive = false;
+
+            foreach (var employee in department.Employees)
+            {
+                employee.DepartmentId = null;
+
+                foreach (var ep in employee.EmployeesProjects.Where(ep => ep.Project.DepartmentId == department.Id))
+                {
+                    ep.IsActive = false;
+                }
+            }
+
+            foreach (var project in department.Projects)
+            {
+                project.IsActive = false;
+            }
+
+            foreach (var ticket in department.Tickets)
+            {
+                ticket.IsActive = false;
+            }
+
+            department.Lead.LeadedDepartmentId = null;
+
+            await repo.SaveChangesAsync();
+        }
+
+        public async Task EditAsync(EditDepartmentViewModel model)
+        {
+            var department = await repo.All<Department>()
+                .Where(d => d.IsActive && d.Id == model.Id)
+                .Include(d => d.Lead)
+                .FirstOrDefaultAsync();
+
+            if(department == null)
+            {
+                throw new NullReferenceException();
+            }
+
+            var lead = await repo.All<Employee>()
+                .Where(e => e.IsActive && e.Id == model.LeadId)
+                .FirstOrDefaultAsync();
+
+            if(lead == null)
+            {
+                throw new NullReferenceException();
+            }
+            
+            if(lead.LeadedDepartmentId != null)
+            {
+                throw new ArgumentException("The Employee is already leader of another department");
             }
 
             department.Name = model.Name;
@@ -211,6 +271,18 @@ namespace ProjectTracker.Core.Services
                     Employees = d.Employees.Count,
                     Projects = d.Projects.Count,
                     Tickets = d.Tickets.Count,
+                })
+                .ToListAsync();
+        }
+
+        public async Task<IEnumerable<EmployeeIdNameViewModel>> GetPosibleLeadersAsync()
+        {
+            return await repo.AllReadonly<Employee>()
+                .Where(e => e.IsActive && e.LeadedDepartmentId == null)
+                .Select(e => new EmployeeIdNameViewModel()
+                {
+                    Id = e.Id,
+                    UserName = e.UserName
                 })
                 .ToListAsync();
         }

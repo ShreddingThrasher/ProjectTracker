@@ -128,10 +128,7 @@ namespace ProjectTracker.Areas.Administration.Controllers
         {
             if (!ModelState.IsValid)
             {
-                ModelState.AddModelError(string.Empty, "Something went wrong");
-
                 model.Projects = await projectService.GetIdsAndNamesAsync();
-
 
                 return View(model);
             }

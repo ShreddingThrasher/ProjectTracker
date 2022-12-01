@@ -53,7 +53,7 @@ namespace ProjectTracker.Areas.Administration.Controllers
         {
             if (!ModelState.IsValid)
             {
-                model.Employees = await employeeService.GetAllIdAndNameAsync();
+                model.Employees = await departmentService.GetPosibleLeadersAsync();
 
                 return View(model);
             }
@@ -108,7 +108,7 @@ namespace ProjectTracker.Areas.Administration.Controllers
         {
             if (!ModelState.IsValid)
             {
-                model.Employees = await employeeService.GetAllIdAndNameAsync();
+                model.Employees = await departmentService.GetPosibleLeadersAsync();
 
                 return View(model);
             }
@@ -120,12 +120,57 @@ namespace ProjectTracker.Areas.Administration.Controllers
 
                 return RedirectToAction(nameof(Active));
             }
+            catch (ArgumentException ex)
+            {
+                ModelState.AddModelError(string.Empty, ex.Message);
+
+                model.Employees = await departmentService.GetPosibleLeadersAsync();
+
+                return View(model);
+            }
             catch (Exception)
             {
                 RedirectToAction(nameof(Change), new { success = false });
             }
 
             return View(model);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Close()
+        {
+            var model = new DeleteDepartmentViewModel()
+            {
+                Departments = await departmentService.GetAllIdAndNameAsync()
+            };
+
+            return View(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Close(DeleteDepartmentViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                model.Departments = await departmentService.GetAllIdAndNameAsync();
+
+                return View(model);
+            }
+
+            try
+            {
+                await departmentService.DeleteAsync(model.Id);
+
+                return RedirectToAction(nameof(Active));
+            }
+            catch (Exception)
+            {
+                ModelState.AddModelError(string.Empty, "Something went wrong");
+
+                model.Departments = await departmentService.GetAllIdAndNameAsync();
+
+                return View(model);
+            }
         }
     }
 }

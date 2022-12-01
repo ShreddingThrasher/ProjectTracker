@@ -1,4 +1,6 @@
 ﻿using ProjectTracker.Core.ViewModels.Department;
+using ProjectTracker.Core.ViewModels.Employee;
+using ProjectTracker.Core.ViewModels.Project;
 using ProjectTracker.Infrastructure.Data.Entities;
 using System;
 using System.Collections.Generic;
@@ -27,5 +29,9 @@ namespace ProjectTracker.Core.Contracts
         Task<EditDepartmentViewModel> GetEditDetailsAsync(Guid id);
 
         Task EditAsync(EditDepartmentViewModel model);
+
+        Task DeleteAsync(Guid id);
+
+        Task<IEnumerable<EmployeeIdNameViewModel>> GetPosibleLeadersAsync();
     }
 }
