@@ -11,6 +11,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using ProjectTracker.Core.ViewModels.Ticket;
+using ProjectTracker.Core.Constants;
+using ProjectTracker.Infrastructure.Data.Entities.Enums;
+using ProjectTracker.Infrastructure.DataConstants;
 
 namespace ProjectTracker.Core.Services
 {
@@ -150,6 +153,7 @@ namespace ProjectTracker.Core.Services
                 .Select(e => new EmployeeViewModel()
                 {
                     Id = e.Id,
+                    Username = e.UserName,
                     FullName = e.FirstName + " " + e.LastName,
                     Department = e.Department.Name,
                     AssignedProjects = e.EmployeesProjects
@@ -161,6 +165,51 @@ namespace ProjectTracker.Core.Services
                     Email = e.Email
                 })
                 .ToListAsync();
+        }
+
+        public async Task RemoveById(string employeeId)
+        {
+            var employee = await repo.All<Employee>()
+                .Where(e => e.IsActive && e.Id == employeeId)
+                .Include(e => e.EmployeesProjects)
+                .Include(e => e.LeadedDepartment)
+                .Include(e => e.AssignedTickets)
+                .Include(e => e.SubmittedTickets)
+                .FirstOrDefaultAsync();
+
+            if(employee == null)
+            {
+                throw new NullReferenceException();
+            }
+
+            employee.IsActive = false;
+
+            if(employee.LeadedDepartmentId != null)
+            {
+                var admin = await repo.All<Employee>()
+                    .Where(e => e.Email == AdminConstants.Email)
+                    .FirstOrDefaultAsync();
+
+                employee.LeadedDepartment.LeadId = admin.Id;
+            }
+
+            foreach (var project in employee.EmployeesProjects)
+            {
+                project.IsActive = false;
+            }
+
+            foreach (var ticket in employee.AssignedTickets)
+            {
+                ticket.AssignedEmployee = null;
+                ticket.Status = Status.Open;
+            }
+
+            foreach (var ticket in employee.SubmittedTickets)   
+            {
+                ticket.IsActive = false;
+            }
+
+            await repo.SaveChangesAsync();
         }
     }
 }

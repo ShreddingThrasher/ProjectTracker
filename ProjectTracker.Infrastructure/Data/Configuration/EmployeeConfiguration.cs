@@ -1,4 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.Build.Execution;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using ProjectTracker.Infrastructure.Data.Entities;
 using ProjectTracker.Infrastructure.DataConstants;
@@ -40,6 +42,7 @@ namespace ProjectTracker.Infrastructure.Data.Configuration
 
             builder.Property(e => e.Email)
                 .HasMaxLength(EmployeeConstants.EmailMaxLength);
+
         }
     }
 }

@@ -112,7 +112,7 @@ namespace ProjectTracker.Core.Services
         public async Task<EditProjectViewModel> GetEditDetailsAsync(Guid id)
         {
             var project = await repo.AllReadonly<Project>()
-                .Where(p => p.IsActive && p.Id == id)
+                .Where(p => p.Id == id)
                 .Select(p => new EditProjectViewModel()
                 {
                     Id = p.Id,

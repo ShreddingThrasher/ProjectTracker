@@ -47,6 +47,22 @@ namespace ProjectTracker.Infrastructure.Data.Migrations
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("AspNetRoles", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "366cddc3-8ffb-4b6c-9df7-aaf99d737444",
+                            ConcurrencyStamp = "a920fb3d-f6c6-47d7-bc99-dbd6cce8876e",
+                            Name = "Admin",
+                            NormalizedName = "ADMIN"
+                        },
+                        new
+                        {
+                            Id = "c65a4ecb-89b0-4c14-8a90-4bafea94d642",
+                            ConcurrencyStamp = "80dc19d2-9924-40c3-bca2-822fa7f727d7",
+                            Name = "DepartmentLead",
+                            NormalizedName = "DEPARTMENTLEAD"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -136,6 +152,13 @@ namespace ProjectTracker.Infrastructure.Data.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("AspNetUserRoles", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            UserId = "33f73add-bb37-4d27-bb48-5fe0e682cd04",
+                            RoleId = "366cddc3-8ffb-4b6c-9df7-aaf99d737444"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
@@ -279,6 +302,25 @@ namespace ProjectTracker.Infrastructure.Data.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "33f73add-bb37-4d27-bb48-5fe0e682cd04",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "492671f7-96e7-4a03-be1c-9867d608467f",
+                            Email = "admin@mail.com",
+                            EmailConfirmed = false,
+                            FirstName = "Admin",
+                            IsActive = false,
+                            IsGuest = false,
+                            LastName = "User",
+                            LockoutEnabled = false,
+                            PhoneNumberConfirmed = false,
+                            SecurityStamp = "44d6a452-9cdf-449b-b163-92436081d392",
+                            TwoFactorEnabled = false,
+                            UserName = "Administrator"
+                        });
                 });
 
             modelBuilder.Entity("ProjectTracker.Infrastructure.Data.Entities.EmployeeProject", b =>

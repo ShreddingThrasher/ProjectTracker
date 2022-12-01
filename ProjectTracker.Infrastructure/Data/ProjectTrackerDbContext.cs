@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.Build.Execution;
 using Microsoft.EntityFrameworkCore;
 using ProjectTracker.Infrastructure.Data.Configuration;
@@ -37,6 +38,10 @@ namespace ProjectTracker.Infrastructure.Data
             builder.ApplyConfiguration(new TicketConfiguration());
             builder.ApplyConfiguration(new TicketChangeConfiguration());
             builder.ApplyConfiguration(new TicketCommentConfiguration());
+
+            SeedAdmin(builder);
+            SeedRoles(builder);
+            SeedUserRoles(builder);
 
             //builder.Entity<EmployeeProject>()
             //    .HasKey(ep => new { ep.EmployeeId, ep.ProjectId });
@@ -132,6 +137,54 @@ namespace ProjectTracker.Infrastructure.Data
             //    .HasDefaultValue(true);
 
             base.OnModelCreating(builder);
+        }
+
+        private void SeedAdmin(ModelBuilder builder)
+        {
+            var admin = new Employee()
+            {
+                Id = "33f73add-bb37-4d27-bb48-5fe0e682cd04",
+                UserName = AdminConstants.UserName,
+                Email = AdminConstants.Email,
+                FirstName = "Admin",
+                LastName = "User",
+                LockoutEnabled = false
+            };
+
+            PasswordHasher<Employee> passwordHasher = new PasswordHasher<Employee>();
+            passwordHasher.HashPassword(admin, "Admin123!");
+
+            builder.Entity<Employee>().HasData(admin);
+        }
+
+        private void SeedRoles(ModelBuilder builder)
+        {
+            builder.Entity<IdentityRole>().HasData(
+                new IdentityRole()
+                { 
+                    Id = "366cddc3-8ffb-4b6c-9df7-aaf99d737444", 
+                    Name = "Admin", 
+                    ConcurrencyStamp = "a920fb3d-f6c6-47d7-bc99-dbd6cce8876e", 
+                    NormalizedName = "ADMIN" 
+                },
+                new IdentityRole() 
+                { Id = "c65a4ecb-89b0-4c14-8a90-4bafea94d642", 
+                    Name = "DepartmentLead", 
+                    ConcurrencyStamp = "80dc19d2-9924-40c3-bca2-822fa7f727d7", 
+                    NormalizedName = "DEPARTMENTLEAD" 
+                }
+            );
+        }
+
+        private void SeedUserRoles(ModelBuilder builder)
+        {
+            builder.Entity<IdentityUserRole<string>>().HasData(
+                new IdentityUserRole<string>() 
+                { 
+                    RoleId = "366cddc3-8ffb-4b6c-9df7-aaf99d737444", 
+                    UserId = "33f73add-bb37-4d27-bb48-5fe0e682cd04"
+                }
+            );
         }
     }
 }

@@ -23,7 +23,7 @@
                         <td>@project.Department</td>
                         <td>@project.AssignedEmployeesCount</td>
                         <td>@project.TicketsCount</td>
-                        <td><a asp-controller="Project" asp-action="Edit" asp-route-id="@project.Id" class="btn btn-warning">Edit</a></td>
+                        <td><a asp-controller="Project" asp-action="Edit" asp-route-projectId="@project.Id" class="btn btn-warning">Edit</a></td>
                     </tr>
                 }
             </tbody>

@@ -22,5 +22,7 @@ namespace ProjectTracker.Core.Contracts
         Task<IEnumerable<EmployeeIdNameViewModel>> GetAllIdAndNameAsync();
 
         Task<EmployeeDetailsViewModel> GetEmployeeDetailsAsync(string id);
+
+        Task RemoveById(string employeeId);
     }
 }

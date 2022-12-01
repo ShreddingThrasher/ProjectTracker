@@ -78,11 +78,11 @@ namespace ProjectTracker.Areas.Administration.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Edit(Guid id)
+        public async Task<IActionResult> Edit(Guid projectId)
         {
             try
             {
-                var model = await projectService.GetEditDetailsAsync(id);
+                var model = await projectService.GetEditDetailsAsync(projectId);
 
                 return View(model);
             }
