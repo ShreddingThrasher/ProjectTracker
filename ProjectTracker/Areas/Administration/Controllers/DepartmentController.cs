@@ -53,7 +53,7 @@ namespace ProjectTracker.Areas.Administration.Controllers
         {
             if (!ModelState.IsValid)
             {
-                model.Employees = await departmentService.GetPosibleLeadersAsync();
+                model.Employees = await departmentService.GetPossibleLeadersAsync();
 
                 return View(model);
             }
@@ -108,7 +108,7 @@ namespace ProjectTracker.Areas.Administration.Controllers
         {
             if (!ModelState.IsValid)
             {
-                model.Employees = await departmentService.GetPosibleLeadersAsync();
+                model.Employees = await departmentService.GetPossibleLeadersAsync();
 
                 return View(model);
             }
@@ -124,7 +124,7 @@ namespace ProjectTracker.Areas.Administration.Controllers
             {
                 ModelState.AddModelError(string.Empty, ex.Message);
 
-                model.Employees = await departmentService.GetPosibleLeadersAsync();
+                model.Employees = await departmentService.GetPossibleLeadersAsync();
 
                 return View(model);
             }

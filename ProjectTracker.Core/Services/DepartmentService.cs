@@ -24,6 +24,11 @@ namespace ProjectTracker.Core.Services
             repo = _repo;
         }
 
+        /// <summary>
+        /// Creates a new Department async
+        /// </summary>
+        /// <param name="model">View model containing the new Department data</param>
+        /// <returns></returns>
         public async Task CreateAsync(CreateDepartmentViewModel model)
         {
             var lead = await repo.All<Employee>()
@@ -54,6 +59,12 @@ namespace ProjectTracker.Core.Services
             await repo.SaveChangesAsync();
         }
 
+        /// <summary>
+        /// Sets a given Department from Active to Inactive
+        /// </summary>
+        /// <param name="id">Department Id</param>
+        /// <returns></returns>
+        /// <exception cref="NullReferenceException">Throws if the given Department doesn't exist.</exception>
         public async Task DeleteAsync(Guid id)
         {
             var department = await repo.All<Department>()
@@ -98,6 +109,13 @@ namespace ProjectTracker.Core.Services
             await repo.SaveChangesAsync();
         }
 
+        /// <summary>
+        /// Edits existing Department
+        /// </summary>
+        /// <param name="model">Model with the Edit data</param>
+        /// <returns></returns>
+        /// <exception cref="NullReferenceException">Throws if the given Department doesn't exist</exception>
+        /// <exception cref="ArgumentException">Throws if the given Department Leader is already leader of another Department</exception>
         public async Task EditAsync(EditDepartmentViewModel model)
         {
             var department = await repo.All<Department>()
@@ -130,6 +148,11 @@ namespace ProjectTracker.Core.Services
             await repo.SaveChangesAsync();
         }
 
+
+        /// <summary>
+        /// Gets all active departments in the database
+        /// </summary>
+        /// <returns>IEnumerable<DepartmentViewModel> departments</returns>
         public async Task<IEnumerable<DepartmentViewModel>> GetAllAsync()
         {
             return await repo.AllReadonly<Department>()
@@ -152,6 +175,11 @@ namespace ProjectTracker.Core.Services
                 .ToListAsync();
         }
 
+
+        /// <summary>
+        /// Gets Id and Name for all active departments in the database
+        /// </summary>
+        /// <returns>IEnumerable<DepartmentIdNameViewModel></returns>
         public async Task<IEnumerable<DepartmentIdNameViewModel>> GetAllIdAndNameAsync()
         {
             return await repo.AllReadonly<Department>()
@@ -164,14 +192,20 @@ namespace ProjectTracker.Core.Services
                 .ToListAsync();
         }
 
-        public async Task<Department> GetByIdAsync(Guid id)
-            => await repo.All<Department>()
-                .Where(d => d.IsActive)
-                .FirstOrDefaultAsync(d => d.Id == id);
 
+        /// <summary>
+        /// Gets the count of all active departments in the database
+        /// </summary>
+        /// <returns>Count as int32</returns>
         public async Task<int> GetCountAsync()
             => await this.repo.AllReadonly<Department>().Where(d => d.IsActive).CountAsync();
 
+
+        /// <summary>
+        /// Gets details for an Active Department by Id async
+        /// </summary>
+        /// <param name="departmentId">Department Id</param>
+        /// <returns>DepartmentDetailsViewModel or null</returns>
         public async Task<DepartmentDetailsViewModel> GetDepartmentDetailsAsync(Guid departmentId)
         {
 #pragma warning disable CS8603 // Possible null reference return.
@@ -240,6 +274,12 @@ namespace ProjectTracker.Core.Services
 #pragma warning restore CS8603 // Possible null reference return.
         }
 
+        /// <summary>
+        /// Gets details for a Department to be edited.
+        /// </summary>
+        /// <param name="id">Department Id</param>
+        /// <returns>EditDepartmentViewModelo</returns>
+        /// <exception cref="NullReferenceException">Throws if there is no Department with the given Id.</exception>
         public async Task<EditDepartmentViewModel> GetEditDetailsAsync(Guid id)
         {
             var department = await repo.AllReadonly<Department>()
@@ -260,6 +300,10 @@ namespace ProjectTracker.Core.Services
             return department;
         }
 
+        /// <summary>
+        /// Gets all inactive departments in the database
+        /// </summary>
+        /// <returns>IEnumerable<DepartmentViewModel></returns>
         public async Task<IEnumerable<DepartmentViewModel>> GetInactiveDepartmentsAsync()
         {
             return await repo.AllReadonly<Department>()
@@ -275,7 +319,12 @@ namespace ProjectTracker.Core.Services
                 .ToListAsync();
         }
 
-        public async Task<IEnumerable<EmployeeIdNameViewModel>> GetPosibleLeadersAsync()
+
+        /// <summary>
+        /// Gets all Employees that can be set as Department Leader
+        /// </summary>
+        /// <returns>Id and Name for all Employees that are currently not a leader of another Department</returns>
+        public async Task<IEnumerable<EmployeeIdNameViewModel>> GetPossibleLeadersAsync()
         {
             return await repo.AllReadonly<Employee>()
                 .Where(e => e.IsActive && e.LeadedDepartmentId == null)
