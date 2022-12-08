@@ -5,6 +5,7 @@ using ProjectTracker.Infrastructure.Data.Common;
 using ProjectTracker.Infrastructure.Data.Entities;
 using ProjectTracker.Core.Contracts;
 using ProjectTracker.Core.Services;
+using Microsoft.AspNetCore.Mvc;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -21,7 +22,11 @@ builder.Services.AddDefaultIdentity<Employee>(options =>
 })
     .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<ProjectTrackerDbContext>();
-builder.Services.AddControllersWithViews();
+
+builder.Services.AddControllersWithViews(options =>
+{
+    options.Filters.Add<AutoValidateAntiforgeryTokenAttribute>();
+});
 
 
 builder.Services.ConfigureApplicationCookie(options =>
