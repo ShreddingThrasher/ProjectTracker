@@ -10,7 +10,7 @@ Users can submit tickets(tasks) to projects, track current tasks' progress and v
 I got inspired to choose this type of application to be my final project by <a href="https://www.youtube.com/@CoderFoundry">Coder Foundry</a>.
 This was one of my main sources of studiying materials along with SoftUni, Tim Corey and many many more since the begining of my C# journey.
 
-#Application Overview
+## Application Overview
 -----------------------
 
 The first thing the user sees is the Login page.
@@ -30,7 +30,7 @@ From here You can navigate and see information Departments, Projects, Tickets an
 <img src="https://iili.io/HnP3vf4.md.jpg" alt="HnP3vf4.md.jpg" border="0">
 <img src="https://iili.io/HnP3OWG.md.jpg" alt="HnP3OWG.md.jpg" border="0">
 
-###Admin Panel
+### Admin Panel
 --------------
 
 The Admin panel is accessible for users that are in admin role.
@@ -40,7 +40,7 @@ The Admin panel is accessible for users that are in admin role.
 The admin can manage roles, assign projects and tickets, remove objects and see a list of past objects.
 
 
-##The application is build using he following technologies:
+## The application is build using he following technologies:
 
 - ASP.NET Core 6.0
 - SQL Server
