@@ -3,7 +3,7 @@
 ------------------------
 
 The idea of the application is pretty simple.
-Project Tracker is an application that helps manage the work process in working business environment.
+Project Tracker is an application that helps manage the work process in a working environment.
 Everything is organized by Departments, Projects and Employees.
 Users can submit tickets(tasks) to projects, track current tasks' progress and view overall info for a given Project and Department.
 
