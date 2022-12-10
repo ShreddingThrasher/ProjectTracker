@@ -26,14 +26,23 @@ namespace ProjectTracker.Core.Services
             repo = _repo;
         }
 
-        public async Task CreateCommentAsync(string userId, Guid ticketId, CreateTicketCommentViewModel model)
+        public async Task CreateCommentAsync(string userId, CreateTicketCommentViewModel model)
         {
+            var ticket = await repo.All<Ticket>()
+                .Where(t => t.IsActive && t.Id == model.TicketId)
+                .FirstOrDefaultAsync();
+
+            if(ticket == null)
+            {
+                throw new NullReferenceException();
+            }
+
             var comment = new TicketComment()
             {
                 Message = model.Message,
                 CommenterId = userId,
                 CreatedOn = DateTime.Now,
-                TicketId = ticketId
+                TicketId = model.TicketId
             };
 
             await repo.AddAsync(comment);

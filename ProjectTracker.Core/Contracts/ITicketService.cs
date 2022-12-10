@@ -34,7 +34,7 @@ namespace ProjectTracker.Core.Contracts
 
         Task<TicketDetailsViewModel> GetTicketDetaisByIdAsync(Guid id);
 
-        Task CreateCommentAsync(string userId, Guid ticketId, CreateTicketCommentViewModel model);
+        Task CreateCommentAsync(string userId, CreateTicketCommentViewModel model);
 
         Task<IEnumerable<Status>> GetAllStatusesAsync();
     }

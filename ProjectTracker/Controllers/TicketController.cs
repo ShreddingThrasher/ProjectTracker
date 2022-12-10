@@ -45,17 +45,23 @@ namespace ProjectTracker.Controllers
         }
 
         [HttpPost]
-        [Route("/Ticket/Details/{Id}/Comment")]
-        public async Task<IActionResult> Comment(Guid Id, CreateTicketCommentViewModel model)
+        public async Task<IActionResult> Comment(CreateTicketCommentViewModel model)
         {
             if (!ModelState.IsValid)
             {
-                return RedirectToAction(nameof(Details), new { id = Id});
+                return RedirectToAction(nameof(Details), new { id = model.TicketId});
             }
 
-            await ticketService.CreateCommentAsync(User.Id(), Id, model);
+            try
+            {
+                await ticketService.CreateCommentAsync(User.Id(), model);
+            }
+            catch (Exception)
+            {
+                return RedirectToAction(nameof(All));
+            }
 
-            return RedirectToAction(nameof(Details), new { id = Id });
+            return RedirectToAction(nameof(Details), new { id = model.TicketId });
         }
     }
 }

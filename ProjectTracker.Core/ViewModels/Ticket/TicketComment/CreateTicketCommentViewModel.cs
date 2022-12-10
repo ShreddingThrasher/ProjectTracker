@@ -11,6 +11,9 @@ namespace ProjectTracker.Core.ViewModels.Ticket.TicketComment
     public class CreateTicketCommentViewModel
     {
         [Required]
+        public Guid TicketId { get; set; }
+
+        [Required]
         [StringLength(CommentConstants.MessageMaxLength,
             MinimumLength = CommentConstants.MessageMinLength)]
         public string Message { get; set; }

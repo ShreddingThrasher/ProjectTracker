@@ -6,7 +6,8 @@
         Post a comment
     </div>
     <div class="card-body">
-        <form method="post" action="/Ticket/Details/@ViewBag.TicketId/Comment">
+        <form method="post" asp-controller="Ticket" asp-action="Comment">
+            <input type="hidden" asp-for="@Model.TicketId" value="@ViewBag.TicketId" />
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group row">
                 <div class="col-sm-15 mb-3 mb-sm-0">
