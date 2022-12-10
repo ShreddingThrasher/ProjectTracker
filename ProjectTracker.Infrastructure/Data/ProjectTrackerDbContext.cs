@@ -16,7 +16,7 @@ namespace ProjectTracker.Infrastructure.Data
         {
             if (Database.IsRelational())
             {
-
+                Database.Migrate();
             }
             else
             {
@@ -51,6 +51,7 @@ namespace ProjectTracker.Infrastructure.Data
             SeedAdmin(builder);
             SeedRoles(builder);
             SeedUserRoles(builder);
+            SeedDepartment(builder);
 
             base.OnModelCreating(builder);
         }
@@ -62,15 +63,31 @@ namespace ProjectTracker.Infrastructure.Data
                 Id = AdminConstants.AdminId,
                 UserName = AdminConstants.UserName,
                 Email = AdminConstants.Email,
-                FirstName = "Admin",
-                LastName = "User",
+                FirstName = "Administrator",
+                LastName = "Administrator",
+                NormalizedUserName = "ADMINISTRATOR",
+                NormalizedEmail = "ADMINISTRATOR@MAIL.COM",
+                LeadedDepartmentId = new Guid(AdminConstants.DepartmentId),
                 LockoutEnabled = false
             };
 
             PasswordHasher<Employee> passwordHasher = new PasswordHasher<Employee>();
-            admin.PasswordHash = passwordHasher.HashPassword(admin, "Admin123!");
+            admin.PasswordHash = passwordHasher.HashPassword(admin, "Administrator123!");
 
             builder.Entity<Employee>().HasData(admin);
+        }
+
+        private void SeedDepartment(ModelBuilder builder)
+        {
+            var department = new Department()
+            {
+                Id = new Guid("76c836e9-f620-4b7e-90e5-b8f15f1564a8"),
+                Name = "Initial Department",
+                LeadId = AdminConstants.AdminId,
+                IsActive = true
+            };
+
+            builder.Entity<Department>().HasData(department);
         }
 
         private void SeedRoles(ModelBuilder builder)
@@ -80,13 +97,12 @@ namespace ProjectTracker.Infrastructure.Data
                 { 
                     Id = "366cddc3-8ffb-4b6c-9df7-aaf99d737444", 
                     Name = "Admin", 
-                    ConcurrencyStamp = "a920fb3d-f6c6-47d7-bc99-dbd6cce8876e", 
                     NormalizedName = "ADMIN" 
                 },
                 new IdentityRole() 
-                { Id = "c65a4ecb-89b0-4c14-8a90-4bafea94d642", 
+                { 
+                    Id = "c65a4ecb-89b0-4c14-8a90-4bafea94d642", 
                     Name = "DepartmentLead", 
-                    ConcurrencyStamp = "80dc19d2-9924-40c3-bca2-822fa7f727d7", 
                     NormalizedName = "DEPARTMENTLEAD" 
                 }
             );

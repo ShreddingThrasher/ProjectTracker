@@ -52,14 +52,14 @@ namespace ProjectTracker.Infrastructure.Data.Migrations
                         new
                         {
                             Id = "366cddc3-8ffb-4b6c-9df7-aaf99d737444",
-                            ConcurrencyStamp = "a920fb3d-f6c6-47d7-bc99-dbd6cce8876e",
+                            ConcurrencyStamp = "4d1a2528-1991-4bd6-b740-1e7668edabd2",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
                             Id = "c65a4ecb-89b0-4c14-8a90-4bafea94d642",
-                            ConcurrencyStamp = "80dc19d2-9924-40c3-bca2-822fa7f727d7",
+                            ConcurrencyStamp = "4ee5b44e-12b2-4c96-a6db-0ea177577169",
                             Name = "DepartmentLead",
                             NormalizedName = "DEPARTMENTLEAD"
                         });
@@ -156,7 +156,7 @@ namespace ProjectTracker.Infrastructure.Data.Migrations
                     b.HasData(
                         new
                         {
-                            UserId = "33f73add-bb37-4d27-bb48-5fe0e682cd04",
+                            UserId = "a14e20b2-f833-42c5-bb8a-abfac472a59c",
                             RoleId = "366cddc3-8ffb-4b6c-9df7-aaf99d737444"
                         });
                 });
@@ -205,6 +205,15 @@ namespace ProjectTracker.Infrastructure.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Departments");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("76c836e9-f620-4b7e-90e5-b8f15f1564a8"),
+                            IsActive = true,
+                            LeadId = "a14e20b2-f833-42c5-bb8a-abfac472a59c",
+                            Name = "Initial Department"
+                        });
                 });
 
             modelBuilder.Entity("ProjectTracker.Infrastructure.Data.Entities.Employee", b =>
@@ -306,18 +315,22 @@ namespace ProjectTracker.Infrastructure.Data.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "33f73add-bb37-4d27-bb48-5fe0e682cd04",
+                            Id = "a14e20b2-f833-42c5-bb8a-abfac472a59c",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "492671f7-96e7-4a03-be1c-9867d608467f",
-                            Email = "admin@mail.com",
+                            ConcurrencyStamp = "730032f7-f0c7-4ddb-b7fe-b5022bc3085d",
+                            Email = "administrator@mail.com",
                             EmailConfirmed = false,
-                            FirstName = "Admin",
+                            FirstName = "Administrator",
                             IsActive = false,
                             IsGuest = false,
-                            LastName = "User",
+                            LastName = "Administrator",
+                            LeadedDepartmentId = new Guid("76c836e9-f620-4b7e-90e5-b8f15f1564a8"),
                             LockoutEnabled = false,
+                            NormalizedEmail = "ADMINISTRATOR@MAIL.COM",
+                            NormalizedUserName = "ADMINISTRATOR",
+                            PasswordHash = "AQAAAAEAACcQAAAAEO11TMy/lEIYDYu8PW0OZLdj23xGrySKmCpFaQp8CZzUpTsehY8XVrfS99hkaLZABw==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "44d6a452-9cdf-449b-b163-92436081d392",
+                            SecurityStamp = "7e4ededb-5f88-49b2-a066-891f7cbcc28b",
                             TwoFactorEnabled = false,
                             UserName = "Administrator"
                         });
