@@ -30,15 +30,7 @@
                     <span class="text">Details</span>
                 </a>
 
-                @if(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value == department.LeaderId)
-                {
-                    <a asp-controller="Department" asp-action="Manage" asp-route-id="@department.Id" class="btn btn-primary btn-icon-split">
-                        <span class="icon text-white-50">
-                            <i class="fas fa-flag"></i>
-                        </span>
-                        <span class="text">Manage</span>
-                    </a>
-                }
+               
             </div>
         </div>
 	}
