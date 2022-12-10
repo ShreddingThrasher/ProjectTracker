@@ -10,8 +10,3 @@ Users can submit tickets(tasks) to projects, track current tasks' progress and v
 I got inspired to choose this type of application to be my final project by <a href="https://www.youtube.com/@CoderFoundry">Coder Foundry</a>.
 This was one of my main sources of studiying materials along with SoftUni, Tim Corey and many many more since the begining of my C# journey.
 
-
-## Application Flow
---------------------------
-
-The main page You see when you open the app is the login page.
