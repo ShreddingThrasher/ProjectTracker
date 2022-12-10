@@ -46,10 +46,18 @@ namespace ProjectTracker.UnitTests
                 new Employee()
                 {
                     Id = "6da2e2f3-c43b-4a68-beea-4da7915b1528",
-                    UserName = "Tester",
+                    UserName = "DepartmentLeader",
                     FirstName = "Some test",
                     LastName = "AnotherTest",
                     Email = "tester@abv.bg",
+                    LeadedDepartment = new Department()
+                    {
+                        Id = new Guid("aabcdf93-5aa9-46dc-bbf3-854d551a8b6d"),
+                        Name = "Testing department",
+                        LeadId = "6da2e2f3-c43b-4a68-beea-4da7915b1528",
+                        IsActive = true
+                    },
+                    LeadedDepartmentId = new Guid("aabcdf93-5aa9-46dc-bbf3-854d551a8b6d"),
                     IsActive = true
                 },
                 new Employee()

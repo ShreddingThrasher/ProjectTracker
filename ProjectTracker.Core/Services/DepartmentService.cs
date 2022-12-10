@@ -47,13 +47,16 @@ namespace ProjectTracker.Core.Services
 
             var department = new Department()
             {
+                Id = Guid.NewGuid(),
                 Name = model.Name,
                 LeadId = model.LeadId,
-                Lead = lead
+                Lead = lead,
+                IsActive = true
             };
 
             department.Employees.Add(lead);
             lead.Department = department;
+            lead.LeadedDepartmentId = department.Id;
 
             await repo.AddAsync(department);
             await repo.SaveChangesAsync();
@@ -104,7 +107,10 @@ namespace ProjectTracker.Core.Services
                 ticket.IsActive = false;
             }
 
-            department.Lead.LeadedDepartmentId = null;
+            if(department.Lead != null)
+            {
+                department.Lead.LeadedDepartmentId = null;
+            }            
 
             await repo.SaveChangesAsync();
         }
@@ -137,7 +143,7 @@ namespace ProjectTracker.Core.Services
                 throw new NullReferenceException();
             }
             
-            if(lead.LeadedDepartmentId != null)
+            if(lead.LeadedDepartmentId != null && lead.LeadedDepartmentId != department.Id)
             {
                 throw new ArgumentException("The Employee is already leader of another department");
             }
