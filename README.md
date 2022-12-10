@@ -11,7 +11,7 @@ I got inspired to choose this type of application to be my final project by <a h
 This was one of my main sources of studiying materials along with SoftUni, Tim Corey and many many more since the begining of my C# journey.
 
 ## Application Overview
------------------------
+---
 
 The first thing the user sees is the Login page.
 
@@ -31,7 +31,7 @@ From here You can navigate and see information Departments, Projects, Tickets an
 <img src="https://iili.io/HnP3OWG.md.jpg" alt="HnP3OWG.md.jpg" border="0">
 
 ### Admin Panel
---------------
+---
 
 The Admin panel is accessible for users that are in admin role.
 
