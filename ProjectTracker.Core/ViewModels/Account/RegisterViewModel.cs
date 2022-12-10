@@ -10,18 +10,24 @@ namespace ProjectTracker.Core.ViewModels.Account
         [Required]
         [StringLength(EmployeeConstants.UserNameMaxLength,
             MinimumLength = EmployeeConstants.UserNameMinLength)]
+        [RegularExpression(ValidationRegex.PropertyRegex,
+            ErrorMessage = "Contains unallowed characters")]
         public string UserName { get; set; }
 
         [Required]
         [Display(Name = "First Name")]
         [StringLength(EmployeeConstants.FirstNameMaxLength,
             MinimumLength = EmployeeConstants.FirstNameMinLength)]
+        [RegularExpression(ValidationRegex.PropertyRegex,
+            ErrorMessage = "Contains unallowed characters")]
         public string FirstName { get; set; }
 
         [Required]
         [Display(Name = "Last Name")]
         [StringLength(EmployeeConstants.LastNameMaxLength,
             MinimumLength = EmployeeConstants.LastNameMinLength)]
+        [RegularExpression(ValidationRegex.PropertyRegex,
+            ErrorMessage = "Contains unallowed characters")]
         public string LastName { get; set; }
 
         [Required]

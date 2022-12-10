@@ -1,4 +1,5 @@
-﻿using ProjectTracker.Infrastructure.DataConstants;
+﻿using ProjectTracker.Core.Constants;
+using ProjectTracker.Infrastructure.DataConstants;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -16,6 +17,8 @@ namespace ProjectTracker.Core.ViewModels.Ticket.TicketComment
         [Required]
         [StringLength(CommentConstants.MessageMaxLength,
             MinimumLength = CommentConstants.MessageMinLength)]
+        [RegularExpression(ValidationRegex.DescriptionAndMessageRegex,
+            ErrorMessage = "Contains unallowed characters")]
         public string Message { get; set; }
     }
 }

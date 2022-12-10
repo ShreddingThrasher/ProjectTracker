@@ -201,7 +201,11 @@ namespace ProjectTracker.Core.Services
             foreach (var ticket in employee.AssignedTickets)
             {
                 ticket.AssignedEmployee = null;
-                ticket.Status = Status.Open;
+                
+                if(ticket.Status != Status.Done)
+                {
+                    ticket.Status = Status.Open;
+                }
             }
 
             foreach (var ticket in employee.SubmittedTickets)   

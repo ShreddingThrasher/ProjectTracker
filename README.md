@@ -33,8 +33,8 @@ From here You can navigate and see information about Departments, Projects, Tick
 ### Admin Panel
 ---
 
-You can login with admin account:
-Email: administrator@mail.com
+You can login with admin account:<br>
+Email: administrator@mail.com<br>
 Password: Administrator123!
 
 The Admin panel is accessible for users that are in admin role.

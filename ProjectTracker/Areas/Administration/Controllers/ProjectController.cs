@@ -106,7 +106,7 @@ namespace ProjectTracker.Areas.Administration.Controllers
 
                 return RedirectToAction(nameof(Active));
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return RedirectToAction(nameof(Change), new { success = false});
             }

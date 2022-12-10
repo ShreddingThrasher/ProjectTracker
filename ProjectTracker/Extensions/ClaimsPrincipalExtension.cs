@@ -1,7 +1,7 @@
 ﻿using System.Runtime.CompilerServices;
 using System.Security.Claims;
 
-namespace HouseRentingSystem.Extensions
+namespace Microsoft.Extensions.DependencyInjection
 {
     public static class ClaimsPrincipalExtension
     {

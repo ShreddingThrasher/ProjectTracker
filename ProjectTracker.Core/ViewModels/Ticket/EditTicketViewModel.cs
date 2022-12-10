@@ -1,4 +1,5 @@
-﻿using ProjectTracker.Core.ViewModels.Project;
+﻿using ProjectTracker.Core.Constants;
+using ProjectTracker.Core.ViewModels.Project;
 using ProjectTracker.Infrastructure.Data.Entities.Enums;
 using ProjectTracker.Infrastructure.DataConstants;
 using System;
@@ -17,6 +18,8 @@ namespace ProjectTracker.Core.ViewModels.Ticket
         [Required]
         [StringLength(TicketConstants.TitleMaxLength,
             MinimumLength = TicketConstants.TitleMinLength)]
+        [RegularExpression(ValidationRegex.PropertyRegex,
+            ErrorMessage = "Contains unallowed characters")]
         public string Title { get; set; }
 
         [Required]

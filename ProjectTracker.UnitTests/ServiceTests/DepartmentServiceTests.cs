@@ -58,7 +58,7 @@ namespace ProjectTracker.UnitTests.ServiceTests
         }
 
         [Test]
-        public async Task CreateAsync_ThrowsNullReferenceExzception_IfLeadDoesntExist()
+        public void CreateAsync_ThrowsNullReferenceExzception_IfLeadDoesntExist()
         {
             Assert.ThrowsAsync<NullReferenceException>(async () =>
             {
@@ -71,7 +71,7 @@ namespace ProjectTracker.UnitTests.ServiceTests
         }
 
         [Test]
-        public async Task CreateAsync_ThrowsArgumentExzception_IfLeadIsAlreadyLead()
+        public void CreateAsync_ThrowsArgumentExzception_IfLeadIsAlreadyLead()
         {
             var data = repo.All<Employee>();
 
@@ -101,7 +101,7 @@ namespace ProjectTracker.UnitTests.ServiceTests
 
 
         [Test]
-        public async Task DeleteAsync_ThrowsNullReferenceException_IfDepartmentDoesntExist()
+        public void DeleteAsync_ThrowsNullReferenceException_IfDepartmentDoesntExist()
         {
             Assert.ThrowsAsync<NullReferenceException>(()
                 => departmentService.DeleteAsync(Guid.NewGuid()));
@@ -126,7 +126,7 @@ namespace ProjectTracker.UnitTests.ServiceTests
         }
 
         [Test]
-        public async Task EditAsync_ThrowsNullReferenceException_WhenDepartmentDoesntExist()
+        public void EditAsync_ThrowsNullReferenceException_WhenDepartmentDoesntExist()
         {
             Assert.ThrowsAsync<NullReferenceException>(()
                 => departmentService.EditAsync(new EditDepartmentViewModel()
@@ -138,7 +138,7 @@ namespace ProjectTracker.UnitTests.ServiceTests
         }
 
         [Test]
-        public async Task GetAllAsync_ReturnsAllDepartments()
+        public void GetAllAsync_ReturnsAllDepartments()
         {
             var expected = data.Departments.Where(d => d.IsActive).Count();
 
@@ -148,7 +148,7 @@ namespace ProjectTracker.UnitTests.ServiceTests
         }
 
         [Test]
-        public async Task GetAllIdAndNameAsync_ReturnsAllDepartments()
+        public void GetAllIdAndNameAsync_ReturnsAllDepartments()
         {
             var expected = data.Departments.Where(d => d.IsActive).Count();
 

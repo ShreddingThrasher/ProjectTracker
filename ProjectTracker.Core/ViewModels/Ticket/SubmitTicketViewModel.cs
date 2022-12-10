@@ -1,4 +1,5 @@
-﻿using ProjectTracker.Infrastructure.Data.Entities.Enums;
+﻿using ProjectTracker.Core.Constants;
+using ProjectTracker.Infrastructure.Data.Entities.Enums;
 using ProjectTracker.Infrastructure.DataConstants;
 using System;
 using System.Collections.Generic;
@@ -24,11 +25,15 @@ namespace ProjectTracker.Core.ViewModels.Ticket
         [Required]
         [StringLength(TicketConstants.TitleMaxLength,
             MinimumLength = TicketConstants.TitleMinLength)]
+        [RegularExpression(ValidationRegex.PropertyRegex,
+            ErrorMessage = "Contains unallowed characters")]
         public string Title { get; set; }
 
         [Required]
         [StringLength(TicketConstants.DescriptionMaxLength,
             MinimumLength = TicketConstants.DescriptionMinLength)]
+        [RegularExpression(ValidationRegex.DescriptionAndMessageRegex,
+            ErrorMessage = "Contains unallowed characters")]
         public string Description { get; set; }
 
         [Required]

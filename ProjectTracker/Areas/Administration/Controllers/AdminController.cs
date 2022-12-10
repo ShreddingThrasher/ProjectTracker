@@ -186,7 +186,7 @@ namespace ProjectTracker.Areas.Administration.Controllers
 
                 return Redirect($"/Project/Details/{model.ProjectId}");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 ModelState.AddModelError(string.Empty, "The Employee is already assigned to this project.");
             }

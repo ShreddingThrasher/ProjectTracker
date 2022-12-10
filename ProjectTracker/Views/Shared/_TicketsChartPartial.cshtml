@@ -1,5 +1,4 @@
 ﻿
-<div class="col-lg-6 mb-4">
 
     <!-- Pie Chart -->
     <div class="col-xl-12 col-lg-5">
@@ -9,24 +8,34 @@
                 <h6 class="m-0 font-weight-bold text-primary">Tickets</h6>
             </div>
             <!-- Card Body -->
-            <div class="card-body">
-                <div class="chart-pie pt-4 pb-2">
-                    <canvas id="ticketsPieChart"></canvas>
-                </div>
-                <div class="mt-4 text-center small">
-                    <span class="mr-2">
-                        <i class="fas fa-circle text-warning"></i> Open
-                    </span>
-                    <span class="mr-2">
-                        <i class="fas fa-circle text-primary"></i> In Progress
-                    </span>
-                    <span class="mr-2">
-                        <i class="fas fa-circle text-success"></i> Done
-                    </span>
-                </div>
+            <div class="card-body" style="text-align: center;">
+                @if (@ViewData["Open"]?.ToString() != "0"
+                || @ViewData["InProgress"]?.ToString() != "0"
+                || @ViewData["Done"]?.ToString() != "0")
+                {
+                    <div class="chart-pie pt-4 pb-2">
+                        <canvas id="ticketsPieChart"></canvas>
+                    </div>
+                    <div class="mt-4 text-center small">
+                        <span class="mr-2">
+                            <i class="fas fa-circle text-warning"></i> Open
+                        </span>
+                        <span class="mr-2">
+                            <i class="fas fa-circle text-primary"></i> In Progress
+                        </span>
+                        <span class="mr-2">
+                            <i class="fas fa-circle text-success"></i> Done
+                        </span>
+                    </div>
+                }
+                else
+                {
+                    @:No Tickets yet.
+                }
             </div>
         </div>
     </div>
+
 
     <script src="~/theme/vendor/chart.js/Chart.min.js"></script>
 
@@ -65,4 +74,3 @@
 
     </script>
 
-</div>

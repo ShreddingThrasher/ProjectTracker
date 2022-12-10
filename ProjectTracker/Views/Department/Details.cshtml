@@ -33,8 +33,12 @@
     
     @await Html.PartialAsync("_DepartmentProjectsPartial", Model.Projects)
 
+
+    <div class="col-lg-6 mb-4">
+
     @await Html.PartialAsync("_TicketsChartPartial");
 
+    </div>
 </div>
 
 <!-- Content Row -->

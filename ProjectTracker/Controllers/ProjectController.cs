@@ -65,7 +65,7 @@ namespace ProjectTracker.Controllers
                 return View(model);
             }
 
-            var submitterId = User?.Claims?.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+            var submitterId = User.Id();
             var project = await projectService.GetProjectDetailsByIdAsync(model.ProjectId);
 
             try

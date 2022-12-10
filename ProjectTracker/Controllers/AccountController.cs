@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ProjectTracker.Core.Constants;
+using ProjectTracker.Core.Contracts;
 using ProjectTracker.Core.ViewModels.Account;
 using ProjectTracker.Infrastructure.Data.Entities;
 
@@ -13,15 +14,18 @@ namespace ProjectTracker.Controllers
         private readonly UserManager<Employee> userManager;
         private readonly SignInManager<Employee> signInManager;
         private readonly RoleManager<IdentityRole> roleManager;
+        private readonly IEmployeeService employeeService;
 
         public AccountController(
             UserManager<Employee> _userManager,
             SignInManager<Employee> _signInManager,
-            RoleManager<IdentityRole> _roleManager)
+            RoleManager<IdentityRole> _roleManager,
+            IEmployeeService _employeeService)
         {
             userManager = _userManager;
             signInManager = _signInManager;
             roleManager = _roleManager;
+            employeeService = _employeeService;
         }
 
         [HttpGet]
@@ -116,11 +120,11 @@ namespace ProjectTracker.Controllers
 
             await signInManager.SignOutAsync();
 
-            var user = await userManager.FindByNameAsync(User.Identity.Name);
+            var user = await userManager.FindByNameAsync(User?.Identity?.Name);
 
             if (user.IsGuest)
             {
-                await userManager.DeleteAsync(user);
+                await employeeService.RemoveById(user.Id);
             }
 
             return RedirectToAction(nameof(Login));

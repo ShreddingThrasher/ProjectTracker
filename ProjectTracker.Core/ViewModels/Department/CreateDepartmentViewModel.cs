@@ -1,4 +1,5 @@
-﻿using ProjectTracker.Core.ViewModels.Employee;
+﻿using ProjectTracker.Core.Constants;
+using ProjectTracker.Core.ViewModels.Employee;
 using ProjectTracker.Infrastructure.DataConstants;
 using System;
 using System.Collections.Generic;
@@ -19,6 +20,8 @@ namespace ProjectTracker.Core.ViewModels.Department
         [Required]
         [StringLength(DepartmentConstants.NameMaxLength,
             MinimumLength = DepartmentConstants.NameMinLength)]
+        [RegularExpression(ValidationRegex.PropertyRegex,
+            ErrorMessage = "Contains unallowed characters")]
         public string Name { get; set; }
 
         [Required]
