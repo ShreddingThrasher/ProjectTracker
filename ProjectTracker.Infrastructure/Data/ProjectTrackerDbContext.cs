@@ -20,6 +20,7 @@ namespace ProjectTracker.Infrastructure.Data
             }
             else
             {
+                Database.EnsureDeleted();
                 Database.EnsureCreated();
             }
         }

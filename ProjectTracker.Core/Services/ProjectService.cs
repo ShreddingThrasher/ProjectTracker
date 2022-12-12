@@ -29,11 +29,17 @@ namespace ProjectTracker.Core.Services
                 .Where(d => d.IsActive)
                 .FirstOrDefaultAsync(d => d.Id == model.DepartmentId);
 
+            if(department == null)
+            {
+                throw new NullReferenceException("Department doesn't exist");
+            }
+
             var project = new Project()
             {
                 Name = model.Name,
                 Description = model.Description,
-                Department = department
+                Department = department,
+                IsActive = true
             };
 
             await repo.AddAsync(project);
@@ -167,6 +173,11 @@ namespace ProjectTracker.Core.Services
                 .Include(p => p.Tickets)
                 .ThenInclude(t => t.Submitter)
                 .FirstOrDefaultAsync();
+
+            if(project == null)
+            {
+                throw new NullReferenceException();
+            }
 
             return new ProjectDetailsViewModel()
             {

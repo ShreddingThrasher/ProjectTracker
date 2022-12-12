@@ -59,7 +59,14 @@ namespace ProjectTracker.Areas.Administration.Controllers
                 return View(model);
             }
 
-            await projectService.CreateAsync(model);
+            try
+            {
+                await projectService.CreateAsync(model);
+            }
+            catch (NullReferenceException)
+            {
+                return RedirectToAction(nameof(Create), new { success = false });
+            }
 
             return RedirectToAction(nameof(Active));
         }

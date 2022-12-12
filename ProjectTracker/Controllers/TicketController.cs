@@ -31,7 +31,7 @@ namespace ProjectTracker.Controllers
 
         public async Task<IActionResult> Details(Guid id)
         {
-            var model = await ticketService.GetTicketDetaisByIdAsync(id);
+            var model = await ticketService.GetTicketDetailsByIdAsync(id);
 
             if (model == null)
             {

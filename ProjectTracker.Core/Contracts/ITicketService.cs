@@ -12,7 +12,7 @@ namespace ProjectTracker.Core.Contracts
 {
     public interface ITicketService
     {
-        Task<int> GetCount();
+        Task<int> GetCountAsync();
 
         Task<IEnumerable<TicketViewModel>> GetAllAsync();
 
@@ -32,7 +32,7 @@ namespace ProjectTracker.Core.Contracts
 
         Task CreateTicketAsync(SubmitTicketViewModel model, string submitterId, Guid departmentId);
 
-        Task<TicketDetailsViewModel> GetTicketDetaisByIdAsync(Guid id);
+        Task<TicketDetailsViewModel> GetTicketDetailsByIdAsync(Guid id);
 
         Task CreateCommentAsync(string userId, CreateTicketCommentViewModel model);
 

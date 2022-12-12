@@ -60,7 +60,8 @@ namespace ProjectTracker.Core.Services
                 CreatedOn = DateTime.Now,
                 ProjectId = model.ProjectId,
                 Status = Status.Open,
-                Priority = model.Priority
+                Priority = model.Priority,
+                IsActive = true
             };
 
             await repo.AddAsync(ticket);
@@ -156,10 +157,10 @@ namespace ProjectTracker.Core.Services
             };
         }
 
-        public async Task<int> GetCount()
+        public async Task<int> GetCountAsync()
             => await this.repo.AllReadonly<Ticket>().Where(t => t.IsActive).CountAsync();
 
-        public async Task<TicketDetailsViewModel> GetTicketDetaisByIdAsync(Guid id)
+        public async Task<TicketDetailsViewModel> GetTicketDetailsByIdAsync(Guid id)
         {
 #pragma warning disable CS8603 // Possible null reference return.
             return await repo.AllReadonly<Ticket>()

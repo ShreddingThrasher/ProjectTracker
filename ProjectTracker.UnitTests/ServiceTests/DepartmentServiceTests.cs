@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Query;
 using Microsoft.EntityFrameworkCore.SqlServer.Query.Internal;
-using Moq;
 using ProjectTracker.Core.Contracts;
 using ProjectTracker.Core.Services;
 using ProjectTracker.Core.ViewModels.Department;
@@ -23,22 +22,22 @@ namespace ProjectTracker.UnitTests.ServiceTests
         private IDepartmentService departmentService;
 
         [OneTimeSetUp]
-        public void Setup()
+        public async Task Setup()
         {
-            var mockRepo = new Mock<IRepository>();
-
             repo = new Repository(data);
             departmentService = new DepartmentService(repo);
+
+            await SetAllToActive();
         }
 
         [Test]
         public async Task GetCountAsync_ReturnsCorrectCount()
         {
-            var expected = 2;
+            var expected = await data.Departments.Where(d => d.IsActive).CountAsync();
 
             var actual = await departmentService.GetCountAsync();
 
-            Assert.That(expected, Is.EqualTo(actual));
+            Assert.That(actual, Is.EqualTo(expected));
         }
 
         [Test]
@@ -198,6 +197,14 @@ namespace ProjectTracker.UnitTests.ServiceTests
             var actual = departmentService.GetPossibleLeadersAsync().Result.Count();
 
             Assert.That(actual, Is.EqualTo(expected));
+        }
+
+        private async Task SetAllToActive()
+        {
+            await data.Departments.ForEachAsync(
+                p => p.IsActive = true);
+
+            await data.SaveChangesAsync();
         }
     }
 }

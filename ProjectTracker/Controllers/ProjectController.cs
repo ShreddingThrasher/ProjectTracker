@@ -66,10 +66,11 @@ namespace ProjectTracker.Controllers
             }
 
             var submitterId = User.Id();
-            var project = await projectService.GetProjectDetailsByIdAsync(model.ProjectId);
 
             try
             {
+                var project = await projectService.GetProjectDetailsByIdAsync(model.ProjectId);
+
                 await ticketService.CreateTicketAsync(model, submitterId, project.Department.Id);
             }
             catch (Exception)

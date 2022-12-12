@@ -36,7 +36,7 @@ namespace ProjectTracker.Controllers
             ViewData["Departments"] = await departmentService.GetCountAsync();
             ViewData["Employees"] = await employeeService.GetCountAsync();
             ViewData["Projects"] = await projectService.GetCountAsync();
-            ViewData["Tickets"] = await ticketService.GetCount();
+            ViewData["Tickets"] = await ticketService.GetCountAsync();
 
             var statuses = await ticketService.GetAllStatusesAsync();
 

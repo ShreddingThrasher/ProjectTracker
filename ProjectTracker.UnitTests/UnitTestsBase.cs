@@ -17,7 +17,6 @@ namespace ProjectTracker.UnitTests
     {
         protected ProjectTrackerDbContext data;
 
-
         [OneTimeSetUp]
         public void SetUpBase()
         {
@@ -182,7 +181,7 @@ namespace ProjectTracker.UnitTests
                     DepartmentId = new Guid("94874ad5-4e3a-4bea-bac8-c7a3002eb205"),
                     SubmitterId = "cd77e188-a292-42ed-b165-015b9f1d8c51",
                     CreatedOn = DateTime.Now,
-                    ProjectId = new Guid("94874ad5-4e3a-4bea-bac8-c7a3002eb205"),
+                    ProjectId = new Guid("5ab2d1c9-13b1-48a2-b31d-546537e148c8"),
                     AssignedEmployeeId = "6da2e2f3-c43b-4a68-beea-4da7915b1528",
                     Status = Status.InProgress,
                     Priority = Priority.Medium,
@@ -265,9 +264,9 @@ namespace ProjectTracker.UnitTests
                 }
             };
 
-            data.SaveChanges();
-
             data.Changes.AddRange(ticketChanges);
+
+            data.SaveChanges();
         }
     }
 }
