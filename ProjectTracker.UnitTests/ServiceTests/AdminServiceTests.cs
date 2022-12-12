@@ -10,6 +10,8 @@ using System.Text;
 using System.Threading.Tasks;
 using Moq;
 using Microsoft.EntityFrameworkCore;
+using ProjectTracker.Infrastructure.DataConstants;
+using ProjectTracker.Core.ViewModels.Admin;
 
 namespace ProjectTracker.UnitTests.ServiceTests
 {
@@ -19,6 +21,8 @@ namespace ProjectTracker.UnitTests.ServiceTests
         private IAdminService adminService;
         private Mock<RoleManager<IdentityRole>> roleManagerMock;
         private Mock<UserManager<Employee>> userManagerMock;
+
+        private List<IdentityRole> roles;
 
         [SetUp]
         public async Task Setup()
@@ -52,15 +56,21 @@ namespace ProjectTracker.UnitTests.ServiceTests
 
 
             //Role Manager Mock Setup
-            roleManagerMock.Setup(rm => rm.Roles)
-                .Returns(new List<IdentityRole>()
+
+            roles = new List<IdentityRole>()
+            {
+                new IdentityRole
                 {
-                    new IdentityRole
-                    {
-                        Name = "Admin",
-                        NormalizedName = "ADMIN"
-                    }
-                }.AsQueryable());
+                    Name = "Admin",
+                    NormalizedName = "ADMIN"
+                }
+            };
+
+            roleManagerMock.Setup(rm => rm.Roles)
+                .Returns(roles.AsQueryable());
+
+            roleManagerMock.Setup(rm => rm.CreateAsync(It.IsAny<IdentityRole>()))
+                .Callback((IdentityRole role) => roles.Add(role));
 
         }
 
@@ -99,6 +109,103 @@ namespace ProjectTracker.UnitTests.ServiceTests
         {
             Assert.ThrowsAsync<NullReferenceException>(async ()
                 => await adminService.AssignToDepartmentAsync("6da2e2f3-c43b-4a68-beea-4da7915b1528", Guid.NewGuid()));
+        }
+
+        [Test]
+        public async Task AssignToDepartmentAsync_ThrowsArgumentException_IfEmployeeIsAlreadyInThatDepartment()
+        {
+            Assert.ThrowsAsync<ArgumentException>(async ()
+                => await adminService.AssignToDepartmentAsync(
+                    "6da2e2f3-c43b-4a68-beea-4da7915b1528", new Guid("aabcdf93-5aa9-46dc-bbf3-854d551a8b6d")));
+        }
+
+        [Test]
+        public async Task AssignToDepartmentAsync_ThrowsArgumentException_IfEmployeeIsAlreadyLeaderOfADepartment()
+        {
+            Assert.ThrowsAsync<ArgumentException>(async ()
+                => await adminService.AssignToDepartmentAsync(
+                    "6da2e2f3-c43b-4a68-beea-4da7915b1528", new Guid("aabcdf93-5aa9-46dc-bbf3-854d551a8b6d")));
+        }
+
+        [Test]
+        public async Task AssignToDepartmentAsync_AssignsCorrect()
+        {
+            var employee = await data.Employees
+                .Where(e => e.IsActive && e.Id == "cd77e188-a292-42ed-b165-015b9f1d8c51")
+                .FirstAsync();
+
+            var departmentId = new Guid("aabcdf93-5aa9-46dc-bbf3-854d551a8b6d");
+
+            var startDepartment = employee.DepartmentId;
+
+            await adminService.AssignToDepartmentAsync(employee.Id, departmentId);
+
+            Assert.That(startDepartment, Is.Not.EqualTo(departmentId));
+            Assert.That(employee.DepartmentId, Is.EqualTo(departmentId));
+        }
+
+        [Test]
+        public async Task AssignToProjectAsync_ThrowsNullReferenceException_WhenEmployeeDoesntExist()
+        {
+            Assert.ThrowsAsync<NullReferenceException>(async ()
+                => await adminService.AssignToProjectAsync("non existent", Guid.NewGuid()));
+        }
+
+        [Test]
+        public async Task AssignToProjectAsync_ThrowsNullReferenceException_WhenProjectDoesntExist()
+        {
+            Assert.ThrowsAsync<NullReferenceException>(async ()
+                => await adminService.AssignToProjectAsync("cd77e188-a292-42ed-b165-015b9f1d8c51", Guid.NewGuid()));
+        }
+
+        [Test]
+        public async Task AssignToProjectAsync_ThrowsArgumentException_WhenEmployeeIsAlreadyInThatProject()
+        {
+            var projects = await data.Projects
+                .Where(p => p.IsActive)
+                .ToListAsync();
+
+            Assert.ThrowsAsync<ArgumentException>(async ()
+                => await adminService.AssignToProjectAsync(
+                    "6da2e2f3-c43b-4a68-beea-4da7915b1528", new Guid("bae3e81b-bfe0-418a-8082-4672bf1f98cd")));
+        }
+
+        [Test]
+        public async Task AssignToProjectAsync_AssignsCorrect()
+        {
+            var epBeforeAssign = await data.EmployeesProjects
+                .Where(p => p.IsActive)
+                .CountAsync();
+
+            await adminService.AssignToProjectAsync(
+                "421365c1-f8d2-4a4b-abc7-aaabaa82117d", new Guid("5ab2d1c9-13b1-48a2-b31d-546537e148c8"));
+
+            var epAfterAssign = await data.EmployeesProjects
+                .Where(p => p.IsActive)
+                .CountAsync();
+
+            var ep = await data.EmployeesProjects
+                .Where(ep => ep.EmployeeId == "421365c1-f8d2-4a4b-abc7-aaabaa82117d"
+                    && ep.ProjectId == new Guid("5ab2d1c9-13b1-48a2-b31d-546537e148c8"))
+                .FirstOrDefaultAsync();
+
+            Assert.That(epAfterAssign, Is.EqualTo(epBeforeAssign + 1));
+            Assert.That(ep, Is.Not.EqualTo(null));
+        }
+
+        [Test]
+        public async Task CreateRoleAsync_WorksCorrect()
+        {
+            var rolesCount = roles.Count();
+
+            await adminService.CreateRoleAsync(new CreateRoleViewModel()
+            {
+                RoleName = "test"
+            });
+
+            var afterCreateCount = roles.Count();
+
+            Assert.That(afterCreateCount, Is.EqualTo(rolesCount + 1));
         }
     }
 }

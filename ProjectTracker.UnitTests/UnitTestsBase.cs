@@ -99,6 +99,15 @@ namespace ProjectTracker.UnitTests
                     Name = "SecondTestProject",
                     Description = "Another project for unit testing",
                     DepartmentId = new Guid("94874ad5-4e3a-4bea-bac8-c7a3002eb205"),
+                    AssignedEmployees = new List<EmployeeProject>()
+                    {
+                        new EmployeeProject()
+                        {
+                            EmployeeId = "421365c1-f8d2-4a4b-abc7-aaabaa82117d",
+                            ProjectId = new Guid("bae3e81b-bfe0-418a-8082-4672bf1f98cd"),
+                            IsActive = true
+                        }
+                    },
                     IsActive = true
                 }
             };
@@ -132,12 +141,7 @@ namespace ProjectTracker.UnitTests
                     ProjectId = new Guid("bae3e81b-bfe0-418a-8082-4672bf1f98cd"),
                     IsActive = true
                 },
-                new EmployeeProject()
-                {
-                    EmployeeId = "421365c1-f8d2-4a4b-abc7-aaabaa82117d",
-                    ProjectId = new Guid("bae3e81b-bfe0-418a-8082-4672bf1f98cd"),
-                    IsActive = true
-                }
+                
             };
 
             data.EmployeesProjects.AddRange(employeeProjects);

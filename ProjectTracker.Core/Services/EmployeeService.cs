@@ -26,6 +26,11 @@ namespace ProjectTracker.Core.Services
             repo = _repo;
         }
 
+
+        /// <summary>
+        /// Gets all active Employees
+        /// </summary>
+        /// <returns>Collection of EmployeeViewModel</returns>
         public async Task<IEnumerable<EmployeeViewModel>> GetAllAsync()
         {
             return await repo.AllReadonly<Employee>()
@@ -46,9 +51,19 @@ namespace ProjectTracker.Core.Services
                 .ToListAsync();
         }
 
+
+        /// <summary>
+        /// Gets the count of all active Employees
+        /// </summary>
+        /// <returns>Count as int</returns>
         public async Task<int> GetCountAsync()
             => await this.repo.AllReadonly<Employee>().Where(e => e.IsActive).CountAsync();
 
+
+        /// <summary>
+        /// Gets Id and UserName for all current Employees
+        /// </summary>
+        /// <returns>Collection of EmployeeIdNameViewModel</returns>
         public async Task<IEnumerable<EmployeeIdNameViewModel>> GetAllIdAndNameAsync()
         {
             return await repo.AllReadonly<Employee>()
@@ -61,12 +76,23 @@ namespace ProjectTracker.Core.Services
                 .ToListAsync();
         }
 
+
+        /// <summary>
+        /// Gets the UserNames for all currentEmployees
+        /// </summary>
+        /// <returns>Collection of string</returns>
         public async Task<IEnumerable<string>> GetUserNamesAsync()
             => await this.repo.AllReadonly<Employee>()
                         .Where(e => e.IsActive)
                         .Select(e => e.UserName)
                         .ToListAsync();
 
+
+        /// <summary>
+        /// Gets details for a given Employee or null if the Employee doesn't exist.
+        /// </summary>
+        /// <param name="id">EmployeeId</param>
+        /// <returns>Model holding detailed data for the Employee</returns>
         public async Task<EmployeeDetailsViewModel> GetEmployeeDetailsAsync(string id)
         {
             var employee = await repo.AllReadonly<Employee>()
@@ -130,6 +156,11 @@ namespace ProjectTracker.Core.Services
             return employee;
         }
 
+
+        /// <summary>
+        /// Gets all Employees that are not assigned to a Department
+        /// </summary>
+        /// <returns>Collection of EmployeeViewModel</returns>
         public async Task<IEnumerable<EmployeeViewModel>> GetUnassignedAsync()
         {
             return await repo.AllReadonly<Employee>()
@@ -146,6 +177,11 @@ namespace ProjectTracker.Core.Services
                 .ToListAsync();
         }
 
+
+        /// <summary>
+        /// Gets all Employees that are assigned to a Department
+        /// </summary>
+        /// <returns>Collection of EmployeeViewModel</returns>
         public async Task<IEnumerable<EmployeeViewModel>> GetActiveAsync()
         {
             return await repo.AllReadonly<Employee>()
@@ -167,6 +203,13 @@ namespace ProjectTracker.Core.Services
                 .ToListAsync();
         }
 
+
+        /// <summary>
+        /// Sets an Employee to innactive
+        /// </summary>
+        /// <param name="employeeId">EmployeeId</param>
+        /// <returns></returns>
+        /// <exception cref="NullReferenceException">Throws if the Employee doesn't exist</exception>
         public async Task RemoveById(string employeeId)
         {
             var employee = await repo.All<Employee>()
