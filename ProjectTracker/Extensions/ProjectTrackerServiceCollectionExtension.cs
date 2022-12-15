@@ -15,6 +15,7 @@ namespace Microsoft.Extensions.DependencyInjection
             services.AddScoped<IProjectService, ProjectService>();
             services.AddScoped<ITicketService, TicketService>();
             services.AddScoped<IAdminService, AdminService>();
+            services.AddScoped<IAccountService, AccountService>();
 
             services.AddAuthorization(options =>
             {

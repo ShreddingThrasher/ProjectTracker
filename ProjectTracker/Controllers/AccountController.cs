@@ -16,16 +16,20 @@ namespace ProjectTracker.Controllers
         private readonly RoleManager<IdentityRole> roleManager;
         private readonly IEmployeeService employeeService;
 
+        private readonly IAccountService accountService;
+
         public AccountController(
             UserManager<Employee> _userManager,
             SignInManager<Employee> _signInManager,
             RoleManager<IdentityRole> _roleManager,
-            IEmployeeService _employeeService)
+            IEmployeeService _employeeService,
+            IAccountService _accountService)
         {
             userManager = _userManager;
             signInManager = _signInManager;
             roleManager = _roleManager;
             employeeService = _employeeService;
+            accountService = _accountService;
         }
 
         [HttpGet]
@@ -49,24 +53,11 @@ namespace ProjectTracker.Controllers
                 return View(model);
             }
 
-            var user = new Employee()
-            {
-                Email = model.Email,
-                FirstName = model.FirstName,
-                LastName = model.LastName,
-                UserName = model.UserName
-            };
-
-            var result = await userManager.CreateAsync(user, model.Password);
+            var result = await accountService.RegisterAsync(model);
 
             if (result.Succeeded)
             {
-                await userManager.AddClaimAsync(
-                    user, new System.Security.Claims.Claim(ClaimTypeConstants.FirstName, user.FirstName));
-
-                await signInManager.SignInAsync(user, false);
-
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction(nameof(HomeController.Index), "Home");
             }
 
             foreach (var error in result.Errors)
@@ -98,16 +89,11 @@ namespace ProjectTracker.Controllers
                 return View(model);
             }
 
-            var user = await userManager.FindByEmailAsync(model.Email);
+            var result = await accountService.LoginAsync(model);
 
-            if(user != null)
+            if (result.Succeeded)
             {
-                var result = await signInManager.PasswordSignInAsync(user, model.Password, model.RememberMe, false);
-
-                if (result.Succeeded)
-                {
-                    return RedirectToAction("Index", "Home");
-                }
+                return RedirectToAction("Index", "Home");
             }
 
             ModelState.AddModelError(string.Empty, "Login failed");
@@ -117,15 +103,7 @@ namespace ProjectTracker.Controllers
 
         public async Task<IActionResult> Logout()
         {
-
-            await signInManager.SignOutAsync();
-
-            var user = await userManager.FindByNameAsync(User?.Identity?.Name);
-
-            if (user.IsGuest)
-            {
-                await employeeService.RemoveById(user.Id);
-            }
+            await accountService.LogoutAsync(User);
 
             return RedirectToAction(nameof(Login));
         }
@@ -155,56 +133,11 @@ namespace ProjectTracker.Controllers
                 return View(model);
             }
 
-            var rnd = new Random();
-
-            int guestRnd = rnd.Next(1, int.MaxValue);
-
-            var guest = new Employee()
-            {
-                Email = $"guest{guestRnd}@mail.com",
-                FirstName = "Guest",
-                LastName = "Guest",
-                UserName = $"Guest{guestRnd}",
-                IsGuest = true
-            };
-
-            var roles = await roleManager.Roles.Select(r => r.Name).ToListAsync();
-
-            if(!roles.Contains(model.Role))
-            {
-                if(model.Role != "Regular")
-                {
-                    ModelState.AddModelError(string.Empty, "Something went Wrong");
-
-                    model.Roles = await roleManager.Roles.Select(r => r.Name).ToListAsync();
-
-                    return View(model);
-                }
-            }
-
-            var result = await userManager.CreateAsync(guest);
+            var result = await accountService.GuestRegisterAsync(model);
 
             if (result.Succeeded)
             {
-
-                await userManager.AddClaimAsync(
-                    guest, new System.Security.Claims.Claim(ClaimTypeConstants.FirstName, guest.FirstName));
-
-                if (model.Role == "Regular")
-                {
-                    await signInManager.SignInAsync(guest, true);
-                    return RedirectToAction("Index", "Home");
-                }
-                else
-                {
-                    var roleResult = await userManager.AddToRoleAsync(guest, model.Role);
-
-                    if (result.Succeeded)
-                    {
-                        await signInManager.SignInAsync(guest, true);
-                        return RedirectToAction("Index", "Home");
-                    }
-                }
+                return RedirectToAction(nameof(HomeController.Index), "Home");
             }
 
             ModelState.AddModelError(string.Empty, "Something went Wrong");

@@ -16,7 +16,7 @@ namespace ProjectTracker.Infrastructure.Data
         {
             if (Database.IsRelational())
             {
-                Database.Migrate();
+                //Database.Migrate();
             }
             else
             {
