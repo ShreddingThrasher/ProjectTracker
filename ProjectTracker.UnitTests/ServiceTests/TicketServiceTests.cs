@@ -173,7 +173,7 @@ namespace ProjectTracker.UnitTests.ServiceTests
                 .Where(t => t.IsActive && t.Id == new Guid("85677f6d-687b-4245-ab81-3c198cfaa831"))
                 .FirstOrDefaultAsync();
 
-            var actual = await ticketService.GetByIdAsync(new Guid("85677f6d-687b-4245-ab81-3c198cfaa831"));
+            var actual = await ticketService.GetEditDetailsById(new Guid("85677f6d-687b-4245-ab81-3c198cfaa831"));
 
             Assert.That(expected.Id == actual.Id);
             Assert.That(expected.Title == actual.Title);

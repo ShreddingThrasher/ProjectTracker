@@ -23,6 +23,12 @@ namespace ProjectTracker.Core.Services
             repo = _repo;
         }
 
+
+        /// <summary>
+        /// Creates new Project
+        /// </summary>
+        /// <param name="model">Model</param>
+        /// <returns></returns>
         public async Task CreateAsync(CreateProjectViewModel model)
         {
             var department = await repo.All<Department>()
@@ -46,6 +52,13 @@ namespace ProjectTracker.Core.Services
             await repo.SaveChangesAsync();
         }
 
+
+        /// <summary>
+        /// Deletes Project
+        /// </summary>
+        /// <param name="id">ProjectId</param>
+        /// <returns></returns>
+        /// <exception cref="NullReferenceException">Throws if Project doesn't exist.</exception>
         public async Task DeleteAsync(Guid id)
         {
             var project = await repo.All<Project>()
@@ -74,6 +87,13 @@ namespace ProjectTracker.Core.Services
             await repo.SaveChangesAsync();
         }
 
+
+        /// <summary>
+        /// Edits Project
+        /// </summary>
+        /// <param name="model">Model</param>
+        /// <returns>ProjectId</returns>
+        /// <exception cref="NullReferenceException">Throws if Project doesn't exist.</exception>
         public async Task<Guid> EditProjectAsync(EditProjectViewModel model)
         {
             var project = await repo.All<Project>()
@@ -92,6 +112,11 @@ namespace ProjectTracker.Core.Services
             return project.Id;
         }
 
+
+        /// <summary>
+        /// Gets all active Projects
+        /// </summary>
+        /// <returns>All active projects as ProjectViewModel</returns>
         public async Task<IEnumerable<ProjectViewModel>> GetAllProjectsAsync()
         {
             return await repo.AllReadonly<Project>()
@@ -112,9 +137,21 @@ namespace ProjectTracker.Core.Services
                 .ToListAsync();
         }
 
+
+        /// <summary>
+        /// Gets the Count of all active projects.
+        /// </summary>
+        /// <returns>Count as int</returns>
         public async Task<int> GetCountAsync()
             => await this.repo.AllReadonly<Project>().Where(p => p.IsActive).CountAsync();
 
+
+        /// <summary>
+        /// Gets details for a Project to be edited
+        /// </summary>
+        /// <param name="id">ProjectId</param>
+        /// <returns>Project details</returns>
+        /// <exception cref="NullReferenceException">Throws if the Project doesn't exist.</exception>
         public async Task<EditProjectViewModel> GetEditDetailsAsync(Guid id)
         {
             var project = await repo.AllReadonly<Project>()
@@ -135,6 +172,11 @@ namespace ProjectTracker.Core.Services
             return project;
         }
 
+
+        /// <summary>
+        /// Gets Id and Name for all active Projects
+        /// </summary>
+        /// <returns>All projects Id and Name</returns>
         public async Task<IEnumerable<ProjectIdNameViewModel>> GetIdsAndNamesAsync()
         {
             return await repo.AllReadonly<Project>()
@@ -147,6 +189,11 @@ namespace ProjectTracker.Core.Services
                 .ToListAsync();
         }
 
+
+        /// <summary>
+        /// Gets all innactive Projects
+        /// </summary>
+        /// <returns>All innactive projects as ProjectViewModel</returns>
         public async Task<IEnumerable<ProjectViewModel>> GetInactiveProjectsAsync()
         {
             return await repo.AllReadonly<Project>()
@@ -163,6 +210,13 @@ namespace ProjectTracker.Core.Services
                 .ToListAsync();
         }
 
+
+        /// <summary>
+        /// Gets details for an active Project
+        /// </summary>
+        /// <param name="id">ProjectId</param>
+        /// <returns>Project details</returns>
+        /// <exception cref="NullReferenceException">Throws if the project doesn't exist</exception>
         public async Task<ProjectDetailsViewModel> GetProjectDetailsByIdAsync(Guid id)
         {
             var project = await repo.AllReadonly<Project>()
@@ -213,6 +267,32 @@ namespace ProjectTracker.Core.Services
                         Date = t.CreatedOn
                     }).ToList()
             };
+        }
+
+
+        /// <summary>
+        /// Get all Projects that the user is assigned to.
+        /// </summary>
+        /// <param name="userId">UserId</param>
+        /// <returns>Collection of ProjectViewModel</returns>
+        public async Task<IEnumerable<ProjectViewModel>> UserProjectsAsync(string userId)
+        {
+            var model = await repo.AllReadonly<EmployeeProject>()
+                .Where(ep => ep.IsActive && ep.EmployeeId == userId)
+                .Include(ep => ep.Project)
+                .ThenInclude(p => p.Department)
+                .Select(ep => ep.Project)
+                .Select(p => new ProjectViewModel()
+                {
+                    Id = p.Id,
+                    Name = p.Name,
+                    Department = p.Department.Name,
+                    AssignedEmployeesCount = p.AssignedEmployees.Count(),
+                    TicketsCount = p.Tickets.Count()
+                })
+                .ToListAsync();
+
+            return model;
         }
     }
 }

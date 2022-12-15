@@ -46,6 +46,13 @@ namespace ProjectTracker.Controllers
             return View(model);
         }
 
+        public async Task<IActionResult> My()
+        {
+            var model = await projectService.UserProjectsAsync(User.Id());
+
+            return View(model);
+        }
+
         [HttpGet]
         public IActionResult SubmitTicket(Guid id, bool? success)
         {

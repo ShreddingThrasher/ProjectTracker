@@ -43,6 +43,20 @@ namespace ProjectTracker.Controllers
             return View(model);
         }
 
+        public async Task<IActionResult> Assigned()
+        {
+            var model = await ticketService.UserAssignedTicketsAsync(User.Id());
+
+            return View(model);
+        }
+
+        public async Task<IActionResult> My()
+        {
+            var model = await ticketService.UserSubmittedAsync(User.Id());
+
+            return View(model);
+        }
+
         [HttpPost]
         public async Task<IActionResult> Comment(CreateTicketCommentViewModel model)
         {

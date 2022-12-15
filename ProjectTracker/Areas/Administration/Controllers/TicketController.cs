@@ -54,9 +54,16 @@ namespace ProjectTracker.Areas.Administration.Controllers
         [Authorize(Policy = "CanAssignAndEditTicket")]
         public async Task<IActionResult> Edit(Guid id)
         {
-            var model = await ticketService.GetByIdAsync(id);
+            try
+            {
+                var model = await ticketService.GetEditDetailsById(id);
 
-            return View(model);
+                return View(model);
+            }
+            catch (NullReferenceException)
+            {
+                return RedirectToAction(nameof(AdminController.Index), "Admin");
+            }
         }
 
         [HttpPost]
@@ -68,7 +75,14 @@ namespace ProjectTracker.Areas.Administration.Controllers
                 return View(model);
             }
 
-            await ticketService.EditTicketAsync(model);
+            try
+            {
+                await ticketService.EditTicketAsync(model);
+            }
+            catch (NullReferenceException)
+            {
+                return RedirectToAction(nameof(AdminController.Index), "Admin");
+            }
 
             return Redirect($"/Ticket/Details/{model.Id}");
         }
