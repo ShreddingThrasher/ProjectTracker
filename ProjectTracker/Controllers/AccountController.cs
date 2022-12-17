@@ -2,34 +2,22 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using ProjectTracker.Core.Constants;
 using ProjectTracker.Core.Contracts;
 using ProjectTracker.Core.ViewModels.Account;
-using ProjectTracker.Infrastructure.Data.Entities;
 
 namespace ProjectTracker.Controllers
 {
     public class AccountController : BaseController
     {
-        private readonly UserManager<Employee> userManager;
-        private readonly SignInManager<Employee> signInManager;
         private readonly RoleManager<IdentityRole> roleManager;
-        private readonly IEmployeeService employeeService;
-
         private readonly IAccountService accountService;
 
         public AccountController(
-            UserManager<Employee> _userManager,
-            SignInManager<Employee> _signInManager,
-            RoleManager<IdentityRole> _roleManager,
-            IEmployeeService _employeeService,
-            IAccountService _accountService)
+            IAccountService _accountService,
+            RoleManager<IdentityRole> _roleManager)
         {
-            userManager = _userManager;
-            signInManager = _signInManager;
-            roleManager = _roleManager;
-            employeeService = _employeeService;
             accountService = _accountService;
+            roleManager = _roleManager;
         }
 
         [HttpGet]

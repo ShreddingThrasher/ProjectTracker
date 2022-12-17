@@ -32,6 +32,12 @@ namespace ProjectTracker.Core.Services
             employeeService = _employeeService;
         }
 
+
+        /// <summary>
+        /// Registers new Guest user
+        /// </summary>
+        /// <param name="model">Model</param>
+        /// <returns>Result, indicating wether the operation succeeded or no</returns>
         public async Task<IdentityResult> GuestRegisterAsync(GuestRegisterViewModel model)
         {
             var rnd = new Random();
@@ -44,12 +50,11 @@ namespace ProjectTracker.Core.Services
                 FirstName = "Guest",
                 LastName = "Guest",
                 UserName = $"Guest{guestRnd}",
+                IsActive= true,
                 IsGuest = true
             };
 
-            var roles = await roleManager.Roles.Select(r => r.Name).ToListAsync();
-
-            if (!roles.Contains(model.Role))
+            if (!roleManager.Roles.Select(r => r.Name).Contains(model.Role))
             {
                 if(model.Role != "Regular")
                 {
@@ -57,7 +62,9 @@ namespace ProjectTracker.Core.Services
                 }
             }
 
-            var result = await userManager.CreateAsync(guest);
+            string password = "Guestttt123!";
+
+            var result = await userManager.CreateAsync(guest, password);
 
             if (result.Succeeded)
             {
@@ -82,11 +89,19 @@ namespace ProjectTracker.Core.Services
 
                 //in case AddToRoleAsync fails
                 await userManager.DeleteAsync(guest);
+
+                return IdentityResult.Failed();
             }
 
             return result;
         }
 
+
+        /// <summary>
+        /// Logs In existing user
+        /// </summary>
+        /// <param name="model">Model</param>
+        /// <returns>Result, indicating wether the operation succeeded or no</returns>
         public async Task<SignInResult> LoginAsync(LoginViewModel model)
         {
             var user = await userManager.FindByEmailAsync(model.Email);
@@ -107,6 +122,12 @@ namespace ProjectTracker.Core.Services
             return SignInResult.Failed;
         }
 
+
+        /// <summary>
+        /// Logs Out the current user.
+        /// </summary>
+        /// <param name="user">User</param>
+        /// <returns></returns>
         public async Task LogoutAsync(ClaimsPrincipal user)
         {
             var employee = await userManager.FindByNameAsync(user?.Identity?.Name);
@@ -119,6 +140,12 @@ namespace ProjectTracker.Core.Services
             }
         }
 
+
+        /// <summary>
+        /// Registers new user
+        /// </summary>
+        /// <param name="model">Model</param>
+        /// <returns>Result, indicating wether the operation succeeded or no</returns>
         public async Task<IdentityResult> RegisterAsync(RegisterViewModel model)
         {
             var user = new Employee()

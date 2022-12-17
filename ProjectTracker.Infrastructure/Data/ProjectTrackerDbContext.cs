@@ -69,6 +69,7 @@ namespace ProjectTracker.Infrastructure.Data
                 NormalizedUserName = "ADMINISTRATOR",
                 NormalizedEmail = "ADMINISTRATOR@MAIL.COM",
                 LeadedDepartmentId = new Guid(AdminConstants.DepartmentId),
+                IsActive = true,
                 LockoutEnabled = false
             };
 
