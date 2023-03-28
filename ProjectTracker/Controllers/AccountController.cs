@@ -7,7 +7,7 @@ using ProjectTracker.Core.ViewModels.Account;
 
 namespace ProjectTracker.Controllers
 {
-    public class AccountController : Controller
+    public class AccountController : BaseController
     {
         private readonly RoleManager<IdentityRole> roleManager;
         private readonly IAccountService accountService;
